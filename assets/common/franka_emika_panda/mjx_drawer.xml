@@ -1,0 +1,30 @@
+<mujoco model="panda drawer">
+  <include file="mjx_scene.xml"/>
+  <compiler texturedir="assets"/>
+
+  <custom>
+    <numeric data="16" name="max_contact_points"/>
+  </custom>
+
+  <include file="studyTable/studyTable_asset.xml"/>
+
+  <worldbody>
+    <body name="table_base" pos="0.7 0 0" euler="0 0 -1.5708">
+      <joint name="table_x" type="slide" axis="1 0 0" limited="true" range="-0.0001 0.0001" damping="1000" armature="100"/>
+      <joint name="table_y" type="slide" axis="0 1 0" limited="true" range="-0.0001 0.0001" damping="1000" armature="100"/>
+      <include file="studyTable/studyTable_body.xml"/>
+    </body>
+    <body name="cube" pos="0.4 0.12 0.41">
+      <freejoint/>
+      <geom type="box" name="cube" size="0.02 0.02 0.02" mass="0.1"
+        condim="3" friction="1 .03 .003" rgba="0 1 0 1"
+        contype="1" conaffinity="1" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    </body>
+  </worldbody>
+
+  <keyframe>
+    <key name="home"
+      qpos="0 -0.5 0 -2.4 0 2.0 -0.7853 0.04 0.04 0 0 0 0.6 -0.12 0.4 1 0 0 0"
+      ctrl="0 0 0 0 0 0 0 0.04"/>
+  </keyframe>
+</mujoco>

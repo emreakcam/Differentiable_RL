@@ -1,0 +1,36 @@
+<mujoco model="panda scene">
+  <include file="mjx_scene.xml"/>
+
+  <asset>
+    <mesh name="cube_mesh" file="cube.obj"/>
+  </asset>
+
+  <worldbody>
+    <!-- Kamera 1: Üstten çapraz — workspace'in tamamını görüyor -->
+    <camera name="overhead_cam" pos="0.927 0.252 0.231"  
+            xyaxes="-0.658 0.753 -0.000 -0.318 -0.278 0.906"
+            fovy="90" mode="fixed"/>
+
+    <body name="box" pos="0.7 0.0 0.03">
+      <freejoint/>
+      <geom type="box" name="box" size="0.025 0.025 0.025" mass="0.1" condim="3"
+       friction="1 .03 .003" margin="0.002" gap="0.002" rgba="0 1 0 1" contype="1" conaffinity="1" 
+       solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    </body>
+    <body name="box2" pos="0.6 0.1 0.03">
+      <freejoint/>
+      <geom type="box" name="box2" size="0.025 0.025 0.025" mass="0.1" condim="3"
+       friction="1 .03 .003" rgba="0 0 1 1" contype="1" conaffinity="1" 
+       solimp="0.9 0.95 0.001" solref="0.02 1"/> 
+    </body>
+    <body mocap="true" name="mocap_target">
+      <geom type="box" size="0.025 0.025 0.025" rgba="1 0 0 0.2" contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <keyframe>
+    <key name="home"
+      qpos="0 0.3 0 -1.57079 0 2.0 -0.7853 0.03 0.03 0.7 0 0.1 1 0 0 0 0.6 0.1 0.03 1 0 0 0"
+      ctrl="0 0.3 0 -1.57079 0 2.0 -0.7853 0.03"/>
+  </keyframe>
+</mujoco>

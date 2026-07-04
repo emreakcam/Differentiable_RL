@@ -1,0 +1,98 @@
+<mujoco model="panda 3cubes container">
+  <include file="mjx_scene.xml"/>
+
+  <custom>
+    <numeric data="24" name="max_contact_points"/>
+  </custom>
+
+  <!--
+    Task: 3 küpü açık üstü kutuya koy
+
+    Container: statik, 5 box geom (taban + 4 duvar)
+      - İç boyut: 25cm × 25cm  (half: 0.125)
+      - Duvar kalınlığı: 5mm (half=0.0025)
+      - Duvar yüksekliği: 6cm (half=0.03)
+      - Pozisyon: (0.5, 0.0, 0.0)
+
+    3 Küp: freejoint, 5cm × 5cm × 5cm (half=0.025)
+
+    qpos layout: [7 arm, 2 finger, 7 cube1, 7 cube2, 7 cube3] = 30
+  -->
+
+  <worldbody>
+    <!-- ==================== CONTAINER (statik) ==================== -->
+    <!-- İç: 0.25×0.25m, Dış: 0.255×0.255m                         -->
+    <!-- x range: 0.3725 — 0.6275,  y range: -0.1275 — +0.1275     -->
+    <body name="container" pos="0.5 0.0 0.0">
+      <geom name="container_bottom" type="box"
+            size="0.1275 0.1275 0.0025" pos="0 0 0.0025"
+            rgba="0.6 0.4 0.2 1" condim="3" contype="1" conaffinity="1"
+            friction="1 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <geom name="container_front" type="box"
+            size="0.1275 0.0025 0.03" pos="0 0.1275 0.035"
+            rgba="0.6 0.4 0.2 1" condim="3" contype="1" conaffinity="1"
+            friction="1 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <geom name="container_back" type="box"
+            size="0.1275 0.0025 0.03" pos="0 -0.1275 0.035"
+            rgba="0.6 0.4 0.2 1" condim="3" contype="1" conaffinity="1"
+            friction="1 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <geom name="container_left" type="box"
+            size="0.0025 0.125 0.03" pos="-0.1275 0 0.035"
+            rgba="0.6 0.4 0.2 1" condim="3" contype="1" conaffinity="1"
+            friction="1 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <geom name="container_right" type="box"
+            size="0.0025 0.125 0.03" pos="0.1275 0 0.035"
+            rgba="0.6 0.4 0.2 1" condim="3" contype="1" conaffinity="1"
+            friction="1 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <site name="container_inside" pos="0 0 0.03" size="0.01"
+            rgba="1 0 0 0.3" type="sphere"/>
+    </body>
+
+    <!-- ==================== NESNELER ==================== -->
+    <!-- 1) Küp: 5cm × 5cm × 5cm -->
+    <body name="cube" pos="0.5 -0.2 0.025">
+      <freejoint name="cube_joint"/>
+      <geom type="box" name="cube" size="0.025 0.025 0.025" mass="0.1"
+            condim="3" friction="2 0.03 0.003" 
+            rgba="0 1 0 1" contype="1" conaffinity="1"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    </body>
+
+    <!-- 2) Top: çap 5cm (radius=0.025) -->
+    <body name="ball" pos="0.5 0.2 0.025">
+      <freejoint name="ball_joint"/>
+      <geom type="sphere" name="ball" size="0.035" mass="0.1"
+            condim="3" friction="2 0.1 0.003"
+            rgba="0 0 1 1" contype="1" conaffinity="1"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    </body>
+
+    <!-- 3) Dikdörtgenler prizması: 8cm × 5cm × 4cm -->
+    <body name="prism" pos="0.7 0.0 0.02">
+      <freejoint name="prism_joint"/>
+      <geom type="box" name="prism" size="0.025 0.05 0.025" mass="0.1"
+            condim="3" friction="1 0.03 0.003"
+            rgba="1 0.5 0 1" contype="1" conaffinity="1"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    </body>
+
+    <body mocap="true" name="mocap_target">
+      <geom type="box" size="0.025 0.025 0.025" rgba="1 0 0 0.2"
+            contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <keyframe>
+    <key name="home"
+      qpos="0 0.3 0 -1.57079 0 2.0 -0.7853 0.06 0.06
+            0.5  -0.3 0.025 1 0 0 0
+            0.5   0.3 0.025 1 0 0 0
+            0.8   0.0 0.020 1 0 0 0"
+      ctrl="0 0.3 0 -1.57079 0 2.0 -0.7853 0.06"/>
+  </keyframe>
+</mujoco>
