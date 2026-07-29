@@ -1,4 +1,4 @@
-# Differentiable Reinforcement Learning for Robotic Manipulation
+# Differentiable Reinforcement Learning in Aerial Manipulation
 
 First-order analytic policy gradients (BPTT) through differentiable physics for Franka Emika Panda manipulation tasks, implemented in MuJoCo MJX (JAX).
 
