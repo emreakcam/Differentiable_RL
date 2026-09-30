@@ -66,8 +66,7 @@ parser.add_argument("--grad-clip", type=float, default=300.0)
 parser.add_argument("--no-viewer", action="store_true")
 parser.add_argument("--img-res", type=int, default=64, help="Depth image resolution")
 parser.add_argument("--xml", type=str,
-                    default="/home/emre/mjx_diffsim/franka_emika_panda_depth/"
-                            "mjx_single_cube.xml")
+                    default="/home/emre/newton_diff_RL/MJX_Franka_DiffSim/old_files/franka_emika_panda_depth/mjx_single_cube.xml")
 args = parser.parse_args()
 
 # ---------------------------------------------------------------------------

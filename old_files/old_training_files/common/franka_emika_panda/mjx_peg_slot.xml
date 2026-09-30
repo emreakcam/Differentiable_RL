@@ -1,0 +1,77 @@
+<mujoco model="panda peg insertion">
+  <include file="mjx_scene.xml"/>
+
+  <custom>
+    <numeric data="16" name="max_contact_points"/>
+  </custom>
+
+
+  <worldbody>
+
+    <body name="slot" pos="0.5 0.0 0.0">
+      <!-- Taban -->
+      <geom name="slot_bottom" type="box"
+            size="0.035 0.035 0.005" pos="0 0 0.005"
+            rgba="0.4 0.4 0.5 1" condim="3" contype="1" conaffinity="1"
+            friction="1 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <!-- Ön duvar (+y) -->
+      <geom name="slot_front" type="box"
+            size="0.035 0.005 0.06" pos="0 0.035 0.05"
+            rgba="0.4 0.4 0.5 1" condim="3" contype="1" conaffinity="1"
+            friction="0.5 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <!-- Arka duvar (-y) -->
+      <geom name="slot_back" type="box"
+            size="0.035 0.005 0.06" pos="0 -0.035 0.05"
+            rgba="0.4 0.4 0.5 1" condim="3" contype="1" conaffinity="1"
+            friction="0.5 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <!-- Sol duvar (-x) -->
+      <geom name="slot_left" type="box"
+            size="0.005 0.030 0.06" pos="-0.035 0 0.05"
+            rgba="0.4 0.4 0.5 1" condim="3" contype="1" conaffinity="1"
+            friction="0.5 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <!-- Sağ duvar (+x) -->
+      <geom name="slot_right" type="box"
+            size="0.005 0.030 0.06" pos="0.035 0 0.05"
+            rgba="0.4 0.4 0.5 1" condim="3" contype="1" conaffinity="1"
+            friction="0.5 0.03 0.003"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+
+      <site name="slot_target" pos="0 0 0.01" size="0.005"
+            rgba="1 0 0 0.5" type="sphere"/>
+      <site name="slot_entry" pos="0 0 0.11" size="0.005"
+            rgba="0 1 0 0.3" type="sphere"/>
+    </body>
+
+    <body name="peg" pos="0.65 0.15 0.06">
+      <freejoint name="peg_joint"/>
+      <geom type="box" name="peg" size="0.025 0.025 0.06" mass="0.08"
+            condim="3" friction="0.8 0.03 0.003"
+            rgba="0.9 0.6 0.1 1" contype="1" conaffinity="1"
+            solimp="0.9 0.95 0.001" solref="0.02 1"/>
+      <!-- Peg alt uç (insertion yönü) -->
+      <site name="peg_bottom" pos="0 0 -0.06" size="0.003"
+            rgba="1 0 0 0.5" type="sphere"/>
+      <!-- Peg grip noktası (üst kısım, gripper buradan kavrar) -->
+      <site name="peg_grip" pos="0 0 0.04" size="0.003"
+            rgba="0 0 1 0.3" type="sphere"/>
+    </body>
+
+    <body mocap="true" name="mocap_target">
+      <geom type="box" size="0.01 0.01 0.01" rgba="1 0 0 0.2"
+            contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <keyframe>
+    <!-- qpos: 7arm + 2finger + 7peg = 16 -->
+    <!-- Peg dik duruyor (identity quat), taban yerde -->
+    <key name="home"
+      qpos="0 0.3 0 -1.57079 0 2.0 -0.7853 0.06 0.06
+            0.65 0.15 0.06 1 0 0 0"
+      ctrl="0 0.3 0 -1.57079 0 2.0 -0.7853 0.06"/>
+  </keyframe>
+</mujoco>

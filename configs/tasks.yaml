@@ -1,0 +1,526 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Robosuite Vision-Primitive Configuration
+# ═══════════════════════════════════════════════════════════════════════════
+# Single source of truth for the primitive vocabulary, the robot description
+# and every task's episode structure.  envs/*.py hold only the logic that
+# genuinely differs per task (index discovery, reward composition, state
+# randomisation, metrics); everything numeric lives here.
+#
+# Loaded by envs/__init__.py:load_config().  Point elsewhere with the
+# MJX_TASK_CONFIG environment variable or the trainer's --config flag.
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ROBOT — shared by every task, because the trunk is shared
+# ═══════════════════════════════════════════════════════════════════════════
+robot:
+  n_joints: 7
+
+  # ee(3) + vel(3) + finger(1) + q(7) + qdot(7) + ee_quat(4) + goal slots(6)
+  # The goal slots are what each env fills in (or leaves at zero); the 25-dim
+  # prefix is identical everywhere.  All tasks must agree on this number — one
+  # trunk consumes all of them.
+  proprio_dim: 31
+
+  q_lo:        [-2.897, -1.763, -2.897, -3.072, -2.897, -0.018, -2.897]
+  q_hi:        [ 2.897,  1.763,  2.897, -0.070,  2.897,  3.752,  2.897]
+  vel_limits:  [2.17, 2.17, 2.17, 2.17, 2.61, 2.61, 2.61]
+
+  # Uniform ±noise added to the arm's home qpos at every reset.
+  joint_reset_noise: 0.2
+
+  # Robosuite two-actuator gripper: ctrl[7] = +f, ctrl[8] = -f.
+  # Opening width is read back as qpos[7] - qpos[8].
+  gripper:
+    ctrl_pos_idx: 7
+    ctrl_neg_idx: 8
+    qpos_pos_idx: 7
+    qpos_neg_idx: 8
+
+  ee_site:   gripper0_right_grip_site
+  hand_body: robot0_right_hand
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PHYSICS / RENDER — shared solver and camera setup
+# ═══════════════════════════════════════════════════════════════════════════
+physics:
+  solver_iterations:    6
+  solver_ls_iterations: 8
+
+camera:
+  name: robot0_eye_in_hand
+  count: 1
+
+# Fields copied from the JAX state into the MJWarp render data every chunk.
+# Mocap bodies reach the renderer through xpos/xmat, so only tasks that want
+# the raw mocap arrays add them (see reach.extra_render_fields).
+render_fields:
+  - xpos
+  - xquat
+  - xmat
+  - geom_xpos
+  - geom_xmat
+  - cam_xpos
+  - cam_xmat
+  - light_xpos
+  - light_xdir
+  - site_xpos
+  - site_xmat
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PRIMITIVE VOCABULARY
+# ═══════════════════════════════════════════════════════════════════════════
+# One head per entry, keyed by name rather than by positional segment index,
+# so every task's `reach` drives the same `reach` head.  Order fixes the head
+# order in the parameter tree — appending is safe, reordering invalidates
+# existing checkpoints.
+#
+# finger_bias feeds head_forward's sigmoid: f = sigmoid(b4[7]) * FINGER_OPEN.
+#   +2.0 → ~0.035 m (open)      -2.0 → ~0.005 m (closed on an object)
+# Holding biases stay at -2.0 rather than -5.0: the tighter value grips no
+# harder in practice but pushes the output far into saturation, where the head
+# can no longer modulate the finger.
+primitives:
+  reach:       {finger_bias:  2.0, doc: approach with the gripper open}
+  descend:     {finger_bias:  2.0, doc: still open while descending onto the object}
+  grasp:       {finger_bias: -2.0, doc: close on the object}
+  move:        {finger_bias: -2.0, doc: carry, same closure as grasp}
+  release:     {finger_bias:  2.0, doc: open to drop}
+  align:       {finger_bias: -2.0, doc: hold the peg over the hole}
+  insert:      {finger_bias: -2.0, doc: still holding while pushing down}
+  pull_drawer: {finger_bias: -2.0, doc: pull a drawer open by the handle}
+  push_drawer: {finger_bias: -2.0, doc: push the drawer shut by the handle}
+  push_object: {finger_bias: -2.0, doc: closed fist makes a solid pushing face}
+  slide_open:  {finger_bias: -2.0, doc: slide a window sash open}
+  slide_close: {finger_bias: -2.0, doc: slide a window sash shut}
+  turn:        {finger_bias: -2.0, doc: rotate a dial}
+  swing:       {finger_bias: -2.0, doc: swing a hinged door}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# APPROACH GEOMETRY — one constant, applied to whatever target a task tracks
+# ═══════════════════════════════════════════════════════════════════════════
+# `reach` aims pre_grasp_z above its task's target and `descend` aims descend_z
+# above it; `grasp` always aims at the target itself. The target is whatever
+# that task tracks — the cube for cube_stacking, the dial site for dial_turn,
+# the peg grip for peg_insertion.
+#
+# These apply ONLY to tasks staged reach -> descend -> grasp, whose target sits
+# on the table and is approached from above. A task that goes straight
+# reach -> grasp aims at its target directly: the drawer, window and door
+# handles are on vertical faces, so there is nothing above them to hover at.
+# The rule follows from prim_seq, so adding or removing a descend segment moves
+# a task between the two behaviours without a second switch to keep in sync.
+# A task may still override either key locally.
+approach:
+  pre_grasp_z: 0.1
+  descend_z:   0.0
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# POLICY ARCHITECTURE
+# ═══════════════════════════════════════════════════════════════════════════
+# proj_dim sets how many keypoint channels the spatial softmax produces: the
+# trunk's visual input is 2 x proj_dim numbers (an expected x,y per channel).
+# More channels = more distinct things that can be tracked across the task set.
+# It does NOT buy finer position — every channel reads out over the same
+# img_size/16 grid of cells (16 cells at img_size 64), so resolution is set by
+# img_size, not by this. Past a few hundred channels the extra ones are largely
+# redundant against that grid.
+policy:
+  proj_dim:     128    #256
+  trunk_hidden: 256    #384
+
+  # Spatial-softmax sharpness. Measured on a trained checkpoint over 408 states
+  # (tests: effective rank of the 512-number trunk input, against the 148 the
+  # raw DINOv3 features carry):
+  #   T=2.0 -> 87   T=1.0 -> 89   T=0.5 -> 97   T=0.2 -> 122
+  #   T=0.1 -> 147  T=0.05 -> 166
+  # High T averages the softmax toward uniform, so every channel reports an
+  # expected (x,y) near the image centre and the 256 channels collapse onto
+  # each other. Low T lets each channel peak on its own patch. 0.1 keeps
+  # essentially all the available information without pushing so far toward a
+  # hard argmax that the keypoint stops moving continuously with the features.
+  temperature:  1.0
+
+  # Each head's width scales with how much work it does: a head driven by many
+  # segments across the task set carries far more of the behaviour than one
+  # driven by a single segment, and a uniform width either starves the former
+  # or wastes parameters on the latter.
+  #   hidden = max(floor, per_segment x <segments driving this head>)
+  # Counted over EVERY task in this file, not the --tasks subset, so the
+  # architecture does not change with the task selection.
+  head_hidden:
+    per_segment: 16
+    # Only the single-use terminal heads land on the floor; every head fed by
+    # 4+ segments is sized by per_segment. Those heads measured rank 13-22 at
+    # width 64 in the previous run -- 20-34% utilised, the same band as the
+    # healthiest heads there -- so 64 is headroom, not strangling.
+    floor:       32    #64
+
+  # Hidden layers per head. Measured over 11 trained heads at iteration 999,
+  # rank90 ran 13-47 against widths of 64-448 -- nothing above 35% utilised.
+  # Among heads fed by exactly one segment, where the workload is identical and
+  # only width varies (64 vs 160), width correlated with rank at +0.13: release
+  # at width 160 reached rank 17 while swing at width 64 reached 22. Width past
+  # a small multiple of the rank in use buys nothing, so the widths above are
+  # cut and the capacity moved into depth instead.
+  head_layers: 2
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TRAINING DEFAULTS — every one is overridable on the command line
+# ═══════════════════════════════════════════════════════════════════════════
+training:
+  default_tasks: [window_open, drawer_open, cube_stacking]
+
+  batch:        20
+  img_size:     64
+  substeps:     4
+  chunk_size:   5
+  iters:        1000
+  gamma:        0.999
+  # Gradient clipping — the shared trunk and every primitive head are clipped
+  # independently, because they see very different gradient magnitudes. A head
+  # driven by 13 segments (`reach`, counting container's three passes)
+  # accumulates a far larger raw gradient than one driven by a single segment
+  # (`turn`). Under one shared threshold the most-shared head is clipped
+  # hardest, so the primitive that matters most trains at the smallest
+  # effective learning rate — the opposite of what you want.
+  #
+  # Every primitive needs its own entry; a missing one is an error rather than
+  # a silent fallback, so adding a primitive forces a deliberate choice here.
+  # Tune each from the per-head |g| table a run prints: a head whose clip
+  # factor sits near 1.00 is unclipped and its limit is not binding; one pinned
+  # near 0.10 is discarding 90% of every step and wants a higher limit.
+  grad_clip: 1500.0          # shared projection + trunk
+  grad_clip_head:
+    reach:       3000.0
+    descend:     1500.0
+    grasp:       1000.0
+    move:        1000.0
+    release:     500.0
+    align:       500.0
+    insert:      500.0
+    pull_drawer: 1000.0
+    push_drawer: 1000.0
+    push_object: 500.0
+    slide_open:  1000.0
+    slide_close: 1000.0
+    turn:        1500.0
+    swing:       2000.0
+
+  grad_groups:  1
+  log_every:    5
+  warmup_iters: 2
+  save_every:   50     # checkpoint params + ObsRMS + reward plot this often
+  # A single non-finite iteration is skipped and training continues; this
+  # many CONSECUTIVE ones means the problem is structural, not one bad batch.
+  max_nan_skips: 10
+  # Divide each task's loss by its active_steps before summing, so a task at
+  # phase 0 weighs as much as one at its final phase. Off by default: it
+  # changes the objective, not just its scale.
+  normalise_loss: false
+
+  lr:      2.0e-4      # shared projection + trunk
+  lr_head: 2.0e-4      # per-primitive heads
+
+  # The insertion primitives want a smaller step: the tight peg fit makes their
+  # gradients larger and spikier than the approach ones.
+  lr_prim:
+    align:  2.0e-5
+    insert: 2.0e-5
+
+  curriculum:
+    patience:   2        # curriculum ticks before a phase advances
+    pass_frac:  0.50     # fraction of envs that must meet a phase's criterion
+
+  termination:
+    success_rate:   0.8  # per-tick success needed to extend the streak
+    success_streak: 4    # consecutive qualifying logs before a task is solved
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TASKS
+# ═══════════════════════════════════════════════════════════════════════════
+# env         → the class in envs/ that implements this task
+# xml         → asset path, relative to assets/
+# seg_steps   → frames per segment; every boundary should be a multiple of
+#               chunk_size so each primitive switch lands on a fresh render
+# prim_seq    → which primitive head drives each segment (same length)
+# criteria    → per-segment curriculum test: [kind, threshold]
+#                 dist  → pass when the metric is BELOW the threshold
+#                 lift  → pass when the metric is ABOVE the threshold
+#                 angle → pass when the metric is ABOVE the threshold
+#                 always→ always passes
+# retired     → runnable by name, but excluded from `--tasks all`
+tasks:
+
+  # ── free-space reach ────────────────────────────────────────────────────
+  reach:
+    env: reach
+    xml: robosuite_reach.xml
+    seg_steps:  [35]
+    seg_labels: [Reach]
+    prim_seq:   [reach]
+    criteria:   [[dist, success]]
+    success_thresh: 0.03           # |ee - target| for an env to count as solved
+    target_quat: [0.0000, 0.9999, 0.0012, 0.0173]    # downward (w, x, y, z)
+    # The target is fed to the policy as coordinates, not shown as a marker:
+    # a 2.5 cm marker covers ~20 of 4096 pixels against a 4x4 patch grid, too
+    # little signal to localise.
+    mocap_body:    reach_target
+    target_center: [0.0, 0.0, 0.90]
+    target_range:  [0.15, 0.15, 0.05]
+    extra_render_fields: [mocap_pos, mocap_quat]
+
+  # ── stack one cube on another ───────────────────────────────────────────
+  cube_stacking:
+    env: cube_stacking
+    xml: robosuite_stack.xml
+    seg_steps:  [25, 20, 10, 35, 10]
+    seg_labels: [Reach, Descend, Grasp, Move, Release]
+    prim_seq:   [reach, descend, grasp, move, release]
+    criteria:
+      # Reach is deliberately looser than Descend. It only has to put the
+      # gripper roughly above the cube; Descend then closes the remaining error
+      # from much closer in, and measures ~0.015 against this same 0.04. At
+      # 0.04 the Reach gate sat just above threshold for 900 iterations and
+      # blocked the curriculum at phase 0 while Descend/Grasp were already 90%.
+      - [dist, 0.06]
+      - [dist, 0.04]
+      - [dist, 0.04]
+      - [dist, 0.10]
+      - [always, 0]
+    target_quat: [0.0000, 0.9999, 0.0012, 0.0173]
+    cube2_height:  0.05
+    stack_offset:  0.01
+    cube_qpos_idx: 9               # free-joint x offset; y is +1
+    cube_xy_noise: 0.05
+    success_xy_tol: 0.02           # cube1 within this of cube2 in xy = stacked
+
+  # ── pick a cube and carry it to a marker (no release) ───────────────────
+  pick_and_place:
+    env: pick_place
+    xml: robosuite_pick_place_push.xml
+    seg_steps:  [25, 20, 10, 35]
+    seg_labels: [Reach, Descend, Grasp, Move]
+    prim_seq:   [reach, descend, grasp, move]
+    criteria:
+      - [dist, 0.04]
+      - [dist, 0.04]
+      - [dist, 0.04]
+      - [dist, success]
+    success_thresh: 0.03           # |cube - place target|, measured while held
+    target_quat: [0.0000, 0.9999, 0.0012, 0.0173]
+    cube_qpos_idx: 9
+    cube_xy_noise: 0.05
+    # Place marker sampling box: centred away from the cube's start so the two
+    # rarely coincide, and above the table so the cube must be lifted.
+    mocap_body:    place_target
+    place_center: [0.0, 0.0, 0.90]
+    place_range:  [0.15, 0.15, 0.05]
+
+  # ── push a cube along the table to a marker (non-prehensile) ────────────
+  push_cube:
+    env: push_cube
+    xml: robosuite_pick_place_push.xml
+    retired: true                  # hard non-prehensile problem; excluded from 'all'
+    seg_steps:  [25, 35]
+    seg_labels: [Reach, Push]
+    prim_seq:   [reach, push_object]
+    criteria:
+      - [dist, 0.05]
+      - [dist, success]
+    success_thresh: 0.05           # |cube - goal|
+    target_quat: [0.0000, 0.9999, 0.0012, 0.0173]
+    cube_qpos_idx: 9
+    cube_xy_noise: 0.05
+    # How far behind the cube (opposite the goal) the gripper lines up. Cube
+    # half-width is 0.025, so this leaves clearance for the closed fingers.
+    push_standoff: 0.06
+    push_offset:   0.01            # approach this far above the cube centre
+    # Goal marker stays at the cube's resting height — it slides, not lifts.
+    mocap_body:   place_target
+    goal_center:  [0.12, 0.0, 0.825]
+    goal_range:   [0.06, 0.15, 0.0]
+
+  # ── drop three objects into a container ─────────────────────────────────
+  container:
+    env: container
+    xml: robosuite_container.xml
+    retired: true    # 15 segments, still on object 1 of 3 after 632 iters
+    prim_seq: [reach, descend, grasp, move, release,
+               reach, descend, grasp, move, release,
+               reach, descend, grasp, move, release]
+    target_quat: [0.0000, 0.9999, 0.0012, 0.0173]
+    place_z_offset: 0.15           # drop height above the container_inside site
+    container_site: container_inside
+    container_radius: 0.125        # xy radius counting as "in the container"
+    table_z: 0.80                  # an object below this has left the table
+    obj_xy_noise: 0.03
+    # Ball first: a sphere with no rolling friction is the hardest to grasp, so
+    # it gets the cleanest scene.  seg_steps/labels/criteria repeat per object.
+    per_object:
+      objects:        [ball, prism, cube]
+      label_prefixes: [B, P, C]
+      qpos_idx:       {ball: 16, prism: 23, cube: 9}
+      seg_steps:  [25, 20, 10, 25, 10]
+      seg_labels: [Reach, Desc, Grasp, Move, Rel]
+      criteria:
+        - [dist, 0.05]
+        - [dist, 0.05]
+        - [dist, 0.04]
+        - [dist, 0.10]
+        - [always, 0]
+
+  # ── seat a peg in a slot ────────────────────────────────────────────────
+  peg_insertion:
+    env: peg_insertion
+    xml: robosuite_peg.xml
+    retired: true    # contact-rich; drove reward to -136 and produced
+                     # every non-finite iteration in the 632-iter run
+    seg_steps:  [25, 20, 10, 25, 20, 20, 10]
+    seg_labels: [Reach, Descend, Grasp, Move, Align, Insert, Release]
+    prim_seq:   [reach, descend, grasp, move, align, insert, release]
+    criteria:
+      - [dist, 0.05]
+      - [dist, 0.05]
+      - [dist, 0.04]
+      - [dist, 0.10]
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [always, 0]
+    success_thresh: 0.03           # |peg tip - slot floor|
+    target_quat: [0.0000, 0.9999, 0.0012, 0.0173]
+    peg_qpos_idx: 9
+    peg_xy_noise: 0.03
+    sites:
+      peg_body:    peg
+      peg_bottom:  peg_bottom
+      peg_grip:    peg_grip
+      slot_entry:  slot_entry
+      slot_target: slot_target
+
+  # ── articulated tasks ───────────────────────────────────────────────────
+  # One hinge or slide joint driven by its handle. Identical structure; only
+  # the joint, the handle site, the endpoints and the approach pose differ.
+  drawer_open:
+    env: articulated
+    xml: robosuite_drawer.xml
+    seg_steps:  [35, 10, 35]
+    seg_labels: [Reach, Grasp, Pull]
+    prim_seq:   [reach, grasp, pull_drawer]
+    criteria:
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, success]
+    success_thresh: 0.02           # |joint - target|
+    target_quat: [0.2554, 0.6594, 0.6593, 0.2555]
+    joint:       drawer_slide
+    handle_site: drawer_handle_site
+    joint_target: -0.16
+    joint_init_range: [-0.02,  0.00]   # original narrow range
+
+  drawer_close:
+    env: articulated
+    xml: robosuite_drawer.xml
+    seg_steps:  [35, 10, 35]
+    seg_labels: [Reach, Grasp, Push]
+    prim_seq:   [reach, grasp, push_drawer]
+    criteria:
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, success]
+    success_thresh: 0.02
+    target_quat: [0.2554, 0.6594, 0.6593, 0.2555]
+    joint:       drawer_slide
+    keyframe:    home2   # starts at the far end of travel
+    handle_site: drawer_handle_site
+    joint_target: 0.0
+    joint_init_range: [-0.16, -0.14]   # original narrow range
+
+  window_open:
+    env: articulated
+    xml: robosuite_window.xml
+    seg_steps:  [35, 10, 35]
+    seg_labels: [Reach, Grasp, Slide]
+    prim_seq:   [reach, grasp, slide_open]
+    criteria:
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, success]
+    success_thresh: 0.02
+    target_quat: [-0.0118, 0.9494, -0.0360, 0.3119]
+    joint:       window_slide
+    handle_site: window_handle_site
+    joint_target: 0.2
+    joint_init_range: [ 0.00,  0.05]   # original narrow range
+
+  window_close:
+    env: articulated
+    xml: robosuite_window.xml
+    seg_steps:  [35, 10, 35]
+    seg_labels: [Reach, Grasp, Slide]
+    # Its own head, not window_open's. Sliding a sash open and sliding it shut
+    # are opposite motions from near-identical views, and with the start ranges
+    # now overlapping there is nothing in the image that says which. This is
+    # what the drawer already does (pull_drawer vs push_drawer); the window was
+    # the odd one out.
+    prim_seq:   [reach, grasp, slide_close]
+    criteria:
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, success]
+    success_thresh: 0.02
+    target_quat: [-0.0118, 0.9494, -0.0360, 0.3119]
+    joint:       window_slide
+    keyframe:    home2   # starts at the far end of travel
+    handle_site: window_handle_site
+    joint_target: 0.0
+    joint_init_range: [ 0.15,  0.20]   # original narrow range
+
+  dial_turn:
+    env: articulated
+    xml: robosuite_dial.xml
+    # A descend segment between reach and grasp: reward_reach pays a 5x bonus
+    # for holding the fingers wide, which fights the closing that grasp needs.
+    # descend drops that bonus to 1x, giving the gripper 20 steps to settle onto
+    # the handle before grasp closes it.
+    seg_steps:  [35, 20, 10, 50]
+    seg_labels: [Reach, Descend, Grasp, Turn]
+    prim_seq:   [reach, descend, grasp, turn]
+    criteria:
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, success]
+    # Radians, not metres. 0.01 rad on a 1.57 rad turn is 0.6% of travel — an
+    # order of magnitude stricter than the linear tasks (drawer 6%, window 5%),
+    # and it scored a dial stopped 2.5 deg short of the target as a total
+    # failure. 0.2 rad (~12 deg) puts it in line with the others.
+    success_thresh: 0.2
+    target_quat: [0.0, 0.7071068, 0.7071068, 0.0]
+    joint:       dial_rotate
+    handle_site: dial_grip_site
+    joint_target: 1.57             # quarter turn, positive direction
+    joint_init_range: [-0.10,  0.10]   # no counterpart task; removes the edge atom
+
+  door_open:
+    env: articulated
+    xml: robosuite_door.xml
+    seg_steps:  [35, 10, 65]
+    seg_labels: [Reach, Grasp, Swing]
+    prim_seq:   [reach, grasp, swing]
+    criteria:
+      - [dist, 0.03]
+      - [dist, 0.03]
+      - [dist, success]
+    success_thresh: 0.1
+    target_quat: [0.2554, 0.6594, 0.6593, 0.2555]
+    joint:       doorjoint
+    handle_site: door_handle_site
+    joint_target: -0.70             # open ~70% of range
+    joint_init_range: [-0.10,  0.00]   # no counterpart task; removes the edge atom

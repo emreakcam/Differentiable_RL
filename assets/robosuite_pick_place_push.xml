@@ -1,0 +1,372 @@
+<mujoco model="base">
+  <compiler angle="radian" meshdir="./"/>
+
+  <option timestep="0.01" iterations="8" ls_iterations="8" integrator="implicitfast">
+    <flag eulerdamp="disable"/>
+  </option>
+
+  <custom>
+    <numeric data="16" name="max_contact_points"/>
+  </custom>
+
+  <size njmax="100" nconmax="50"/>
+
+  <visual>
+    <map znear="0.001"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.9 0.9 1" rgb2="0.2 0.3 0.4" width="256" height="1536"/>
+    <texture type="2d" name="texplane" file="assets/textures/light-gray-floor-tile.png"/>
+    <texture type="cube" name="tex-ceramic" file="assets/textures/ceramic.png"/>
+    <texture type="cube" name="tex-steel-brushed" file="assets/textures/steel-brushed.png"/>
+    <texture type="2d" name="tex-light-gray-plaster" file="assets/textures/light-gray-plaster.png"/>
+    <texture type="cube" name="textable" builtin="flat" rgb1="0.5 0.5 0.5" width="512" height="3072"/>
+    <texture type="cube" name="cubeA_redwood" file="assets/textures/red-wood.png"/>
+    <texture type="cube" name="cubeB_greenwood" file="assets/textures/green-wood.png"/>
+    <material name="floorplane" texture="texplane" texuniform="true" texrepeat="2 2" specular="0" shininess="0" reflectance="0.01"/>
+    <material name="table_ceramic" texture="tex-ceramic" specular="0.2" shininess="0"/>
+    <material name="table_legs_metal" texture="tex-steel-brushed" shininess="0.8" reflectance="0.8"/>
+    <material name="walls_mat" texture="tex-light-gray-plaster" texuniform="true" texrepeat="3 3" specular="0.1" shininess="0.1"/>
+    <material name="table_mat" texture="textable"/>
+    <material name="robot0_Face636_001" shininess="0.45" rgba="0.901961 0.921569 0.929412 1"/>
+    <material name="robot0_Part__Feature017_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature018_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature019_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature022_001" shininess="0.45" rgba="0.901961 0.921569 0.929412 1"/>
+    <material name="robot0_Part__Feature023_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Shell001_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Shell002_001" shininess="0.45" rgba="0.901961 0.921569 0.929412 1"/>
+    <material name="robot0_Shell003_001" shininess="0.45" rgba="0.901961 0.921569 0.929412 1"/>
+    <material name="robot0_Shell009_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Shell010_001" shininess="0.45" rgba="0.901961 0.921569 0.929412 1"/>
+    <material name="robot0_Shell_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Feature_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature024" shininess="0.45"/>
+    <material name="robot0_Part__Feature001_010_001_002" shininess="0.45"/>
+    <material name="robot0_Part__Feature002_007_001_002" shininess="0.45"/>
+    <material name="robot0_Part__Feature003_004_001_002" shininess="0.45"/>
+    <material name="robot0_Part__Feature_001_001_001_002" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Feature001_001_003_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature002_001_003_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Feature003_001_003_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature_002_003_001" shininess="0.45"/>
+    <material name="robot0_Part__Feature_002_004_003" shininess="0.45"/>
+    <material name="robot0_Shell001_001_001_003" shininess="0.45" rgba="0.25 0.25 0.25 1"/>
+    <material name="robot0_Shell_001_001_003" shininess="0.45"/>
+    <material name="robot0_Face064_002_001_002_001" shininess="0.45" rgba="1 0 0 1"/>
+    <material name="robot0_Face065_002_001_002_001" shininess="0.45" rgba="0 1 0 1"/>
+    <material name="robot0_Face374_002_001_002_001" shininess="0.45"/>
+    <material name="robot0_Face539_002_001_002_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Feature001_009_001_002_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Feature002_006_001_002_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Shell002_002_001_002_001" shininess="0.45"/>
+    <material name="robot0_Shell003_002_001_002_001" shininess="0.45"/>
+    <material name="robot0_Shell004_001_001_002_001" shininess="0.45"/>
+    <material name="robot0_Shell005_001_001_002_001" shininess="0.45"/>
+    <material name="robot0_Shell006_003_002_001" shininess="0.45" rgba="0.901961 0.921569 0.929412 1"/>
+    <material name="robot0_Shell007_002_002_001" shininess="0.45" rgba="0.25 0.25 0.25 1"/>
+    <material name="robot0_Shell011_002_002_001" shininess="0.45"/>
+    <material name="robot0_Shell012_002_002_001" shininess="0.45"/>
+    <material name="robot0_Shell_003_001_002_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Union001_001_001_002_001" shininess="0.45" rgba="0.039216 0.541176 0.780392 1"/>
+    <material name="robot0_Union_001_001_002_001" shininess="0.45" rgba="0.039216 0.541176 0.780392 1"/>
+    <material name="robot0_Part__Mirroring001_004_002" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Mirroring002_004_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Mirroring003_004_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Mirroring004_004_002" shininess="0.45"/>
+    <material name="robot0_Part__Mirroring005_004_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Mirroring006_004_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Mirroring007_004_001" shininess="0.45" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="robot0_Part__Mirroring_004_001" shininess="0.45" rgba="0.898039 0.917647 0.929412 1"/>
+    <material name="cubeA_redwood_mat" texture="cubeA_redwood" specular="0.4" shininess="0.1"/>
+    <material name="cubeB_greenwood_mat" texture="cubeB_greenwood" specular="0.4" shininess="0.1"/>
+    <mesh name="robot0_link0" file="assets/robots/panda/meshes/link0.stl"/>
+    <mesh name="robot0_link1" file="assets/robots/panda/meshes/link1.stl"/>
+    <mesh name="robot0_link2" file="assets/robots/panda/meshes/link2.stl"/>
+    <mesh name="robot0_link3" file="assets/robots/panda/meshes/link3.stl"/>
+    <mesh name="robot0_link4" file="assets/robots/panda/meshes/link4.stl"/>
+    <mesh name="robot0_link5" file="assets/robots/panda/meshes/link5.stl"/>
+    <mesh name="robot0_link6" file="assets/robots/panda/meshes/link6.stl"/>
+    <mesh name="robot0_link7" file="assets/robots/panda/meshes/link7.stl"/>
+    <mesh name="robot0_link0_vis_0" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_0.obj"/>
+    <mesh name="robot0_link0_vis_1" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_1.obj"/>
+    <mesh name="robot0_link0_vis_2" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_2.obj"/>
+    <mesh name="robot0_link0_vis_3" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_3.obj"/>
+    <mesh name="robot0_link0_vis_4" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_4.obj"/>
+    <mesh name="robot0_link0_vis_5" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_5.obj"/>
+    <mesh name="robot0_link0_vis_6" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_6.obj"/>
+    <mesh name="robot0_link0_vis_7" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_7.obj"/>
+    <mesh name="robot0_link0_vis_8" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_8.obj"/>
+    <mesh name="robot0_link0_vis_9" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_9.obj"/>
+    <mesh name="robot0_link0_vis_10" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_10.obj"/>
+    <mesh name="robot0_link0_vis_11" file="assets/robots/panda/obj_meshes/link0_vis/link0_vis_11.obj"/>
+    <mesh name="robot0_link1_vis" file="assets/robots/panda/obj_meshes/link1_vis/link1_vis.obj"/>
+    <mesh name="robot0_link2_vis" file="assets/robots/panda/obj_meshes/link2_vis/link2_vis.obj"/>
+    <mesh name="robot0_link3_vis_0" file="assets/robots/panda/obj_meshes/link3_vis/link3_vis_0.obj"/>
+    <mesh name="robot0_link3_vis_1" file="assets/robots/panda/obj_meshes/link3_vis/link3_vis_1.obj"/>
+    <mesh name="robot0_link3_vis_2" file="assets/robots/panda/obj_meshes/link3_vis/link3_vis_2.obj"/>
+    <mesh name="robot0_link3_vis_3" file="assets/robots/panda/obj_meshes/link3_vis/link3_vis_3.obj"/>
+    <mesh name="robot0_link4_vis_0" file="assets/robots/panda/obj_meshes/link4_vis/link4_vis_0.obj"/>
+    <mesh name="robot0_link4_vis_1" file="assets/robots/panda/obj_meshes/link4_vis/link4_vis_1.obj"/>
+    <mesh name="robot0_link4_vis_2" file="assets/robots/panda/obj_meshes/link4_vis/link4_vis_2.obj"/>
+    <mesh name="robot0_link4_vis_3" file="assets/robots/panda/obj_meshes/link4_vis/link4_vis_3.obj"/>
+    <mesh name="robot0_link5_vis_0" file="assets/robots/panda/obj_meshes/link5_vis/link5_vis_0.obj"/>
+    <mesh name="robot0_link5_vis_1" file="assets/robots/panda/obj_meshes/link5_vis/link5_vis_1.obj"/>
+    <mesh name="robot0_link5_vis_2" file="assets/robots/panda/obj_meshes/link5_vis/link5_vis_2.obj"/>
+    <mesh name="robot0_link6_vis_0" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_0.obj"/>
+    <mesh name="robot0_link6_vis_1" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_1.obj"/>
+    <mesh name="robot0_link6_vis_2" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_2.obj"/>
+    <mesh name="robot0_link6_vis_3" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_3.obj"/>
+    <mesh name="robot0_link6_vis_4" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_4.obj"/>
+    <mesh name="robot0_link6_vis_5" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_5.obj"/>
+    <mesh name="robot0_link6_vis_6" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_6.obj"/>
+    <mesh name="robot0_link6_vis_7" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_7.obj"/>
+    <mesh name="robot0_link6_vis_8" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_8.obj"/>
+    <mesh name="robot0_link6_vis_9" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_9.obj"/>
+    <mesh name="robot0_link6_vis_10" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_10.obj"/>
+    <mesh name="robot0_link6_vis_11" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_11.obj"/>
+    <mesh name="robot0_link6_vis_12" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_12.obj"/>
+    <mesh name="robot0_link6_vis_13" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_13.obj"/>
+    <mesh name="robot0_link6_vis_14" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_14.obj"/>
+    <mesh name="robot0_link6_vis_15" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_15.obj"/>
+    <mesh name="robot0_link6_vis_16" file="assets/robots/panda/obj_meshes/link6_vis/link6_vis_16.obj"/>
+    <mesh name="robot0_link7_vis_0" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_0.obj"/>
+    <mesh name="robot0_link7_vis_1" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_1.obj"/>
+    <mesh name="robot0_link7_vis_2" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_2.obj"/>
+    <mesh name="robot0_link7_vis_3" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_3.obj"/>
+    <mesh name="robot0_link7_vis_4" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_4.obj"/>
+    <mesh name="robot0_link7_vis_5" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_5.obj"/>
+    <mesh name="robot0_link7_vis_6" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_6.obj"/>
+    <mesh name="robot0_link7_vis_7" file="assets/robots/panda/obj_meshes/link7_vis/link7_vis_7.obj"/>
+    <mesh name="fixed_mount0_pedestal" file="assets/bases/meshes/rethink_mount/pedestal.stl"/>
+    <mesh name="gripper0_right_hand" file="assets/grippers/meshes/panda_gripper/hand.stl"/>
+    <mesh name="gripper0_right_hand_vis" file="assets/grippers/meshes/panda_gripper/hand_vis.stl"/>
+    <mesh name="gripper0_right_finger" file="assets/grippers/meshes/panda_gripper/finger.stl"/>
+    <mesh name="gripper0_right_finger_vis" file="assets/grippers/meshes/panda_gripper/finger_vis.stl"/>
+    <mesh name="gripper0_right_finger_vis2" file="assets/grippers/meshes/panda_gripper/finger_longer.stl"/>
+  </asset>
+
+  <worldbody>
+    <geom name="floor" size="3 3 0.125" type="plane" group="1" material="floorplane"/>
+    <geom name="wall_leftcorner_visual" size="1.06 1.5 0.01" pos="-1.25 2.25 1.5" quat="0.653281 0.653281 0.270598 0.270598" type="box" contype="0" conaffinity="0" group="1" material="walls_mat"/>
+    <geom name="wall_rightcorner_visual" size="1.06 1.5 0.01" pos="-1.25 -2.25 1.5" quat="0.653281 0.653281 -0.270598 -0.270598" type="box" contype="0" conaffinity="0" group="1" material="walls_mat"/>
+    <geom name="wall_left_visual" size="1.75 1.5 0.01" pos="1.25 3 1.5" quat="0.707107 0.707107 0 0" type="box" contype="0" conaffinity="0" group="1" material="walls_mat"/>
+    <geom name="wall_right_visual" size="1.75 1.5 0.01" pos="1.25 -3 1.5" quat="0.707107 -0.707107 0 0" type="box" contype="0" conaffinity="0" group="1" material="walls_mat"/>
+    <geom name="wall_rear_visual" size="1.5 1.5 0.01" pos="-2 0 1.5" quat="0.5 0.5 0.5 0.5" type="box" contype="0" conaffinity="0" group="1" material="walls_mat"/>
+    <geom name="wall_front_visual" size="3 1.5 0.01" pos="3 0 1.5" quat="0.5 0.5 -0.5 -0.5" type="box" contype="0" conaffinity="0" group="1" material="walls_mat"/>
+    <camera name="frontview" pos="1.6 0 1.45" quat="0.560842 0.430646 0.430646 0.560842"/>
+    <camera name="birdview" pos="-0.2 0 3" quat="0.707107 0 0 0.707107"/>
+    <camera name="agentview" pos="0.5 0 1.35" quat="0.653098 0.271041 0.271041 0.653098"/>
+    <camera name="sideview" pos="-0.0565177 1.27612 1.48796" quat="0.00990507 0.00687796 0.591223 0.806418"/>
+    <light pos="1 1 1.5" dir="-0.19245 -0.19245 -0.96225" directional="true" castshadow="false"/>
+    <body name="table" pos="0 0 0.775">
+      <geom name="table_collision" size="0.4 0.4 0.025" type="box" rgba="0.5 0.5 0 1"/>
+      <geom name="table_visual" size="0.4 0.4 0.025" type="box" contype="0" conaffinity="0" group="1" material="table_ceramic"/>
+      <geom name="table_leg1_visual" size="0.025 0.3875" pos="0.3 0.3 -0.3875" type="cylinder" contype="0" conaffinity="0" group="1" material="table_legs_metal"/>
+      <geom name="table_leg2_visual" size="0.025 0.3875" pos="-0.3 0.3 -0.3875" type="cylinder" contype="0" conaffinity="0" group="1" material="table_legs_metal"/>
+      <geom name="table_leg3_visual" size="0.025 0.3875" pos="-0.3 -0.3 -0.3875" type="cylinder" contype="0" conaffinity="0" group="1" material="table_legs_metal"/>
+      <geom name="table_leg4_visual" size="0.025 0.3875" pos="0.3 -0.3 -0.3875" type="cylinder" contype="0" conaffinity="0" group="1" material="table_legs_metal"/>
+      <site name="table_top" pos="0 0 0.025" size="0.001" rgba="0 0 0 0"/>
+    </body>
+    <body name="left_eef_target" pos="0 0 -1" mocap="true">
+      <geom name="left_eef_target_box" size="0.05 0.05 0.05" type="box" contype="0" conaffinity="0" group="2" rgba="0.898 0.42 0.435 0.5"/>
+      <geom name="left_eef_target_sphere" size="0.01" contype="0" conaffinity="0" group="2" rgba="0.898 0.42 0.435 0.8"/>
+    </body>
+    <body name="right_eef_target" pos="0 0 -1" mocap="true">
+      <geom name="right_eef_target_box" size="0.05 0.05 0.05" type="box" contype="0" conaffinity="0" group="2" rgba="0.208 0.314 0.439 0.5"/>
+      <geom name="right_eef_target_sphere" size="0.01" contype="0" conaffinity="0" group="2" rgba="0.208 0.314 0.439 0.8"/>
+    </body>
+    <body name="robot0_base" pos="-0.56 0 0.912" gravcomp="1">
+      <inertial pos="0 0 0" mass="0" diaginertia="0 0 0"/>
+      <camera name="robot0_robotview" pos="1 0 0.4" quat="0.653098 0.271041 0.271041 0.653098"/>
+      <body name="robot0_link0" gravcomp="1">
+        <inertial pos="0 0 0.05" mass="4" diaginertia="0.4 0.4 0.4"/>
+        <geom name="robot0_g0_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell010_001" mesh="robot0_link0_vis_0"/>
+        <geom name="robot0_g1_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell009_001" mesh="robot0_link0_vis_1"/>
+        <geom name="robot0_g2_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell003_001" mesh="robot0_link0_vis_2"/>
+        <geom name="robot0_g3_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell_001" mesh="robot0_link0_vis_3"/>
+        <geom name="robot0_g4_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell002_001" mesh="robot0_link0_vis_4"/>
+        <geom name="robot0_g5_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell001_001" mesh="robot0_link0_vis_5"/>
+        <geom name="robot0_g6_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Face636_001" mesh="robot0_link0_vis_6"/>
+        <geom name="robot0_g7_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature018_001" mesh="robot0_link0_vis_7"/>
+        <geom name="robot0_g8_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature019_001" mesh="robot0_link0_vis_8"/>
+        <geom name="robot0_g9_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature023_001" mesh="robot0_link0_vis_9"/>
+        <geom name="robot0_g10_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature022_001" mesh="robot0_link0_vis_10"/>
+        <geom name="robot0_g11_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature017_001" mesh="robot0_link0_vis_11"/>
+        <geom name="robot0_link0_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link0" contype="0" conaffinity="0"/>
+        <site name="robot0_right_center" pos="0 0 0" size="0.01" group="2" rgba="1 0.3 0.3 -1"/>
+        <body name="robot0_link1" pos="0 0 0.333" gravcomp="1">
+          <inertial pos="0 0 -0.07" mass="3" diaginertia="0.3 0.3 0.3"/>
+          <joint name="robot0_joint1" pos="0 0 0" axis="0 0 1" limited="true" range="-2.8973 2.8973" armature="5" damping="0.1" frictionloss="0.1"/>
+          <geom name="robot0_g12_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature_001" mesh="robot0_link1_vis"/>
+          <geom name="robot0_link1_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link1" contype="0" conaffinity="0"/>
+          <body name="robot0_link2" quat="0.707107 -0.707107 0 0" gravcomp="1">
+            <inertial pos="0 -0.1 0" mass="3" diaginertia="0.3 0.3 0.3"/>
+            <joint name="robot0_joint2" pos="0 0 0" axis="0 0 1" limited="true" range="-1.7628 1.7628" armature="2.5" damping="0.1" frictionloss="0.1"/>
+            <geom name="robot0_g13_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature024" mesh="robot0_link2_vis"/>
+            <geom name="robot0_link2_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link2" contype="0" conaffinity="0"/>
+            <body name="robot0_link3" pos="0 -0.316 0" quat="0.707107 0.707107 0 0" gravcomp="1">
+              <inertial pos="0.04 0 -0.05" mass="2" diaginertia="0.2 0.2 0.2"/>
+              <joint name="robot0_joint3" pos="0 0 0" axis="0 0 1" limited="true" range="-2.8973 2.8973" armature="1.66667" damping="0.1" frictionloss="0.1"/>
+              <geom name="robot0_g14_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature003_004_001_002" mesh="robot0_link3_vis_0"/>
+              <geom name="robot0_g15_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature002_007_001_002" mesh="robot0_link3_vis_1"/>
+              <geom name="robot0_g16_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature001_010_001_002" mesh="robot0_link3_vis_2"/>
+              <geom name="robot0_g17_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature_001_001_001_002" mesh="robot0_link3_vis_3"/>
+              <geom name="robot0_link3_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link3" contype="0" conaffinity="0"/>
+              <body name="robot0_link4" pos="0.0825 0 0" quat="0.707107 0.707107 0 0" gravcomp="1">
+                <inertial pos="-0.04 0.05 0" mass="2" diaginertia="0.2 0.2 0.2"/>
+                <joint name="robot0_joint4" pos="0 0 0" axis="0 0 1" limited="true" range="-3.0718 -0.0698" armature="1.25" damping="0.1" frictionloss="0.1"/>
+                <geom name="robot0_g18_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature001_001_003_001" mesh="robot0_link4_vis_0"/>
+                <geom name="robot0_g19_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature003_001_003_001" mesh="robot0_link4_vis_1"/>
+                <geom name="robot0_g20_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature002_001_003_001" mesh="robot0_link4_vis_2"/>
+                <geom name="robot0_g21_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature_002_003_001" mesh="robot0_link4_vis_3"/>
+                <geom name="robot0_link4_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link4" contype="0" conaffinity="0"/>
+                <body name="robot0_link5" pos="-0.0825 0.384 0" quat="0.707107 -0.707107 0 0" gravcomp="1">
+                  <inertial pos="0 0 -0.15" mass="2" diaginertia="0.2 0.2 0.2"/>
+                  <joint name="robot0_joint5" pos="0 0 0" axis="0 0 1" limited="true" range="-2.8973 2.8973" armature="1" damping="0.1" frictionloss="0.1"/>
+                  <geom name="robot0_g22_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell001_001_001_003" mesh="robot0_link5_vis_0"/>
+                  <geom name="robot0_g23_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell_001_001_003" mesh="robot0_link5_vis_1"/>
+                  <geom name="robot0_g24_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature_002_004_003" mesh="robot0_link5_vis_2"/>
+                  <geom name="robot0_link5_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link5" contype="0" conaffinity="0"/>
+                  <body name="robot0_link6" quat="0.707107 0.707107 0 0" gravcomp="1">
+                    <inertial pos="0.06 0 0" mass="1.5" diaginertia="0.1 0.1 0.1"/>
+                    <joint name="robot0_joint6" pos="0 0 0" axis="0 0 1" limited="true" range="-0.0175 3.7525" armature="0.833333" damping="0.01" frictionloss="0.1"/>
+                    <geom name="robot0_g25_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell006_003_002_001" mesh="robot0_link6_vis_0"/>
+                    <geom name="robot0_g26_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell011_002_002_001" mesh="robot0_link6_vis_1"/>
+                    <geom name="robot0_g27_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell007_002_002_001" mesh="robot0_link6_vis_2"/>
+                    <geom name="robot0_g28_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell005_001_001_002_001" mesh="robot0_link6_vis_3"/>
+                    <geom name="robot0_g29_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell004_001_001_002_001" mesh="robot0_link6_vis_4"/>
+                    <geom name="robot0_g30_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell003_002_001_002_001" mesh="robot0_link6_vis_5"/>
+                    <geom name="robot0_g31_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell002_002_001_002_001" mesh="robot0_link6_vis_6"/>
+                    <geom name="robot0_g32_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Union001_001_001_002_001" mesh="robot0_link6_vis_7"/>
+                    <geom name="robot0_g33_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Union_001_001_002_001" mesh="robot0_link6_vis_8"/>
+                    <geom name="robot0_g34_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Face539_002_001_002_001" mesh="robot0_link6_vis_9"/>
+                    <geom name="robot0_g35_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell_003_001_002_001" mesh="robot0_link6_vis_10"/>
+                    <geom name="robot0_g36_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Face374_002_001_002_001" mesh="robot0_link6_vis_11"/>
+                    <geom name="robot0_g37_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Face065_002_001_002_001" mesh="robot0_link6_vis_12"/>
+                    <geom name="robot0_g38_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Face064_002_001_002_001" mesh="robot0_link6_vis_13"/>
+                    <geom name="robot0_g39_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature002_006_001_002_001" mesh="robot0_link6_vis_14"/>
+                    <geom name="robot0_g40_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Feature001_009_001_002_001" mesh="robot0_link6_vis_15"/>
+                    <geom name="robot0_g41_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Shell012_002_002_001" mesh="robot0_link6_vis_16"/>
+                    <geom name="robot0_link6_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link6" contype="0" conaffinity="0"/>
+                    <body name="robot0_link7" pos="0.088 0 0" quat="0.707107 0.707107 0 0" gravcomp="1">
+                      <inertial pos="0 0 0.08" mass="0.5" diaginertia="0.05 0.05 0.05"/>
+                      <joint name="robot0_joint7" pos="0 0 0" axis="0 0 1" limited="true" range="-2.8973 2.8973" armature="0.714286" damping="0.01" frictionloss="0.1"/>
+                      <geom name="robot0_g42_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring004_004_002" mesh="robot0_link7_vis_0"/>
+                      <geom name="robot0_g43_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring001_004_002" mesh="robot0_link7_vis_1"/>
+                      <geom name="robot0_g44_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring007_004_001" mesh="robot0_link7_vis_2"/>
+                      <geom name="robot0_g45_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring006_004_001" mesh="robot0_link7_vis_3"/>
+                      <geom name="robot0_g46_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring005_004_001" mesh="robot0_link7_vis_4"/>
+                      <geom name="robot0_g47_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring003_004_001" mesh="robot0_link7_vis_5"/>
+                      <geom name="robot0_g48_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring002_004_001" mesh="robot0_link7_vis_6"/>
+                      <geom name="robot0_g49_vis" type="mesh" contype="0" conaffinity="0" group="1" material="robot0_Part__Mirroring_004_001" mesh="robot0_link7_vis_7"/>
+                      <geom name="robot0_link7_collision" type="mesh" rgba="0 0.5 0 1" mesh="robot0_link7" contype="0" conaffinity="0"/>
+                      <body name="robot0_right_hand" pos="0 0 0.1065" quat="0.923785 0 0 -0.382911" gravcomp="1">
+                        <inertial pos="0 0 0" mass="0.5" diaginertia="0.05 0.05 0.05"/>
+                        <camera name="robot0_eye_in_hand" pos="0.05 0 0" quat="0 0.707107 0.707107 0" fovy="75"/>
+                        <body name="gripper0_right_right_gripper" quat="0.707107 0 0 -0.707107" gravcomp="1">
+                          <inertial pos="0 0 0.17" quat="0.707107 0.707107 0 0" mass="0.3" diaginertia="0.09 0.07 0.05"/>
+                          <geom name="gripper0_right_hand_visual" quat="0.707107 0 0 0.707107" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="gripper0_right_hand_vis"/>
+                          <geom name="gripper0_right_hand_collision" quat="0.707107 0 0 0.707107" type="mesh" rgba="0 0 0.5 1" mesh="gripper0_right_hand" contype="0" conaffinity="0"/>
+                          <site name="gripper0_right_ft_frame" pos="0 0 0" size="0.01" group="1" rgba="1 0 0 -1"/>
+                          <body name="gripper0_right_eef" pos="0 0 0.097" gravcomp="1">
+                            <site name="gripper0_right_grip_site" pos="0 0 0" size="0.01" group="1" rgba="1 0 0 -0.5"/>
+                            <site name="gripper0_right_ee_x" pos="0.1 0 0" quat="0.707105 0 0.707108 0" size="0.005 0.1" group="1" type="cylinder" rgba="1 0 0 0"/>
+                            <site name="gripper0_right_ee_y" pos="0 0.1 0" quat="0.707105 0.707108 0 0" size="0.005 0.1" group="1" type="cylinder" rgba="0 1 0 0"/>
+                            <site name="gripper0_right_ee_z" pos="0 0 0.1" size="0.005 0.1" group="1" type="cylinder" rgba="0 0 1 0"/>
+                            <site name="gripper0_right_grip_site_cylinder" pos="0 0 0" size="0.005 10" group="1" type="cylinder" rgba="0 1 0 -0.3"/>
+                          </body>
+                          <body name="gripper0_right_leftfinger" pos="0 0 0.0524" quat="0.707107 0 0 0.707107" gravcomp="1">
+                            <inertial pos="0 0 0.05" mass="0.1" diaginertia="0.01 0.01 0.005"/>
+                            <joint name="gripper0_right_finger_joint1" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="0 0.04" armature="1" damping="100" frictionloss="1"/>
+                            <geom name="gripper0_right_finger1_visual" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.499 0.499 0.499 1" mesh="gripper0_right_finger_vis"/>
+                            <geom name="gripper0_right_finger1_collision" type="mesh" contype="0" conaffinity="0" condim="4" rgba="0 0 0.5 1" mesh="gripper0_right_finger"/>
+                            <body name="gripper0_right_finger_joint1_tip" pos="0 0.0085 0.056">
+                              <inertial pos="0 0 0" quat="0 0 0 1" mass="0.01" diaginertia="0.01 0.01 0.01"/>
+                              <geom name="gripper0_right_finger1_pad_collision" size="0.008 0.004 0.008" pos="0 -0.005 -0.015" quat="0 0 0 1" type="box" friction="2 0.05" solref="0.01 0.5" rgba="0 0 0.5 1"/>
+                            </body>
+                          </body>
+                          <body name="gripper0_right_rightfinger" pos="0 0 0.0524" quat="0.707107 0 0 0.707107" gravcomp="1">
+                            <inertial pos="0 0 0.05" mass="0.1" diaginertia="0.01 0.01 0.005"/>
+                            <joint name="gripper0_right_finger_joint2" pos="0 0 0" axis="0 1 0" type="slide" limited="true" range="-0.04 0" armature="1" damping="100" frictionloss="1"/>
+                            <geom name="gripper0_right_finger2_visual" quat="0 0 0 1" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.499 0.499 0.499 1" mesh="gripper0_right_finger_vis"/>
+                            <geom name="gripper0_right_finger2_collision" quat="0 0 0 1" type="mesh" contype="0" conaffinity="0" condim="4" rgba="0 0 0.5 1" mesh="gripper0_right_finger"/>
+                            <body name="gripper0_right_finger_joint2_tip" pos="0 -0.0085 0.056">
+                              <inertial pos="0 0 0" quat="0 0 0 1" mass="0.01" diaginertia="0.01 0.01 0.01"/>
+                              <geom name="gripper0_right_finger2_pad_collision" size="0.008 0.004 0.008" pos="0 0.005 -0.015" quat="0 0 0 1" type="box" friction="2 0.05" solref="0.01 0.5" rgba="0 0 0.5 1"/>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="fixed_mount0_base" pos="0 0 0.01">
+        <body name="fixed_mount0_controller_box">
+          <inertial pos="-0.325 0 -0.38" mass="46.64" diaginertia="1.71363 1.27988 0.809981"/>
+          <geom name="fixed_mount0_controller_box_col" size="0.11 0.2 0.265" pos="-0.325 0 -0.38" type="box" rgba="0.5 0.5 0 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="fixed_mount0_pedestal_feet">
+          <inertial pos="-0.1225 0 -0.758" mass="167.09" diaginertia="8.16095 9.59375 15.0785"/>
+          <geom name="fixed_mount0_pedestal_feet_col" size="0.385 0.35 0.155" pos="-0.1225 0 -0.758" type="box" rgba="0.5 0.5 0 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="fixed_mount0_torso">
+          <inertial pos="0 0 0" mass="0.0001" diaginertia="1e-08 1e-08 1e-08"/>
+          <geom name="fixed_mount0_torso_vis" size="0.05 0.05 0.05" pos="0 0 -0.05" type="box" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1"/>
+        </body>
+        <body name="fixed_mount0_pedestal">
+          <inertial pos="0 0 0" quat="0.659267 -0.259505 -0.260945 0.655692" mass="60.864" diaginertia="6.0869 5.81635 4.20915"/>
+          <geom name="fixed_mount0_pedestal_vis" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="fixed_mount0_pedestal"/>
+          <geom name="fixed_mount0_pedestal_col" size="0.18 0.31" pos="-0.02 0 -0.29" type="cylinder" rgba="0.5 0.5 0 1 " contype="0" conaffinity="0"/>
+        </body>
+      </body>
+    </body>
+    <body name="box">
+      <joint name="cubeA_joint0" type="free" limited="false" actuatorfrclimited="false"/>
+      <geom name="cubeA_g0" size="0.025 0.025 0.025" type="box" rgba="0.5 0 0 1" group="1"/>
+      <geom name="cubeA_g0_vis" size="0.025 0.025 0.025" type="box" contype="0" conaffinity="0" group="1" mass="0" material="cubeA_redwood_mat"/>
+      <site name="cubeA_default_site" pos="0 0 0" size="0.002" rgba="1 0 0 -1"/>
+    </body>
+
+    <!-- Target carrier only: the position is fed to the policy through proprio,
+         so there is no geom here.  A visible marker is ~20 of 4096 pixels
+         against a 4x4 patch grid, which the backbone cannot localise. -->
+    <body name="place_target" mocap="true" pos="0 0 0.9">
+      <site name="place_target_site" size="0.002" rgba="0 1 0 0"/>
+    </body>
+  </worldbody>
+
+  <actuator>
+  <velocity name="actuator1" joint="robot0_joint1" kv="450" ctrlrange="-2.175 2.175" forcerange="-87 87"/>
+  <velocity name="actuator2" joint="robot0_joint2" kv="450" ctrlrange="-2.175 2.175" forcerange="-87 87"/>
+  <velocity name="actuator3" joint="robot0_joint3" kv="350" ctrlrange="-2.175 2.175" forcerange="-87 87"/>
+  <velocity name="actuator4" joint="robot0_joint4" kv="350" ctrlrange="-2.175 2.175" forcerange="-87 87"/>
+  <velocity name="actuator5" joint="robot0_joint5" kv="200" ctrlrange="-2.61 2.61" forcerange="-12 12"/>
+  <velocity name="actuator6" joint="robot0_joint6" kv="200" ctrlrange="-2.61 2.61" forcerange="-12 12"/>
+  <velocity name="actuator7" joint="robot0_joint7" kv="200" ctrlrange="-2.61 2.61" forcerange="-12 12"/>
+    <general name="gripper0_right_gripper_finger_joint1" joint="gripper0_right_finger_joint1" ctrllimited="true" ctrlrange="0 0.04" forcelimited="true" forcerange="-20 20" biastype="affine" gainprm="1000" biasprm="0 -1000"/>
+    <general name="gripper0_right_gripper_finger_joint2" joint="gripper0_right_finger_joint2" ctrllimited="true" ctrlrange="-0.04 0" forcelimited="true" forcerange="-20 20" biastype="affine" gainprm="1000" biasprm="0 -1000"/>
+  </actuator>
+
+  <sensor>
+    <force site="gripper0_right_ft_frame" name="gripper0_right_force_ee"/>
+    <torque site="gripper0_right_ft_frame" name="gripper0_right_torque_ee"/>
+  </sensor>
+
+  <keyframe>
+    <key name="home" qpos="0 -0.785 0 -2.356 0 1.571 -0.6 0.02 -0.02
+                            -0.05 0 0.825 1 0 0 0
+                            "/>
+
+    <key name="home2" qpos="0 -0.785 0 -2.356 0 1.571 0.785 0.02 -0.02
+                            -0.05 0 0.825 1 0 0 0
+                            "/>
+  </keyframe>
+
+</mujoco>

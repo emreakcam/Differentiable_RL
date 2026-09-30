@@ -1,0 +1,322 @@
+
+######################################################################
+# run started 2026-09-17 21:33:03
+# train_primitives_state.py --tasks dial_turn --out-prefix dial_turn
+######################################################################
+======================================================================
+JOINT STATE-PRIMITIVE TRAINING — robosuite (no vision)
+  Tasks: dial_turn
+  Batch: {'dial_turn': 20}
+  Obs dim: 43 (shared trunk) — 25 proprio + 6x3 object slots
+  Viewer: on
+  Saving to dial_turn_*  every 50 iters
+======================================================================
+
+[1] Shared state policy...
+
+  State Policy:
+    Observation: 43 (no projection, no spatial softmax)
+    Trunk: 43 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 77,142   Heads: 388,400   Total trainable: 465,542
+
+[2] Building task 'dial_turn' (articulated env, state obs) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_dial.xml
+  ee_site: 3
+  hand_body: 13
+  handle_site: 8
+  joint_qpos_idx: 9
+  slot0 (site dial_grip_site): 8
+  slot1 (joint dial_rotate): 9
+  nq=10, nu=9, nsite=9
+  Steps: 115, Chunks: 23, Chunk size: 5
+  Feature slots: 24, frame_dt: 0.0400s
+  obs dim: 43 = 25 proprio + 2/6 slots x 3
+    segments [35, 20, 10, 50] → primitives ['reach', 'descend', 'grasp', 'turn']
+    slots: site:dial_grip_site, joint:dial_rotate
+
+  Active primitives: reach, descend, grasp, turn
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+  [warmup 2 iters, 4600 samples]  std min=1.000e-02 max=4.246e-01
+  variance floor (0.0001) binding on 17/43 dims: [6, 25, 26, 27, 29, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+
+Iter    2:  Σrew=-43.013  grad=438.6  [reset=0.0s bptt=2.7s elapsed=179s]
+  heads (0/4 clipped)   trunk |g|=42 lim=1500 x1.00
+          reach x1  |g|=     402 lim=  3000 x1.00       descend x1  |g|=     171 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew= -43.013  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3403  Descend=0%/0.5052  Grasp=0%/0.5052  Turn=0%/1.5844
+
+Iter    5:  Σrew=-23.259  grad=226.1  [reset=0.0s bptt=2.7s elapsed=238s]
+  heads (0/4 clipped)   trunk |g|=23 lim=1500 x1.00
+          reach x1  |g|=     221 lim=  3000 x1.00       descend x1  |g|=      44 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew= -23.259  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3063  Descend=0%/0.3564  Grasp=0%/0.3564  Turn=0%/1.5602
+
+Iter   10:  Σrew=-17.456  grad=253.3  [reset=0.0s bptt=2.7s elapsed=258s]
+  heads (0/4 clipped)   trunk |g|=24 lim=1500 x1.00
+          reach x1  |g|=     218 lim=  3000 x1.00       descend x1  |g|=     127 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew= -17.456  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2401  Descend=0%/0.1969  Grasp=0%/0.1969  Turn=0%/1.5674
+
+Iter   15:  Σrew=-10.696  grad=538.4  [reset=0.0s bptt=2.7s elapsed=278s]
+  heads (0/4 clipped)   trunk |g|=50 lim=1500 x1.00
+          reach x1  |g|=     524 lim=  3000 x1.00       descend x1  |g|=     115 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew= -10.696  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1147  Descend=0%/0.1519  Grasp=0%/0.1519  Turn=0%/1.5439
+
+Iter   20:  Σrew=-3.741  grad=431.2  [reset=0.0s bptt=2.7s elapsed=298s]
+  heads (0/4 clipped)   trunk |g|=33 lim=1500 x1.00
+          reach x1  |g|=     395 lim=  3000 x1.00       descend x1  |g|=     170 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=  -3.741  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1407  Descend=5%/0.0896  Grasp=5%/0.0896  Turn=0%/1.5766
+
+Iter   25:  Σrew=6.600  grad=789.7  [reset=0.0s bptt=2.7s elapsed=318s]
+  heads (0/4 clipped)   trunk |g|=70 lim=1500 x1.00
+        descend x1  |g|=     690 lim=  1500 x1.00         reach x1  |g|=     379 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=   6.600  ph=0  success=2/20 (10%) (partial) streak=0  | Reach=5%/0.0883  Descend=0%/0.0656  Grasp=0%/0.0656  Turn=10%/1.0391
+
+Iter   30:  Σrew=6.526  grad=940.2  [reset=0.0s bptt=2.7s elapsed=338s]
+  heads (0/4 clipped)   trunk |g|=88 lim=1500 x1.00
+          reach x1  |g|=     704 lim=  3000 x1.00       descend x1  |g|=     617 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=   6.526  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.0610  Descend=40%/0.0371  Grasp=40%/0.0371  Turn=0%/1.6372
+
+Iter   35:  Σrew=12.627  grad=708.9  [reset=0.0s bptt=2.7s elapsed=359s]
+  heads (0/4 clipped)   trunk |g|=75 lim=1500 x1.00
+          reach x1  |g|=     559 lim=  3000 x1.00       descend x1  |g|=     429 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=  12.627  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0380  Descend=35%/0.0439  Grasp=35%/0.0439  Turn=0%/1.6088
+
+Iter   40:  Σrew=14.744  grad=1137.7  [reset=0.0s bptt=2.7s elapsed=379s]
+  heads (0/4 clipped)   trunk |g|=112 lim=1500 x1.00
+          reach x1  |g|=     987 lim=  3000 x1.00       descend x1  |g|=     555 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=  14.744  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=70%/0.0269  Descend=55%/0.0270  Grasp=55%/0.0270  Turn=0%/1.5959
+
+Iter   45:  Σrew=21.072  grad=1030.7  [reset=0.0s bptt=2.7s elapsed=399s]
+  heads (0/4 clipped)   trunk |g|=92 lim=1500 x1.00
+          reach x1  |g|=     983 lim=  3000 x1.00       descend x1  |g|=     297 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=  21.072  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=75%/0.0234  Descend=75%/0.0228  Grasp=75%/0.0228  Turn=0%/1.5076
+    ──→ dial_turn: phase 1, active=65
+
+Iter   50:  Σrew=28.605  grad=1198.6  [reset=0.0s bptt=3.1s elapsed=421s]
+  heads (0/4 clipped)   trunk |g|=129 lim=1500 x1.00
+          reach x1  |g|=     991 lim=  3000 x1.00       descend x1  |g|=     649 lim=  1500 x1.00  
+          grasp x1  |g|=     127 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=  28.605  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0287  Descend=50%/0.0281  Grasp=45%/0.0321  Turn=0%/1.5869
+  ✓ saved dial_turn_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 50
+
+Iter   55:  Σrew=31.667  grad=2465.8  [reset=0.0s bptt=3.1s elapsed=445s]
+  heads (0/4 clipped)   trunk |g|=281 lim=1500 x1.00
+          reach x1  |g|=    2301 lim=  3000 x1.00       descend x1  |g|=     741 lim=  1500 x1.00  
+          grasp x1  |g|=     398 lim=  1000 x1.00          turn x1  |g|=       0 lim=  1500 x1.00  
+    dial_turn       rew=  31.667  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0218  Descend=75%/0.0213  Grasp=100%/0.0223  Turn=0%/1.7311
+    ──→ dial_turn: phase 2, active=115
+
+⚠ iter 57: non-finite grads — update skipped (1 in a row, 1 total). Weights and ObsRMS left untouched.
+
+Iter   60:  Σrew=79.941  grad=2577.0  [reset=0.0s bptt=5.5s elapsed=479s]
+  heads (0/4 clipped)   trunk |g|=282 lim=1500 x1.00
+          reach x1  |g|=    2007 lim=  3000 x1.00          turn x1  |g|=    1186 lim=  1500 x1.00  
+        descend x1  |g|=     863 lim=  1500 x1.00         grasp x1  |g|=     619 lim=  1000 x1.00  
+    dial_turn       rew=  79.941  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0127  Descend=75%/0.0187  Grasp=100%/0.0129  Turn=0%/1.6500
+
+Iter   65:  Σrew=60.872  grad=3782.2  [reset=0.0s bptt=5.5s elapsed=514s]
+  heads (1/4 clipped)   trunk |g|=384 lim=1500 x1.00
+          reach x1  |g|=    3524 lim=  3000 x0.85          turn x1  |g|=    1205 lim=  1500 x1.00  
+        descend x1  |g|=     479 lim=  1500 x1.00         grasp x1  |g|=     249 lim=  1000 x1.00  
+    dial_turn       rew=  60.872  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0152  Descend=80%/0.0220  Grasp=95%/0.0212  Turn=0%/1.5087
+    ──→ dial_turn: phase 3, active=115
+
+⚠ iter 69: non-finite grads — update skipped (1 in a row, 2 total). Weights and ObsRMS left untouched.
+
+Iter   70:  Σrew=59.571  grad=2855.9  [reset=0.0s bptt=5.5s elapsed=548s]
+  heads (1/4 clipped)   trunk |g|=324 lim=1500 x1.00
+          reach x1  |g|=    2050 lim=  3000 x1.00          turn x1  |g|=    1897 lim=  1500 x0.79  
+          grasp x1  |g|=     370 lim=  1000 x1.00       descend x1  |g|=     336 lim=  1500 x1.00  
+    dial_turn       rew=  59.571  ph=3  success=0/20 (0%) streak=0  | Reach=90%/0.0178  Descend=35%/0.0284  Grasp=100%/0.0156  Turn=0%/1.3145
+
+⚠ iter 74: non-finite grads — update skipped (1 in a row, 3 total). Weights and ObsRMS left untouched.
+
+⚠ iter 75: non-finite grads — update skipped (2 in a row, 4 total). Weights and ObsRMS left untouched.
+
+⚠ iter 76: non-finite grads — update skipped (3 in a row, 5 total). Weights and ObsRMS left untouched.
+
+⚠ iter 77: non-finite grads — update skipped (4 in a row, 6 total). Weights and ObsRMS left untouched.
+
+⚠ iter 78: non-finite grads — update skipped (5 in a row, 7 total). Weights and ObsRMS left untouched.
+
+⚠ iter 79: non-finite grads — update skipped (6 in a row, 8 total). Weights and ObsRMS left untouched.
+
+⚠ iter 80: non-finite grads — update skipped (7 in a row, 9 total). Weights and ObsRMS left untouched.
+
+⚠ iter 81: non-finite grads — update skipped (8 in a row, 10 total). Weights and ObsRMS left untouched.
+
+⚠ iter 84: non-finite grads — update skipped (1 in a row, 11 total). Weights and ObsRMS left untouched.
+
+Iter   85:  Σrew=84.826  grad=3240.9  [reset=0.0s bptt=5.5s elapsed=638s]
+  heads (1/4 clipped)   trunk |g|=342 lim=1500 x1.00
+          reach x1  |g|=    3010 lim=  3000 x1.00          turn x1  |g|=     861 lim=  1500 x1.00  
+        descend x1  |g|=     706 lim=  1500 x1.00         grasp x1  |g|=     297 lim=  1000 x1.00  
+    dial_turn       rew=  84.826  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0087  Descend=95%/0.0141  Grasp=100%/0.0148  Turn=0%/1.4223
+
+Iter   90:  Σrew=81.402  grad=1664.0  [reset=0.0s bptt=5.5s elapsed=672s]
+  heads (0/4 clipped)   trunk |g|=206 lim=1500 x1.00
+          reach x1  |g|=    1310 lim=  3000 x1.00          turn x1  |g|=     924 lim=  1500 x1.00  
+        descend x1  |g|=     344 lim=  1500 x1.00         grasp x1  |g|=     196 lim=  1000 x1.00  
+    dial_turn       rew=  81.402  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0135  Descend=55%/0.0233  Grasp=100%/0.0173  Turn=0%/1.2649
+
+Iter   95:  Σrew=107.602  grad=1834.9  [reset=0.0s bptt=5.5s elapsed=707s]
+  heads (0/4 clipped)   trunk |g|=204 lim=1500 x1.00
+           turn x1  |g|=    1252 lim=  1500 x1.00         reach x1  |g|=    1250 lim=  3000 x1.00  
+        descend x1  |g|=     346 lim=  1500 x1.00         grasp x1  |g|=     275 lim=  1000 x1.00  
+    dial_turn       rew= 107.602  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0076  Descend=55%/0.0234  Grasp=100%/0.0171  Turn=0%/1.1636
+
+Iter  100:  Σrew=109.680  grad=1849.1  [reset=0.0s bptt=5.5s elapsed=741s]
+  heads (0/4 clipped)   trunk |g|=241 lim=1500 x1.00
+          reach x1  |g|=    1649 lim=  3000 x1.00          turn x1  |g|=     648 lim=  1500 x1.00  
+        descend x1  |g|=     460 lim=  1500 x1.00         grasp x1  |g|=      99 lim=  1000 x1.00  
+    dial_turn       rew= 109.680  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0065  Descend=65%/0.0209  Grasp=100%/0.0107  Turn=0%/1.0963
+  ✓ saved dial_turn_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 100
+
+Iter  105:  Σrew=101.433  grad=1624.3  [reset=0.0s bptt=5.5s elapsed=777s]
+  heads (0/4 clipped)   trunk |g|=236 lim=1500 x1.00
+          reach x1  |g|=    1194 lim=  3000 x1.00          turn x1  |g|=    1016 lim=  1500 x1.00  
+        descend x1  |g|=     351 lim=  1500 x1.00         grasp x1  |g|=      43 lim=  1000 x1.00  
+    dial_turn       rew= 101.433  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0057  Descend=45%/0.0256  Grasp=100%/0.0113  Turn=0%/1.0294
+
+Iter  110:  Σrew=123.144  grad=3553.0  [reset=0.0s bptt=5.5s elapsed=812s]
+  heads (1/4 clipped)   trunk |g|=435 lim=1500 x1.00
+          reach x1  |g|=    3256 lim=  3000 x0.92          turn x1  |g|=    1124 lim=  1500 x1.00  
+        descend x1  |g|=     741 lim=  1500 x1.00         grasp x1  |g|=     146 lim=  1000 x1.00  
+    dial_turn       rew= 123.144  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0068  Descend=65%/0.0202  Grasp=100%/0.0094  Turn=0%/0.9299
+
+Iter  115:  Σrew=118.382  grad=3101.4  [reset=0.0s bptt=5.5s elapsed=846s]
+  heads (1/4 clipped)   trunk |g|=359 lim=1500 x1.00
+          reach x1  |g|=    2477 lim=  3000 x1.00          turn x1  |g|=    1802 lim=  1500 x0.83  
+        descend x1  |g|=     269 lim=  1500 x1.00         grasp x1  |g|=     179 lim=  1000 x1.00  
+    dial_turn       rew= 118.382  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0067  Descend=75%/0.0184  Grasp=100%/0.0102  Turn=0%/0.7661
+
+Iter  120:  Σrew=125.114  grad=4144.5  [reset=0.0s bptt=5.5s elapsed=881s]
+  heads (2/4 clipped)   trunk |g|=497 lim=1500 x1.00
+          reach x1  |g|=    3356 lim=  3000 x0.89          turn x1  |g|=    2372 lim=  1500 x0.63  
+          grasp x1  |g|=     176 lim=  1000 x1.00       descend x1  |g|=     113 lim=  1500 x1.00  
+    dial_turn       rew= 125.114  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0053  Descend=90%/0.0122  Grasp=100%/0.0087  Turn=0%/0.6470
+
+Iter  125:  Σrew=127.905  grad=3265.9  [reset=0.0s bptt=5.5s elapsed=916s]
+  heads (0/4 clipped)   trunk |g|=427 lim=1500 x1.00
+          reach x1  |g|=    2959 lim=  3000 x1.00          turn x1  |g|=    1288 lim=  1500 x1.00  
+        descend x1  |g|=     244 lim=  1500 x1.00         grasp x1  |g|=      94 lim=  1000 x1.00  
+    dial_turn       rew= 127.905  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0045  Descend=65%/0.0212  Grasp=100%/0.0068  Turn=0%/0.6609
+
+Iter  130:  Σrew=135.533  grad=2901.8  [reset=0.0s bptt=5.5s elapsed=950s]
+  heads (0/4 clipped)   trunk |g|=375 lim=1500 x1.00
+          reach x1  |g|=    2428 lim=  3000 x1.00          turn x1  |g|=    1480 lim=  1500 x1.00  
+        descend x1  |g|=     393 lim=  1500 x1.00         grasp x1  |g|=     195 lim=  1000 x1.00  
+    dial_turn       rew= 135.533  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0069  Descend=60%/0.0170  Grasp=100%/0.0052  Turn=0%/0.6998
+
+Iter  135:  Σrew=130.658  grad=3661.1  [reset=0.0s bptt=5.5s elapsed=985s]
+  heads (2/4 clipped)   trunk |g|=500 lim=1500 x1.00
+          reach x1  |g|=    3254 lim=  3000 x0.92          turn x1  |g|=    1571 lim=  1500 x0.95  
+        descend x1  |g|=     233 lim=  1500 x1.00         grasp x1  |g|=     198 lim=  1000 x1.00  
+    dial_turn       rew= 130.658  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0061  Descend=50%/0.0231  Grasp=100%/0.0058  Turn=0%/0.7107
+
+Iter  140:  Σrew=140.694  grad=3460.2  [reset=0.0s bptt=5.5s elapsed=1019s]
+  heads (1/4 clipped)   trunk |g|=499 lim=1500 x1.00
+          reach x1  |g|=    3168 lim=  3000 x0.95          turn x1  |g|=    1200 lim=  1500 x1.00  
+        descend x1  |g|=     427 lim=  1500 x1.00         grasp x1  |g|=     261 lim=  1000 x1.00  
+    dial_turn       rew= 140.694  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0045  Descend=70%/0.0152  Grasp=100%/0.0046  Turn=0%/0.5208
+
+Iter  145:  Σrew=140.843  grad=2747.7  [reset=0.0s bptt=5.5s elapsed=1054s]
+  heads (0/4 clipped)   trunk |g|=379 lim=1500 x1.00
+          reach x1  |g|=    2383 lim=  3000 x1.00          turn x1  |g|=    1296 lim=  1500 x1.00  
+          grasp x1  |g|=     201 lim=  1000 x1.00       descend x1  |g|=     103 lim=  1500 x1.00  
+    dial_turn       rew= 140.843  ph=3  success=0/20 (0%) streak=0  | Reach=100%/0.0058  Descend=40%/0.0229  Grasp=100%/0.0053  Turn=0%/0.4542
+
+Iter  150:  Σrew=139.537  grad=2678.0  [reset=0.0s bptt=5.5s elapsed=1088s]
+  heads (1/4 clipped)   trunk |g|=340 lim=1500 x1.00
+          reach x1  |g|=    2039 lim=  3000 x1.00          turn x1  |g|=    1635 lim=  1500 x0.92  
+        descend x1  |g|=     339 lim=  1500 x1.00         grasp x1  |g|=     337 lim=  1000 x1.00  
+    dial_turn       rew= 139.537  ph=3  success=11/20 (55%) streak=0  | Reach=100%/0.0036  Descend=65%/0.0155  Grasp=100%/0.0065  Turn=55%/0.2355
+  ✓ saved dial_turn_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 150
+
+Iter  155:  Σrew=158.384  grad=4286.6  [reset=0.0s bptt=5.5s elapsed=1124s]
+  heads (1/4 clipped)   trunk |g|=427 lim=1500 x1.00
+           turn x1  |g|=    3645 lim=  1500 x0.41         reach x1  |g|=    2155 lim=  3000 x1.00  
+        descend x1  |g|=     421 lim=  1500 x1.00         grasp x1  |g|=     290 lim=  1000 x1.00  
+    dial_turn       rew= 158.384  ph=3  success=20/20 (100%) streak=1  | Reach=100%/0.0026  Descend=80%/0.0119  Grasp=100%/0.0040  Turn=100%/0.0722
+
+Iter  160:  Σrew=164.166  grad=3606.0  [reset=0.0s bptt=5.5s elapsed=1159s]
+  heads (1/4 clipped)   trunk |g|=215 lim=1500 x1.00
+           turn x1  |g|=    3509 lim=  1500 x0.43         reach x1  |g|=     746 lim=  3000 x1.00  
+        descend x1  |g|=     241 lim=  1500 x1.00         grasp x1  |g|=     173 lim=  1000 x1.00  
+    dial_turn       rew= 164.166  ph=3  success=15/20 (75%) streak=0  | Reach=100%/0.0032  Descend=90%/0.0102  Grasp=100%/0.0048  Turn=75%/0.1323
+
+Iter  165:  Σrew=164.224  grad=4779.4  [reset=0.0s bptt=5.5s elapsed=1193s]
+  heads (1/4 clipped)   trunk |g|=331 lim=1500 x1.00
+           turn x1  |g|=    4465 lim=  1500 x0.34         reach x1  |g|=    1379 lim=  3000 x1.00  
+        descend x1  |g|=     918 lim=  1500 x1.00         grasp x1  |g|=     233 lim=  1000 x1.00  
+    dial_turn       rew= 164.224  ph=3  success=11/20 (55%) streak=0  | Reach=100%/0.0032  Descend=100%/0.0071  Grasp=100%/0.0053  Turn=55%/0.1809
+
+Iter  170:  Σrew=165.963  grad=4388.6  [reset=0.0s bptt=5.5s elapsed=1228s]
+  heads (1/4 clipped)   trunk |g|=282 lim=1500 x1.00
+           turn x1  |g|=    4056 lim=  1500 x0.37         reach x1  |g|=    1430 lim=  3000 x1.00  
+        descend x1  |g|=     599 lim=  1500 x1.00         grasp x1  |g|=     570 lim=  1000 x1.00  
+    dial_turn       rew= 165.963  ph=3  success=9/20 (45%) streak=0  | Reach=100%/0.0024  Descend=80%/0.0126  Grasp=100%/0.0076  Turn=45%/0.2066
+
+Iter  175:  Σrew=165.588  grad=6257.1  [reset=0.0s bptt=5.5s elapsed=1262s]
+  heads (1/4 clipped)   trunk |g|=486 lim=1500 x1.00
+           turn x1  |g|=    5671 lim=  1500 x0.26         reach x1  |g|=    2543 lim=  3000 x1.00  
+        descend x1  |g|=     486 lim=  1500 x1.00         grasp x1  |g|=     231 lim=  1000 x1.00  
+    dial_turn       rew= 165.588  ph=3  success=12/20 (60%) streak=0  | Reach=100%/0.0020  Descend=95%/0.0067  Grasp=100%/0.0050  Turn=60%/0.1814
+
+Iter  180:  Σrew=175.673  grad=6003.8  [reset=0.0s bptt=5.5s elapsed=1297s]
+  heads (2/4 clipped)   trunk |g|=608 lim=1500 x1.00
+           turn x1  |g|=    4869 lim=  1500 x0.31         reach x1  |g|=    3323 lim=  3000 x0.90  
+        descend x1  |g|=     913 lim=  1500 x1.00         grasp x1  |g|=     311 lim=  1000 x1.00  
+    dial_turn       rew= 175.673  ph=3  success=19/20 (95%) streak=1  | Reach=100%/0.0021  Descend=95%/0.0069  Grasp=100%/0.0036  Turn=95%/0.0998
+
+Iter  185:  Σrew=174.852  grad=8305.0  [reset=0.0s bptt=5.5s elapsed=1331s]
+  heads (1/4 clipped)   trunk |g|=470 lim=1500 x1.00
+           turn x1  |g|=    8084 lim=  1500 x0.19         reach x1  |g|=    1747 lim=  3000 x1.00  
+        descend x1  |g|=     553 lim=  1500 x1.00         grasp x1  |g|=     203 lim=  1000 x1.00  
+    dial_turn       rew= 174.852  ph=3  success=20/20 (100%) streak=2  | Reach=100%/0.0023  Descend=100%/0.0055  Grasp=100%/0.0028  Turn=100%/0.0813
+
+Iter  190:  Σrew=174.857  grad=6554.7  [reset=0.0s bptt=5.5s elapsed=1366s]
+  heads (1/4 clipped)   trunk |g|=338 lim=1500 x1.00
+           turn x1  |g|=    6322 lim=  1500 x0.24         reach x1  |g|=    1667 lim=  3000 x1.00  
+        descend x1  |g|=     277 lim=  1500 x1.00         grasp x1  |g|=     143 lim=  1000 x1.00  
+    dial_turn       rew= 174.857  ph=3  success=20/20 (100%) streak=3  | Reach=100%/0.0023  Descend=95%/0.0063  Grasp=100%/0.0040  Turn=100%/0.0810
+
+Iter  195:  Σrew=168.880  grad=9303.3  [reset=0.0s bptt=5.5s elapsed=1400s]
+  heads (1/4 clipped)   trunk |g|=469 lim=1500 x1.00
+           turn x1  |g|=    9020 lim=  1500 x0.17         reach x1  |g|=    2175 lim=  3000 x1.00  
+        descend x1  |g|=     436 lim=  1500 x1.00         grasp x1  |g|=     241 lim=  1000 x1.00  
+  ✓ dial_turn       rew= 168.880  ph=3  success=19/20 (95%) streak=4  | Reach=100%/0.0023  Descend=100%/0.0044  Grasp=100%/0.0059  Turn=95%/0.1086
+
+✓ All 1 tasks solved (4 consecutive ≥80%) at iter 195.
+
+Training stopped: all tasks solved after 195 iters, 1407.4s  (11 non-finite iterations skipped)
+  ✓ saved dial_turn_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 195 (final)

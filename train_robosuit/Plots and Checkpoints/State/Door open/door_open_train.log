@@ -1,0 +1,301 @@
+
+######################################################################
+# run started 2026-09-17 22:04:04
+# train_primitives_state.py --tasks door_open --out-prefix door_open
+######################################################################
+======================================================================
+JOINT STATE-PRIMITIVE TRAINING — robosuite (no vision)
+  Tasks: door_open
+  Batch: {'door_open': 20}
+  Obs dim: 43 (shared trunk) — 25 proprio + 6x3 object slots
+  Viewer: on
+  Saving to door_open_*  every 50 iters
+======================================================================
+
+[1] Shared state policy...
+
+  State Policy:
+    Observation: 43 (no projection, no spatial softmax)
+    Trunk: 43 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 77,142   Heads: 388,400   Total trainable: 465,542
+
+[2] Building task 'door_open' (articulated env, state obs) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_door.xml
+  ee_site: 3
+  hand_body: 13
+  handle_site: 8
+  joint_qpos_idx: 9
+  slot0 (site door_handle_site): 8
+  slot1 (joint doorjoint): 9
+  nq=10, nu=9, nsite=9
+  Steps: 110, Chunks: 22, Chunk size: 5
+  Feature slots: 23, frame_dt: 0.0400s
+  obs dim: 43 = 25 proprio + 2/6 slots x 3
+    segments [35, 10, 65] → primitives ['reach', 'grasp', 'swing']
+    slots: site:door_handle_site, joint:doorjoint
+
+  Active primitives: reach, grasp, swing
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+  [warmup 2 iters, 4400 samples]  std min=1.000e-02 max=3.620e-01
+  variance floor (0.0001) binding on 16/43 dims: [25, 26, 27, 29, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+
+Iter    2:  Σrew=-19.064  grad=495.0  [reset=0.0s bptt=2.4s elapsed=199s]
+  heads (0/3 clipped)   trunk |g|=48 lim=1500 x1.00
+          reach x1  |g|=     493 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew= -19.064  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3299  Grasp=0%/0.3244  Swing=0%/0.6428
+
+Iter    5:  Σrew=-13.195  grad=408.4  [reset=0.0s bptt=2.4s elapsed=262s]
+  heads (0/3 clipped)   trunk |g|=47 lim=1500 x1.00
+          reach x1  |g|=     406 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew= -13.195  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1769  Grasp=0%/0.1402  Swing=0%/0.6555
+
+Iter   10:  Σrew=-7.555  grad=362.5  [reset=0.0s bptt=2.4s elapsed=281s]
+  heads (0/3 clipped)   trunk |g|=43 lim=1500 x1.00
+          reach x1  |g|=     360 lim=  3000 x1.00         grasp x1  |g|=       7 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  -7.555  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1502  Grasp=0%/0.1576  Swing=0%/0.6162
+
+Iter   15:  Σrew=-6.389  grad=453.6  [reset=0.0s bptt=2.4s elapsed=299s]
+  heads (0/3 clipped)   trunk |g|=38 lim=1500 x1.00
+          reach x1  |g|=     452 lim=  3000 x1.00         grasp x1  |g|=       4 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  -6.389  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1478  Grasp=0%/0.2010  Swing=0%/0.6158
+
+Iter   20:  Σrew=-2.664  grad=1009.4  [reset=0.0s bptt=2.4s elapsed=318s]
+  heads (0/3 clipped)   trunk |g|=82 lim=1500 x1.00
+          reach x1  |g|=    1006 lim=  3000 x1.00         grasp x1  |g|=       7 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  -2.664  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.0918  Grasp=5%/0.1604  Swing=0%/0.6233
+
+Iter   25:  Σrew=-1.752  grad=399.6  [reset=0.0s bptt=2.4s elapsed=336s]
+  heads (0/3 clipped)   trunk |g|=25 lim=1500 x1.00
+          reach x1  |g|=     399 lim=  3000 x1.00         grasp x1  |g|=       2 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  -1.752  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.0651  Grasp=0%/0.1842  Swing=0%/0.5362
+
+Iter   30:  Σrew=1.626  grad=675.8  [reset=0.0s bptt=2.4s elapsed=355s]
+  heads (0/3 clipped)   trunk |g|=62 lim=1500 x1.00
+          reach x1  |g|=     673 lim=  3000 x1.00         grasp x1  |g|=      13 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   1.626  ph=0  success=3/20 (15%) (partial) streak=0  | Reach=15%/0.0688  Grasp=0%/0.1587  Swing=15%/0.4734
+
+Iter   35:  Σrew=2.240  grad=783.8  [reset=0.0s bptt=2.4s elapsed=373s]
+  heads (0/3 clipped)   trunk |g|=77 lim=1500 x1.00
+          reach x1  |g|=     779 lim=  3000 x1.00         grasp x1  |g|=      30 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   2.240  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=20%/0.0516  Grasp=20%/0.0604  Swing=0%/0.6272
+
+Iter   40:  Σrew=7.056  grad=1456.9  [reset=0.0s bptt=2.4s elapsed=392s]
+  heads (0/3 clipped)   trunk |g|=128 lim=1500 x1.00
+          reach x1  |g|=    1448 lim=  3000 x1.00         grasp x1  |g|=     100 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   7.056  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=25%/0.0368  Grasp=30%/0.0792  Swing=0%/0.5972
+
+Iter   45:  Σrew=2.577  grad=469.7  [reset=0.0s bptt=2.4s elapsed=410s]
+  heads (0/3 clipped)   trunk |g|=49 lim=1500 x1.00
+          reach x1  |g|=     467 lim=  3000 x1.00         grasp x1  |g|=      21 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   2.577  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1138  Grasp=0%/0.1274  Swing=0%/0.6180
+
+Iter   50:  Σrew=3.846  grad=891.1  [reset=0.0s bptt=2.4s elapsed=428s]
+  heads (0/3 clipped)   trunk |g|=83 lim=1500 x1.00
+          reach x1  |g|=     883 lim=  3000 x1.00         grasp x1  |g|=      87 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   3.846  ph=0  success=1/20 (5%) (partial) streak=0  | Reach=15%/0.0556  Grasp=55%/0.0535  Swing=5%/0.6331
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 50
+
+Iter   55:  Σrew=9.948  grad=1149.9  [reset=0.0s bptt=2.4s elapsed=448s]
+  heads (0/3 clipped)   trunk |g|=108 lim=1500 x1.00
+          reach x1  |g|=    1138 lim=  3000 x1.00         grasp x1  |g|=     122 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   9.948  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=25%/0.0399  Grasp=45%/0.0427  Swing=0%/0.6757
+
+Iter   60:  Σrew=10.349  grad=1606.9  [reset=0.0s bptt=2.4s elapsed=467s]
+  heads (0/3 clipped)   trunk |g|=130 lim=1500 x1.00
+          reach x1  |g|=    1600 lim=  3000 x1.00         grasp x1  |g|=      74 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  10.349  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0375  Grasp=10%/0.0968  Swing=0%/0.5551
+
+Iter   65:  Σrew=14.704  grad=2277.3  [reset=0.0s bptt=2.4s elapsed=485s]
+  heads (0/3 clipped)   trunk |g|=213 lim=1500 x1.00
+          reach x1  |g|=    2267 lim=  3000 x1.00         grasp x1  |g|=      57 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  14.704  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0328  Grasp=55%/0.0337  Swing=0%/0.6706
+
+Iter   70:  Σrew=13.248  grad=1206.0  [reset=0.0s bptt=2.4s elapsed=504s]
+  heads (0/3 clipped)   trunk |g|=153 lim=1500 x1.00
+          reach x1  |g|=    1178 lim=  3000 x1.00         grasp x1  |g|=     209 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  13.248  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=60%/0.0292  Grasp=90%/0.0190  Swing=0%/0.7024
+
+Iter   75:  Σrew=11.703  grad=1360.7  [reset=0.0s bptt=2.4s elapsed=522s]
+  heads (0/3 clipped)   trunk |g|=162 lim=1500 x1.00
+          reach x1  |g|=    1342 lim=  3000 x1.00         grasp x1  |g|=     154 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  11.703  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=65%/0.0300  Grasp=35%/0.0490  Swing=0%/0.6009
+    ──→ door_open: phase 1, active=110
+
+Iter   80:  Σrew=30.896  grad=97155.5  [reset=0.0s bptt=5.7s elapsed=557s]
+  heads (2/3 clipped)   trunk |g|=12641 lim=1500 x0.12
+          swing x1  |g|=   96013 lim=  2000 x0.02         reach x1  |g|=    7798 lim=  3000 x0.38  
+          grasp x1  |g|=     262 lim=  1000 x1.00  
+    door_open       rew=  30.896  ph=1  success=0/20 (0%) streak=0  | Reach=90%/0.0192  Grasp=90%/0.0237  Swing=0%/0.6827
+
+Iter   85:  Σrew=41.629  grad=3564.1  [reset=0.0s bptt=5.7s elapsed=593s]
+  heads (1/3 clipped)   trunk |g|=343 lim=1500 x1.00
+          reach x1  |g|=    3345 lim=  3000 x0.90         swing x1  |g|=    1158 lim=  2000 x1.00  
+          grasp x1  |g|=     239 lim=  1000 x1.00  
+    door_open       rew=  41.629  ph=1  success=0/20 (0%) streak=0  | Reach=90%/0.0147  Grasp=75%/0.0259  Swing=0%/0.6470
+    ──→ door_open: phase 2, active=110
+
+Iter   90:  Σrew=41.452  grad=2362.1  [reset=0.0s bptt=5.7s elapsed=629s]
+  heads (1/3 clipped)   trunk |g|=342 lim=1500 x1.00
+          swing x1  |g|=    2042 lim=  2000 x0.98         reach x1  |g|=    1085 lim=  3000 x1.00  
+          grasp x1  |g|=     343 lim=  1000 x1.00  
+    door_open       rew=  41.452  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0099  Grasp=100%/0.0124  Swing=0%/0.6652
+
+Iter   95:  Σrew=50.920  grad=4181.7  [reset=0.0s bptt=5.7s elapsed=664s]
+  heads (1/3 clipped)   trunk |g|=485 lim=1500 x1.00
+          reach x1  |g|=    3998 lim=  3000 x0.75         swing x1  |g|=    1115 lim=  2000 x1.00  
+          grasp x1  |g|=     147 lim=  1000 x1.00  
+    door_open       rew=  50.920  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0100  Grasp=100%/0.0084  Swing=0%/0.6884
+
+Iter  100:  Σrew=56.115  grad=4489.6  [reset=0.0s bptt=5.7s elapsed=700s]
+  heads (1/3 clipped)   trunk |g|=534 lim=1500 x1.00
+          reach x1  |g|=    4164 lim=  3000 x0.72         swing x1  |g|=    1580 lim=  2000 x1.00  
+          grasp x1  |g|=     183 lim=  1000 x1.00  
+    door_open       rew=  56.115  ph=2  success=0/20 (0%) streak=0  | Reach=85%/0.0144  Grasp=90%/0.0135  Swing=0%/0.7007
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 100
+
+Iter  105:  Σrew=60.159  grad=3364.6  [reset=0.0s bptt=5.7s elapsed=737s]
+  heads (1/3 clipped)   trunk |g|=385 lim=1500 x1.00
+          reach x1  |g|=    2589 lim=  3000 x1.00         swing x1  |g|=    2100 lim=  2000 x0.95  
+          grasp x1  |g|=     243 lim=  1000 x1.00  
+    door_open       rew=  60.159  ph=2  success=0/20 (0%) streak=0  | Reach=85%/0.0157  Grasp=85%/0.0250  Swing=0%/0.6725
+
+Iter  110:  Σrew=53.149  grad=1879.8  [reset=0.0s bptt=5.7s elapsed=773s]
+  heads (0/3 clipped)   trunk |g|=175 lim=1500 x1.00
+          swing x1  |g|=    1720 lim=  2000 x1.00         reach x1  |g|=     683 lim=  3000 x1.00  
+          grasp x1  |g|=     279 lim=  1000 x1.00  
+    door_open       rew=  53.149  ph=2  success=0/20 (0%) streak=0  | Reach=75%/0.0212  Grasp=80%/0.0197  Swing=0%/0.6524
+
+Iter  115:  Σrew=47.224  grad=1619.2  [reset=0.0s bptt=5.7s elapsed=808s]
+  heads (0/3 clipped)   trunk |g|=220 lim=1500 x1.00
+          swing x1  |g|=    1451 lim=  2000 x1.00         reach x1  |g|=     672 lim=  3000 x1.00  
+          grasp x1  |g|=     130 lim=  1000 x1.00  
+    door_open       rew=  47.224  ph=2  success=0/20 (0%) streak=0  | Reach=85%/0.0183  Grasp=85%/0.0158  Swing=0%/0.6045
+
+⚠ iter 119: non-finite grads — update skipped (1 in a row, 1 total). Weights and ObsRMS left untouched.
+
+Iter  120:  Σrew=72.721  grad=2169.0  [reset=0.0s bptt=5.7s elapsed=844s]
+  heads (0/3 clipped)   trunk |g|=366 lim=1500 x1.00
+          swing x1  |g|=    1832 lim=  2000 x1.00         reach x1  |g|=    1089 lim=  3000 x1.00  
+          grasp x1  |g|=     164 lim=  1000 x1.00  
+    door_open       rew=  72.721  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0144  Grasp=100%/0.0104  Swing=0%/0.5594
+
+⚠ iter 121: non-finite grads — update skipped (1 in a row, 2 total). Weights and ObsRMS left untouched.
+
+Iter  125:  Σrew=79.273  grad=1429.7  [reset=0.0s bptt=5.7s elapsed=879s]
+  heads (0/3 clipped)   trunk |g|=200 lim=1500 x1.00
+          reach x1  |g|=    1233 lim=  3000 x1.00         swing x1  |g|=     681 lim=  2000 x1.00  
+          grasp x1  |g|=     145 lim=  1000 x1.00  
+    door_open       rew=  79.273  ph=2  success=0/20 (0%) streak=0  | Reach=95%/0.0161  Grasp=100%/0.0142  Swing=0%/0.6181
+
+⚠ iter 128: non-finite grads — update skipped (1 in a row, 3 total). Weights and ObsRMS left untouched.
+
+Iter  130:  Σrew=69.586  grad=5255.3  [reset=0.0s bptt=5.7s elapsed=915s]
+  heads (2/3 clipped)   trunk |g|=605 lim=1500 x1.00
+          reach x1  |g|=    4806 lim=  3000 x0.62         swing x1  |g|=    2026 lim=  2000 x0.99  
+          grasp x1  |g|=     219 lim=  1000 x1.00  
+    door_open       rew=  69.586  ph=2  success=0/20 (0%) streak=0  | Reach=80%/0.0167  Grasp=100%/0.0178  Swing=0%/0.5657
+
+Iter  135:  Σrew=87.813  grad=3874.6  [reset=0.0s bptt=5.7s elapsed=951s]
+  heads (1/3 clipped)   trunk |g|=446 lim=1500 x1.00
+          swing x1  |g|=    2758 lim=  2000 x0.73         reach x1  |g|=    2681 lim=  3000 x1.00  
+          grasp x1  |g|=     132 lim=  1000 x1.00  
+    door_open       rew=  87.813  ph=2  success=0/20 (0%) streak=0  | Reach=95%/0.0173  Grasp=100%/0.0106  Swing=0%/0.4919
+
+Iter  140:  Σrew=81.884  grad=3772.6  [reset=0.0s bptt=5.7s elapsed=986s]
+  heads (1/3 clipped)   trunk |g|=485 lim=1500 x1.00
+          reach x1  |g|=    2738 lim=  3000 x1.00         swing x1  |g|=    2544 lim=  2000 x0.79  
+          grasp x1  |g|=     171 lim=  1000 x1.00  
+    door_open       rew=  81.884  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0081  Grasp=100%/0.0106  Swing=0%/0.4915
+
+Iter  145:  Σrew=90.631  grad=3998.0  [reset=0.0s bptt=5.7s elapsed=1022s]
+  heads (1/3 clipped)   trunk |g|=413 lim=1500 x1.00
+          swing x1  |g|=    3109 lim=  2000 x0.64         reach x1  |g|=    2476 lim=  3000 x1.00  
+          grasp x1  |g|=     131 lim=  1000 x1.00  
+    door_open       rew=  90.631  ph=2  success=0/20 (0%) streak=0  | Reach=95%/0.0145  Grasp=95%/0.0113  Swing=0%/0.4447
+
+Iter  150:  Σrew=88.616  grad=3107.8  [reset=0.0s bptt=5.7s elapsed=1057s]
+  heads (0/3 clipped)   trunk |g|=308 lim=1500 x1.00
+          reach x1  |g|=    2559 lim=  3000 x1.00         swing x1  |g|=    1734 lim=  2000 x1.00  
+          grasp x1  |g|=     103 lim=  1000 x1.00  
+    door_open       rew=  88.616  ph=2  success=1/20 (5%) streak=0  | Reach=90%/0.0148  Grasp=90%/0.0146  Swing=5%/0.3610
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 150
+
+Iter  155:  Σrew=92.591  grad=5023.6  [reset=0.0s bptt=5.7s elapsed=1094s]
+  heads (2/3 clipped)   trunk |g|=550 lim=1500 x1.00
+          reach x1  |g|=    4386 lim=  3000 x0.68         swing x1  |g|=    2380 lim=  2000 x0.84  
+          grasp x1  |g|=     177 lim=  1000 x1.00  
+    door_open       rew=  92.591  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0101  Grasp=100%/0.0075  Swing=0%/0.3744
+
+Iter  160:  Σrew=107.137  grad=727931.1  [reset=0.0s bptt=5.7s elapsed=1130s]
+  heads (2/3 clipped)   trunk |g|=112293 lim=1500 x0.01
+          swing x1  |g|=  719200 lim=  2000 x0.00         reach x1  |g|=    5108 lim=  3000 x0.59  
+          grasp x1  |g|=     132 lim=  1000 x1.00  
+    door_open       rew= 107.137  ph=2  success=0/20 (0%) streak=0  | Reach=90%/0.0138  Grasp=90%/0.0102  Swing=0%/0.2274
+
+⚠ iter 164: non-finite grads — update skipped (1 in a row, 4 total). Weights and ObsRMS left untouched.
+
+Iter  165:  Σrew=93.764  grad=2309.3  [reset=0.0s bptt=5.7s elapsed=1166s]
+  heads (0/3 clipped)   trunk |g|=338 lim=1500 x1.00
+          reach x1  |g|=    2136 lim=  3000 x1.00         swing x1  |g|=     795 lim=  2000 x1.00  
+          grasp x1  |g|=     151 lim=  1000 x1.00  
+    door_open       rew=  93.764  ph=2  success=18/20 (90%) streak=1  | Reach=90%/0.0150  Grasp=90%/0.0124  Swing=90%/0.0917
+
+Iter  170:  Σrew=100.308  grad=2856.9  [reset=0.0s bptt=5.7s elapsed=1201s]
+  heads (1/3 clipped)   trunk |g|=307 lim=1500 x1.00
+          swing x1  |g|=    2367 lim=  2000 x0.84         reach x1  |g|=    1541 lim=  3000 x1.00  
+          grasp x1  |g|=     297 lim=  1000 x1.00  
+    door_open       rew= 100.308  ph=2  success=19/20 (95%) streak=2  | Reach=100%/0.0105  Grasp=100%/0.0131  Swing=95%/0.0327
+
+Iter  175:  Σrew=112.225  grad=1999.7  [reset=0.0s bptt=5.7s elapsed=1237s]
+  heads (0/3 clipped)   trunk |g|=221 lim=1500 x1.00
+          reach x1  |g|=    1560 lim=  3000 x1.00         swing x1  |g|=    1224 lim=  2000 x1.00  
+          grasp x1  |g|=     128 lim=  1000 x1.00  
+    door_open       rew= 112.225  ph=2  success=19/20 (95%) streak=3  | Reach=85%/0.0161  Grasp=95%/0.0127  Swing=95%/0.0229
+
+Iter  180:  Σrew=109.904  grad=36744.4  [reset=0.0s bptt=5.7s elapsed=1272s]
+  heads (1/3 clipped)   trunk |g|=4886 lim=1500 x0.31
+          swing x1  |g|=   36405 lim=  2000 x0.05         reach x1  |g|=     949 lim=  3000 x1.00  
+          grasp x1  |g|=     173 lim=  1000 x1.00  
+  ✓ door_open       rew= 109.904  ph=2  success=19/20 (95%) streak=4  | Reach=100%/0.0114  Grasp=100%/0.0108  Swing=95%/0.0349
+
+✓ All 1 tasks solved (4 consecutive ≥80%) at iter 180.
+
+Training stopped: all tasks solved after 180 iters, 1279.1s  (4 non-finite iterations skipped)
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 180 (final)

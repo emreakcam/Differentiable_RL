@@ -1,0 +1,143 @@
+<mujoco model="panda hingecabinet">
+  <include file="mjx_scene.xml"/>
+
+  <custom>
+    <numeric data="16" name="max_contact_points"/>
+  </custom>
+
+  <!--
+    Task: Hinge cabinet kapı açma
+    Kaynak: vikashplus/furniture_sim/hingecabinet (Apache 2.0)
+
+    Lokal eksenler (rotation öncesi):
+      X = genişlik (half=0.24, toplam 48cm)
+      Y = derinlik (half=0.10, toplam 20cm)
+      Z = yükseklik (half=0.30, toplam 60cm)
+    
+    euler="0 0 -1.5708" ile:
+      lokal +Y → world +X (derinlik robota/robottan yönünde)
+      lokal +X → world -Y (genişlik sağa/sola)
+      Kapılar (lokal -Y) → world -X (robota bakıyor ✓)
+
+    qpos: [7 arm, 2 finger, 1 left_hinge, 1 right_hinge] = 11
+  -->
+
+  <default>
+    <default class="hingecabinet">
+      <joint damping="2" frictionloss="2" armature="0.01" limited="true"/>
+      <geom condim="3" contype="1" conaffinity="1"
+            solimp="0.9 0.95 0.001" solref="0.02 1"
+            friction="0.8 0.03 0.003"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <body name="cabinet_base" pos="1.0 0.0 0.30" euler="0 0 -1.5708">
+      <body name="hingecab" childclass="hingecabinet">
+
+        <!-- ======== DOLAP GÖVDESİ ======== -->
+        <!--
+          Üstten bakış (lokal frame, kapılar -Y yönünde):
+
+               +Y (arka, derinlik 0.10)
+            ┌───────────────────────┐
+            │  arka duvar sol │ sağ │  y=0.08
+            │                │     │
+          L │   sol boşluk   │ M   │ R    ← M = merkez panel (x=0)
+            │                │     │
+            │   sağ boşluk   │     │
+            │                │     │
+            └───────────────────────┘
+               -Y (ön, kapılar)
+          x=-0.24           0    x=+0.24
+
+          Sol açıklık: x = -0.22 ... -0.04 (genişlik 0.18)
+          Sağ açıklık: x = +0.04 ... +0.22 (genişlik 0.18)
+        -->
+
+        <!-- Merkez arka panel -->
+        <geom size="0.04 0.10 0.30" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Sol yan panel -->
+        <geom pos="-0.24 0 0" size="0.02 0.10 0.30" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Sağ yan panel -->
+        <geom pos="0.24 0 0" size="0.02 0.10 0.30" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Üst raf sol -->
+        <geom pos="-0.14 0 0.28" size="0.10 0.10 0.02" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Alt raf sol -->
+        <geom pos="-0.14 0 -0.28" size="0.10 0.10 0.02" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Üst raf sağ -->
+        <geom pos="0.14 0 0.28" size="0.10 0.10 0.02" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Alt raf sağ -->
+        <geom pos="0.14 0 -0.28" size="0.10 0.10 0.02" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Arka duvar sol -->
+        <geom pos="-0.14 0.08 0" size="0.10 0.02 0.26" type="box" rgba="0.45 0.35 0.25 1"/>
+        <!-- Arka duvar sağ -->
+        <geom pos="0.14 0.08 0" size="0.10 0.02 0.26" type="box" rgba="0.45 0.35 0.25 1"/>
+
+        <!-- ======== SOL KAPI ======== -->
+        <!--
+          Hinge: sol yan panel ön kenarında (-0.24, -0.12, 0)
+          Kapı paneli: hinge'den +X yönüne, açıklığı kapatır
+          Açıklık: x = -0.22 ... -0.04, genişlik = 0.18
+          Panel: center_x = 0.11 (hinge'e göre), half_x = 0.09
+        -->
+        <body name="hingeleftdoor" pos="-0.24 -0.12 0">
+          <joint axis="0 0 1" name="leftdoorhinge" range="-1.57 0"/>
+          <geom pos="0.11 -0.01 0" size="0.09 0.02 0.27" type="box"
+                rgba="0.50 0.38 0.22 1" mass="0.2"/>
+          <!-- Kulp shaft -->
+          <geom type="capsule" name="left_handle_shaft"
+                fromto="0.18 -0.06 -0.18  0.18 -0.06 0.18" size="0.015"
+                rgba="0.7 0.7 0.7 1" mass="0.05"/>
+          <!-- Kulp üst çıkıntı -->
+          <geom type="capsule" name="left_handle_top"
+                fromto="0.18 -0.055 0.14  0.18 -0.01 0.14" size="0.012"
+                rgba="0.7 0.7 0.7 1" mass="0.01"/>
+          <!-- Kulp alt çıkıntı -->
+          <geom type="capsule" name="left_handle_bot"
+                fromto="0.18 -0.055 -0.14  0.18 -0.01 -0.14" size="0.012"
+                rgba="0.7 0.7 0.7 1" mass="0.01"/>
+          <site type="sphere" name="leftdoor_handle" pos="0.18 -0.06 0"
+                size="0.01" rgba="1 0 0 0.5"/>
+        </body>
+
+        <!-- ======== SAĞ KAPI ======== -->
+        <!--
+          Hinge: sağ yan panel ön kenarında (0.24, -0.12, 0)
+          Panel: center_x = -0.11, half_x = 0.09 (hinge'den -X yönüne)
+        -->
+        <body name="hingerightdoor" pos="0.24 -0.12 0">
+          <joint axis="0 0 1" name="rightdoorhinge" range="0 1.57"/>
+          <geom pos="-0.11 -0.01 0" size="0.09 0.02 0.27" type="box"
+                rgba="0.50 0.38 0.22 1" mass="0.2"/>
+          <!-- Kulp shaft -->
+          <geom type="capsule" name="right_handle_shaft"
+                fromto="-0.18 -0.06 -0.18  -0.18 -0.06 0.18" size="0.015"
+                rgba="0.7 0.7 0.7 1" mass="0.05"/>
+          <!-- Kulp üst çıkıntı -->
+          <geom type="capsule" name="right_handle_top"
+                fromto="-0.18 -0.055 0.14  -0.18 -0.01 0.14" size="0.012"
+                rgba="0.7 0.7 0.7 1" mass="0.01"/>
+          <!-- Kulp alt çıkıntı -->
+          <geom type="capsule" name="right_handle_bot"
+                fromto="-0.18 -0.055 -0.14  -0.18 -0.01 -0.14" size="0.012"
+                rgba="0.7 0.7 0.7 1" mass="0.01"/>
+          <site type="sphere" name="rightdoor_handle" pos="-0.18 -0.06 0"
+                size="0.01" rgba="0 1 0 0.5"/>
+        </body>
+
+      </body>
+    </body>
+
+    <body mocap="true" name="mocap_target">
+      <geom type="box" size="0.01 0.01 0.01" rgba="1 0 0 0.2"
+            contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <keyframe>
+    <key name="home"
+      qpos="0 0.3 0 -1.57079 0 2.0 -0.7853 0.06 0.06 0 0"
+      ctrl="0 0.3 0 -1.57079 0 2.0 -0.7853 0.06"/>
+  </keyframe>
+</mujoco>

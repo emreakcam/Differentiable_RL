@@ -1,0 +1,927 @@
+
+######################################################################
+# run started 2026-09-20 16:09:35
+# train_primitives_vision.py --tasks cube_stacking --monolithic
+######################################################################
+======================================================================
+JOINT VISION-PRIMITIVE TRAINING — robosuite
+  Tasks: cube_stacking
+  Batch: {'cube_stacking': 20}
+  Proprio dim: 31 (shared trunk)
+  Viewer: on
+  Saving to vision_primitives_*  every 50 iters
+======================================================================
+
+[1] DINOv3 backbone (shared)...
+  DINOv3: 64x64 → 4x4 patches, dim=768
+
+[2] Shared primitive policy...
+
+  MONOLITHIC Policy (ablation — no trunk/head split):
+    Projection: 768 → 128 (1 camera) → spatial softmax → 256
+    MLP: 301 (256 vis + 31 proprio + 14 one-hot) → 384 → 384 → 384 → 384 → 8
+    No per-primitive heads; one output layer, one finger bias.
+    Total trainable: 662,114
+
+[3] Building task 'cube_stacking' (cube_stacking env) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_stack.xml
+  ee_site: 3
+  hand_body: 13
+  cube1: 25
+  cube2: 26
+  left_finger: 16
+  right_finger: 18
+  nq=23, nu=9, nsite=10
+  Steps: 100, Chunks: 20, Chunk size: 5
+  Feature slots: 21, frame_dt: 0.0400s
+
+[2] Creating MJWarp GPU renderer...
+Warp 1.16.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/emre/.cache/warp/1.16.0
+Module mujoco.mjx.third_party.mujoco_warp._src.render_util 97c6606 load on device 'cuda:0' took 9.10 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.io 89aaeca load on device 'cuda:0' took 8.92 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.bvh f2c5137 load on device 'cuda:0' took 3.60 ms  (cached)
+  Camera: robot0_eye_in_hand → cam_id: 5
+  Render context: nworld=20, 64x64
+Module mujoco.mjx.warp.ffi 7a22eb4 load on device 'cuda:0' took 35.36 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.smooth 47158eb load on device 'cuda:0' took 8.33 ms  (cached)
+Module _nxn_broadphase__locals__kernel_3e896ca5 3e896ca load on device 'cuda:0' took 2.33 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 ef3754c load on device 'cuda:0' took 44.80 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 231e976 load on device 'cuda:0' took 4.73 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_caf42918 caf4291 load on device 'cuda:0' took 4.05 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.constraint 36c8060 load on device 'cuda:0' took 2.76 ms  (cached)
+Module _friction_dof__locals__kernel_a6ed3529 a6ed352 load on device 'cuda:0' took 3.06 ms  (cached)
+Module _limit_slide_hinge__locals__kernel_56cb53b3 56cb53b load on device 'cuda:0' took 2.02 ms  (cached)
+Module _efc_contact_init__locals__kernel_0bd15084 0bd1508 load on device 'cuda:0' took 1.85 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_f15eda8d 1ff2125 load on device 'cuda:0' took 1.66 ms  (cached)
+Module _efc_contact_update__locals__kernel_8c34abe6 8c34abe load on device 'cuda:0' took 5.40 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward 81c85c8 load on device 'cuda:0' took 3.71 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.passive efc109c load on device 'cuda:0' took 3.13 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward fc5c4e4 load on device 'cuda:0' took 3.62 ms  (cached)
+Module _qfrc_smooth__locals__kernel_b98573a2 b98573a load on device 'cuda:0' took 1.67 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.support ca784c5 load on device 'cuda:0' took 1.73 ms  (cached)
+Module _tile_cholesky_factorize_solve_block__locals__kernel_8d2c83d3 bb4c15e load on device 'cuda:0' took 33.23 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.solver 4a1f2fb load on device 'cuda:0' took 5.95 ms  (cached)
+Module _solve_init_jaref_kernel__locals__kernel_a190cee0 a190cee load on device 'cuda:0' took 1.98 ms  (cached)
+Module mul_m_kernel__locals___mul_m_dc7994af dc7994a load on device 'cuda:0' took 2.29 ms  (cached)
+Module _update_constraint_efc__locals__kernel_34351367 3435136 load on device 'cuda:0' took 1.78 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_626172ab 626172a load on device 'cuda:0' took 1.61 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_d22ec30a d22ec30 load on device 'cuda:0' took 1.39 ms  (cached)
+Module _update_gradient_grad__locals__kernel_30531d0a 30531d0 load on device 'cuda:0' took 1.58 ms  (cached)
+Module _update_gradient_JTDAJ_dense_tiled__locals__kernel_0a788f5b 5791943 load on device 'cuda:0' took 3.96 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_2c36253a e542b74 load on device 'cuda:0' took 32.76 ms  (cached)
+Module _linesearch_iterative_kernel__locals__kernel_fd8c9e1b c7b3998 load on device 'cuda:0' took 2.57 ms  (cached)
+Module _update_constraint_efc__locals__kernel_8791d97d 8791d97 load on device 'cuda:0' took 3.17 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_e7e36618 e7e3661 load on device 'cuda:0' took 4.16 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_e3354673 e335467 load on device 'cuda:0' took 1.47 ms  (cached)
+Module _update_gradient_grad__locals__kernel_f92b7b33 f92b7b3 load on device 'cuda:0' took 1.61 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_fbdf5714 76985a6 load on device 'cuda:0' took 35.41 ms  (cached)
+Module _solve_zero_search_dot__locals__kernel_a3b7406e a3b7406 load on device 'cuda:0' took 3.32 ms  (cached)
+Module _solve_search_update__locals__kernel_f542f3c2 f542f3c load on device 'cuda:0' took 1.64 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.sensor de892d8 load on device 'cuda:0' took 5.17 ms  (cached)
+    segments [25, 20, 10, 35, 10] → primitives ['reach', 'descend', 'grasp', 'move', 'release']
+
+  MONOLITHIC MLP (ablation): no trunk/head split. The primitive is a
+  one-hot input, so the information matches the baseline and only the
+  architecture differs. Per-head LRs and clips do not apply.
+
+  Task minibatching: off (one update per iteration).
+
+  Active primitives: 
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+Module render__locals___render_megakernel_b55cbe04 a6579b0 load on device 'cuda:0' took 4.85 ms  (cached)
+  [warmup 2 iters, 4000 samples]  std min=1.581e-04 (dim 25) max=9.925e-01
+  ! dim 25 std=1.581e-04 → normalising amplifies it 6324x; expect a gradient spike. A variance floor in helpers/obs.py would be the actual fix.
+
+Iter    2:  Σrew=-74.087  grad=271.8  [phase1=1.5s bptt=2.9s elapsed=232s]
+  heads (0/0 clipped)   trunk |g|=272 lim=1500 x1.00
+    cube_stacking   rew= -74.087  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.6781  Descend=0%/0.6822  Grasp=0%/0.6822  Move=0%/0.1677  Release=100%/0.2163
+
+Iter    5:  Σrew=-34.317  grad=72.6  [phase1=1.4s bptt=2.9s elapsed=296s]
+  heads (0/0 clipped)   trunk |g|=73 lim=1500 x1.00
+    cube_stacking   rew= -34.317  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4371  Descend=0%/0.5207  Grasp=0%/0.5207  Move=0%/0.1547  Release=100%/0.2022
+
+Iter   10:  Σrew=-32.806  grad=92.7  [phase1=1.4s bptt=2.9s elapsed=320s]
+  heads (0/0 clipped)   trunk |g|=93 lim=1500 x1.00
+    cube_stacking   rew= -32.806  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4354  Descend=0%/0.4539  Grasp=0%/0.4539  Move=0%/0.1574  Release=100%/0.2050
+
+Iter   15:  Σrew=-24.154  grad=75.9  [phase1=1.4s bptt=2.9s elapsed=344s]
+  heads (0/0 clipped)   trunk |g|=76 lim=1500 x1.00
+    cube_stacking   rew= -24.154  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3596  Descend=0%/0.3777  Grasp=0%/0.3777  Move=0%/0.1585  Release=100%/0.2061
+
+Iter   20:  Σrew=-22.247  grad=87.3  [phase1=1.4s bptt=2.9s elapsed=368s]
+  heads (0/0 clipped)   trunk |g|=87 lim=1500 x1.00
+    cube_stacking   rew= -22.247  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2910  Descend=0%/0.3881  Grasp=0%/0.3881  Move=0%/0.1538  Release=100%/0.2010
+
+Iter   25:  Σrew=-19.397  grad=33.5  [phase1=3.9s bptt=2.9s elapsed=395s]
+  heads (0/0 clipped)   trunk |g|=34 lim=1500 x1.00
+    cube_stacking   rew= -19.397  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2697  Descend=0%/0.3132  Grasp=0%/0.3132  Move=0%/0.1655  Release=100%/0.2140
+
+Iter   30:  Σrew=-19.420  grad=18.4  [phase1=1.4s bptt=2.9s elapsed=420s]
+  heads (0/0 clipped)   trunk |g|=18 lim=1500 x1.00
+    cube_stacking   rew= -19.420  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2840  Descend=0%/0.3163  Grasp=0%/0.3163  Move=0%/0.1607  Release=100%/0.2086
+
+Iter   35:  Σrew=-20.532  grad=29.4  [phase1=1.3s bptt=2.9s elapsed=444s]
+  heads (0/0 clipped)   trunk |g|=29 lim=1500 x1.00
+    cube_stacking   rew= -20.532  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2855  Descend=0%/0.3433  Grasp=0%/0.3433  Move=0%/0.1493  Release=100%/0.1962
+
+Iter   40:  Σrew=-15.182  grad=131.2  [phase1=1.3s bptt=2.9s elapsed=468s]
+  heads (0/0 clipped)   trunk |g|=131 lim=1500 x1.00
+    cube_stacking   rew= -15.182  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=20%/0.1349  Descend=0%/0.3159  Grasp=0%/0.3159  Move=0%/0.1605  Release=100%/0.2082
+
+Iter   45:  Σrew=-10.477  grad=376.0  [phase1=1.3s bptt=2.9s elapsed=492s]
+  heads (0/0 clipped)   trunk |g|=376 lim=1500 x1.00
+    cube_stacking   rew= -10.477  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1600  Descend=0%/0.2631  Grasp=0%/0.2631  Move=5%/0.2113  Release=100%/0.2826
+
+Iter   50:  Σrew=-5.939  grad=127.8  [phase1=1.3s bptt=2.9s elapsed=517s]
+  heads (0/0 clipped)   trunk |g|=128 lim=1500 x1.00
+    cube_stacking   rew=  -5.939  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1289  Descend=0%/0.1044  Grasp=0%/0.1044  Move=15%/0.1617  Release=100%/0.2083
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 50
+
+Iter   55:  Σrew=-5.077  grad=794.8  [phase1=1.4s bptt=2.9s elapsed=543s]
+  heads (0/0 clipped)   trunk |g|=795 lim=1500 x1.00
+    cube_stacking   rew=  -5.077  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1026  Descend=5%/0.0922  Grasp=5%/0.0922  Move=0%/0.1508  Release=100%/0.1973
+
+Iter   60:  Σrew=-9.857  grad=194.4  [phase1=1.4s bptt=2.9s elapsed=567s]
+  heads (0/0 clipped)   trunk |g|=194 lim=1500 x1.00
+    cube_stacking   rew=  -9.857  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1599  Descend=0%/0.2734  Grasp=0%/0.2734  Move=0%/0.1547  Release=100%/0.2023
+
+Iter   65:  Σrew=-10.582  grad=217.4  [phase1=1.4s bptt=2.9s elapsed=591s]
+  heads (0/0 clipped)   trunk |g|=217 lim=1500 x1.00
+    cube_stacking   rew= -10.582  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1511  Descend=0%/0.2688  Grasp=0%/0.2688  Move=5%/0.1683  Release=100%/0.2165
+
+Iter   70:  Σrew=-12.313  grad=387.5  [phase1=1.3s bptt=2.9s elapsed=615s]
+  heads (0/0 clipped)   trunk |g|=387 lim=1500 x1.00
+    cube_stacking   rew= -12.313  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1545  Descend=0%/0.2521  Grasp=0%/0.2521  Move=0%/0.1403  Release=100%/0.1864
+
+Iter   75:  Σrew=-9.602  grad=2609.0  [phase1=1.3s bptt=2.9s elapsed=640s]
+  heads (0/0 clipped)   trunk |g|=2609 lim=1500 x0.57
+    cube_stacking   rew=  -9.602  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1165  Descend=0%/0.2268  Grasp=0%/0.2268  Move=5%/0.1636  Release=100%/0.2109
+
+Iter   80:  Σrew=-8.327  grad=271.9  [phase1=1.3s bptt=2.9s elapsed=664s]
+  heads (0/0 clipped)   trunk |g|=272 lim=1500 x1.00
+    cube_stacking   rew=  -8.327  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2587  Descend=0%/0.1962  Grasp=0%/0.1962  Move=5%/0.1584  Release=100%/0.2060
+
+Iter   85:  Σrew=-21.604  grad=230.3  [phase1=1.3s bptt=2.9s elapsed=688s]
+  heads (0/0 clipped)   trunk |g|=230 lim=1500 x1.00
+    cube_stacking   rew= -21.604  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3429  Descend=0%/0.3884  Grasp=0%/0.3884  Move=0%/0.1593  Release=100%/0.2070
+
+Iter   90:  Σrew=-19.898  grad=106.6  [phase1=1.3s bptt=2.9s elapsed=712s]
+  heads (0/0 clipped)   trunk |g|=107 lim=1500 x1.00
+    cube_stacking   rew= -19.898  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2729  Descend=0%/0.3157  Grasp=0%/0.3157  Move=0%/0.1579  Release=100%/0.2058
+
+Iter   95:  Σrew=-12.049  grad=159.3  [phase1=1.3s bptt=2.9s elapsed=736s]
+  heads (0/0 clipped)   trunk |g|=159 lim=1500 x1.00
+    cube_stacking   rew= -12.049  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1825  Descend=0%/0.1513  Grasp=0%/0.1513  Move=5%/0.1572  Release=100%/0.2047
+
+Iter  100:  Σrew=-9.032  grad=113.2  [phase1=1.3s bptt=2.9s elapsed=762s]
+  heads (0/0 clipped)   trunk |g|=113 lim=1500 x1.00
+    cube_stacking   rew=  -9.032  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1366  Descend=0%/0.1681  Grasp=0%/0.1681  Move=5%/0.1567  Release=100%/0.2041
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 100
+
+Iter  105:  Σrew=-6.675  grad=147.6  [phase1=1.3s bptt=2.9s elapsed=787s]
+  heads (0/0 clipped)   trunk |g|=148 lim=1500 x1.00
+    cube_stacking   rew=  -6.675  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1266  Descend=0%/0.1364  Grasp=0%/0.1364  Move=5%/0.1620  Release=100%/0.2101
+
+Iter  110:  Σrew=-4.904  grad=282.6  [phase1=1.4s bptt=2.9s elapsed=811s]
+  heads (0/0 clipped)   trunk |g|=283 lim=1500 x1.00
+    cube_stacking   rew=  -4.904  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1108  Descend=10%/0.0906  Grasp=10%/0.0906  Move=0%/0.1515  Release=100%/0.1984
+
+Iter  115:  Σrew=-5.576  grad=63.5  [phase1=1.4s bptt=2.9s elapsed=835s]
+  heads (0/0 clipped)   trunk |g|=63 lim=1500 x1.00
+    cube_stacking   rew=  -5.576  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1149  Descend=0%/0.1015  Grasp=0%/0.1015  Move=5%/0.1613  Release=100%/0.2089
+
+Iter  120:  Σrew=-6.926  grad=72.7  [phase1=1.3s bptt=2.9s elapsed=859s]
+  heads (0/0 clipped)   trunk |g|=73 lim=1500 x1.00
+    cube_stacking   rew=  -6.926  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1252  Descend=5%/0.1030  Grasp=5%/0.1030  Move=5%/0.1536  Release=100%/0.2008
+
+Iter  125:  Σrew=-6.666  grad=50.4  [phase1=1.3s bptt=2.9s elapsed=885s]
+  heads (0/0 clipped)   trunk |g|=50 lim=1500 x1.00
+    cube_stacking   rew=  -6.666  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1121  Descend=5%/0.0929  Grasp=5%/0.0929  Move=5%/0.1543  Release=100%/0.2015
+
+Iter  130:  Σrew=-5.298  grad=61.0  [phase1=1.3s bptt=2.9s elapsed=909s]
+  heads (0/0 clipped)   trunk |g|=61 lim=1500 x1.00
+    cube_stacking   rew=  -5.298  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1011  Descend=5%/0.0989  Grasp=5%/0.0989  Move=5%/0.1564  Release=100%/0.2038
+
+Iter  135:  Σrew=-6.727  grad=134.6  [phase1=1.4s bptt=2.9s elapsed=933s]
+  heads (0/0 clipped)   trunk |g|=135 lim=1500 x1.00
+    cube_stacking   rew=  -6.727  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=20%/0.1045  Descend=0%/0.0947  Grasp=0%/0.0947  Move=5%/0.1554  Release=100%/0.2028
+
+Iter  140:  Σrew=-6.373  grad=109.6  [phase1=1.3s bptt=2.9s elapsed=957s]
+  heads (0/0 clipped)   trunk |g|=110 lim=1500 x1.00
+    cube_stacking   rew=  -6.373  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1087  Descend=5%/0.0925  Grasp=5%/0.0925  Move=0%/0.1523  Release=100%/0.1990
+
+Iter  145:  Σrew=-5.829  grad=111.6  [phase1=1.4s bptt=2.9s elapsed=983s]
+  heads (0/0 clipped)   trunk |g|=112 lim=1500 x1.00
+    cube_stacking   rew=  -5.829  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1272  Descend=0%/0.1088  Grasp=0%/0.1088  Move=0%/0.1626  Release=100%/0.2107
+
+Iter  150:  Σrew=-4.512  grad=65.9  [phase1=1.3s bptt=2.9s elapsed=1006s]
+  heads (0/0 clipped)   trunk |g|=66 lim=1500 x1.00
+    cube_stacking   rew=  -4.512  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1128  Descend=15%/0.0794  Grasp=15%/0.0794  Move=0%/0.1696  Release=100%/0.2184
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 150
+
+Iter  155:  Σrew=-5.072  grad=111.7  [phase1=1.4s bptt=2.9s elapsed=1032s]
+  heads (0/0 clipped)   trunk |g|=112 lim=1500 x1.00
+    cube_stacking   rew=  -5.072  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1063  Descend=20%/0.0727  Grasp=20%/0.0727  Move=10%/0.1685  Release=100%/0.2151
+
+Iter  160:  Σrew=-6.507  grad=635.5  [phase1=1.3s bptt=2.9s elapsed=1056s]
+  heads (0/0 clipped)   trunk |g|=636 lim=1500 x1.00
+    cube_stacking   rew=  -6.507  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1111  Descend=5%/0.0812  Grasp=5%/0.0812  Move=0%/0.1738  Release=100%/0.2223
+
+Iter  165:  Σrew=-6.067  grad=2188.6  [phase1=1.4s bptt=2.9s elapsed=1080s]
+  heads (0/0 clipped)   trunk |g|=2189 lim=1500 x0.69
+    cube_stacking   rew=  -6.067  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1042  Descend=10%/0.0890  Grasp=10%/0.0890  Move=10%/0.1699  Release=100%/0.2178
+
+Iter  170:  Σrew=-9.967  grad=551.6  [phase1=1.3s bptt=2.9s elapsed=1104s]
+  heads (0/0 clipped)   trunk |g|=552 lim=1500 x1.00
+    cube_stacking   rew=  -9.967  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1620  Descend=0%/0.2302  Grasp=0%/0.2302  Move=5%/0.1654  Release=100%/0.2130
+
+Iter  175:  Σrew=-8.629  grad=321.1  [phase1=1.3s bptt=2.9s elapsed=1130s]
+  heads (0/0 clipped)   trunk |g|=321 lim=1500 x1.00
+    cube_stacking   rew=  -8.629  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1525  Descend=0%/0.2106  Grasp=0%/0.2106  Move=0%/0.1572  Release=100%/0.2055
+
+Iter  180:  Σrew=-5.901  grad=94.3  [phase1=1.4s bptt=2.9s elapsed=1154s]
+  heads (0/0 clipped)   trunk |g|=94 lim=1500 x1.00
+    cube_stacking   rew=  -5.901  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1434  Descend=0%/0.2363  Grasp=0%/0.2363  Move=5%/0.1598  Release=100%/0.2081
+
+Iter  185:  Σrew=-10.452  grad=57.0  [phase1=1.3s bptt=2.9s elapsed=1178s]
+  heads (0/0 clipped)   trunk |g|=57 lim=1500 x1.00
+    cube_stacking   rew= -10.452  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1753  Descend=0%/0.2975  Grasp=0%/0.2975  Move=0%/0.1834  Release=100%/0.2328
+
+Iter  190:  Σrew=-8.527  grad=42.6  [phase1=1.3s bptt=2.9s elapsed=1202s]
+  heads (0/0 clipped)   trunk |g|=43 lim=1500 x1.00
+    cube_stacking   rew=  -8.527  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1660  Descend=0%/0.2425  Grasp=0%/0.2425  Move=5%/0.1686  Release=100%/0.2166
+
+Iter  195:  Σrew=-7.945  grad=46.0  [phase1=1.3s bptt=2.9s elapsed=1226s]
+  heads (0/0 clipped)   trunk |g|=46 lim=1500 x1.00
+    cube_stacking   rew=  -7.945  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1676  Descend=0%/0.2573  Grasp=0%/0.2573  Move=0%/0.2171  Release=100%/0.2884
+
+Iter  200:  Σrew=-7.782  grad=46.7  [phase1=1.4s bptt=2.9s elapsed=1251s]
+  heads (0/0 clipped)   trunk |g|=47 lim=1500 x1.00
+    cube_stacking   rew=  -7.782  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1596  Descend=0%/0.2014  Grasp=0%/0.2014  Move=5%/0.1544  Release=100%/0.2012
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 200
+
+Iter  205:  Σrew=-7.285  grad=47.5  [phase1=1.4s bptt=2.9s elapsed=1277s]
+  heads (0/0 clipped)   trunk |g|=48 lim=1500 x1.00
+    cube_stacking   rew=  -7.285  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1609  Descend=0%/0.1875  Grasp=0%/0.1875  Move=0%/0.1567  Release=100%/0.2037
+
+Iter  210:  Σrew=-7.490  grad=79.7  [phase1=1.5s bptt=2.9s elapsed=1301s]
+  heads (0/0 clipped)   trunk |g|=80 lim=1500 x1.00
+    cube_stacking   rew=  -7.490  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1516  Descend=0%/0.1832  Grasp=0%/0.1832  Move=5%/0.1582  Release=100%/0.2058
+
+Iter  215:  Σrew=-6.057  grad=58.0  [phase1=1.4s bptt=2.9s elapsed=1325s]
+  heads (0/0 clipped)   trunk |g|=58 lim=1500 x1.00
+    cube_stacking   rew=  -6.057  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1399  Descend=5%/0.1234  Grasp=5%/0.1234  Move=5%/0.1588  Release=100%/0.2061
+
+Iter  220:  Σrew=-6.270  grad=130.2  [phase1=1.5s bptt=2.9s elapsed=1350s]
+  heads (0/0 clipped)   trunk |g|=130 lim=1500 x1.00
+    cube_stacking   rew=  -6.270  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1350  Descend=0%/0.1183  Grasp=0%/0.1183  Move=0%/0.1672  Release=100%/0.2154
+
+Iter  225:  Σrew=-5.911  grad=251.4  [phase1=1.5s bptt=2.9s elapsed=1377s]
+  heads (0/0 clipped)   trunk |g|=251 lim=1500 x1.00
+    cube_stacking   rew=  -5.911  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1382  Descend=5%/0.0995  Grasp=5%/0.0995  Move=5%/0.1594  Release=100%/0.2069
+
+Iter  230:  Σrew=-5.448  grad=154.3  [phase1=1.4s bptt=2.9s elapsed=1401s]
+  heads (0/0 clipped)   trunk |g|=154 lim=1500 x1.00
+    cube_stacking   rew=  -5.448  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1273  Descend=0%/0.1181  Grasp=0%/0.1181  Move=10%/0.1672  Release=100%/0.2144
+
+Iter  235:  Σrew=-5.903  grad=853.6  [phase1=1.5s bptt=2.9s elapsed=1426s]
+  heads (0/0 clipped)   trunk |g|=854 lim=1500 x1.00
+    cube_stacking   rew=  -5.903  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1337  Descend=20%/0.0901  Grasp=20%/0.0901  Move=5%/0.1624  Release=100%/0.2098
+
+Iter  240:  Σrew=-5.072  grad=695.5  [phase1=1.4s bptt=2.9s elapsed=1450s]
+  heads (0/0 clipped)   trunk |g|=696 lim=1500 x1.00
+    cube_stacking   rew=  -5.072  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1505  Descend=0%/0.1015  Grasp=0%/0.1015  Move=0%/0.1694  Release=100%/0.2179
+
+Iter  245:  Σrew=-10.678  grad=634.8  [phase1=1.4s bptt=2.9s elapsed=1477s]
+  heads (0/0 clipped)   trunk |g|=635 lim=1500 x1.00
+    cube_stacking   rew= -10.678  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2010  Descend=0%/0.1638  Grasp=0%/0.1638  Move=0%/0.1526  Release=100%/0.2001
+
+Iter  250:  Σrew=-9.435  grad=250.0  [phase1=1.4s bptt=2.9s elapsed=1501s]
+  heads (0/0 clipped)   trunk |g|=250 lim=1500 x1.00
+    cube_stacking   rew=  -9.435  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1699  Descend=5%/0.1608  Grasp=5%/0.1608  Move=0%/0.1639  Release=100%/0.2124
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 250
+
+Iter  255:  Σrew=-7.249  grad=64.4  [phase1=1.4s bptt=2.9s elapsed=1528s]
+  heads (0/0 clipped)   trunk |g|=64 lim=1500 x1.00
+    cube_stacking   rew=  -7.249  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1471  Descend=5%/0.1400  Grasp=5%/0.1400  Move=10%/0.1550  Release=100%/0.2015
+
+Iter  260:  Σrew=-6.874  grad=174.0  [phase1=1.5s bptt=2.9s elapsed=1552s]
+  heads (0/0 clipped)   trunk |g|=174 lim=1500 x1.00
+    cube_stacking   rew=  -6.874  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1429  Descend=0%/0.1301  Grasp=0%/0.1301  Move=0%/0.1695  Release=100%/0.2179
+
+Iter  265:  Σrew=-6.422  grad=88.3  [phase1=1.5s bptt=2.9s elapsed=1577s]
+  heads (0/0 clipped)   trunk |g|=88 lim=1500 x1.00
+    cube_stacking   rew=  -6.422  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1352  Descend=5%/0.1024  Grasp=5%/0.1024  Move=0%/0.1667  Release=100%/0.2152
+
+Iter  270:  Σrew=-7.267  grad=85.4  [phase1=1.4s bptt=2.9s elapsed=1601s]
+  heads (0/0 clipped)   trunk |g|=85 lim=1500 x1.00
+    cube_stacking   rew=  -7.267  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1438  Descend=5%/0.1117  Grasp=5%/0.1117  Move=0%/0.1538  Release=100%/0.2009
+
+Iter  275:  Σrew=-7.135  grad=74.3  [phase1=3.8s bptt=2.9s elapsed=1628s]
+  heads (0/0 clipped)   trunk |g|=74 lim=1500 x1.00
+    cube_stacking   rew=  -7.135  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1397  Descend=0%/0.1162  Grasp=0%/0.1162  Move=0%/0.1638  Release=100%/0.2119
+
+Iter  280:  Σrew=-5.840  grad=185.7  [phase1=1.4s bptt=2.9s elapsed=1652s]
+  heads (0/0 clipped)   trunk |g|=186 lim=1500 x1.00
+    cube_stacking   rew=  -5.840  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1058  Descend=10%/0.0761  Grasp=10%/0.0761  Move=5%/0.1566  Release=100%/0.2038
+
+Iter  285:  Σrew=-5.693  grad=186.3  [phase1=1.4s bptt=2.9s elapsed=1677s]
+  heads (0/0 clipped)   trunk |g|=186 lim=1500 x1.00
+    cube_stacking   rew=  -5.693  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1453  Descend=5%/0.0954  Grasp=5%/0.0954  Move=0%/0.1594  Release=100%/0.2072
+
+Iter  290:  Σrew=-9.715  grad=3200.9  [phase1=1.5s bptt=2.9s elapsed=1701s]
+  heads (0/0 clipped)   trunk |g|=3201 lim=1500 x0.47
+    cube_stacking   rew=  -9.715  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2090  Descend=0%/0.1301  Grasp=0%/0.1301  Move=0%/0.1503  Release=100%/0.1973
+
+Iter  295:  Σrew=-16.763  grad=160.1  [phase1=3.1s bptt=2.8s elapsed=1727s]
+  heads (0/0 clipped)   trunk |g|=160 lim=1500 x1.00
+    cube_stacking   rew= -16.763  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3292  Descend=0%/0.2350  Grasp=0%/0.2350  Move=0%/0.1744  Release=100%/0.2235
+
+Iter  300:  Σrew=-20.454  grad=157.5  [phase1=1.4s bptt=2.9s elapsed=1751s]
+  heads (0/0 clipped)   trunk |g|=157 lim=1500 x1.00
+    cube_stacking   rew= -20.454  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3129  Descend=0%/0.2318  Grasp=0%/0.2318  Move=0%/0.1605  Release=100%/0.2083
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 300
+
+Iter  305:  Σrew=-20.558  grad=251.2  [phase1=1.3s bptt=2.9s elapsed=1777s]
+  heads (0/0 clipped)   trunk |g|=251 lim=1500 x1.00
+    cube_stacking   rew= -20.558  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2641  Descend=0%/0.2165  Grasp=0%/0.2165  Move=0%/0.1559  Release=100%/0.2034
+
+Iter  310:  Σrew=-12.351  grad=1274.6  [phase1=1.4s bptt=2.9s elapsed=1801s]
+  heads (0/0 clipped)   trunk |g|=1275 lim=1500 x1.00
+    cube_stacking   rew= -12.351  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1589  Descend=0%/0.1262  Grasp=0%/0.1262  Move=5%/0.1556  Release=100%/0.2027
+
+Iter  315:  Σrew=-9.291  grad=420.8  [phase1=1.4s bptt=2.9s elapsed=1825s]
+  heads (0/0 clipped)   trunk |g|=421 lim=1500 x1.00
+    cube_stacking   rew=  -9.291  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1607  Descend=0%/0.1240  Grasp=0%/0.1240  Move=0%/0.1609  Release=100%/0.2088
+
+Iter  320:  Σrew=-9.143  grad=1184.8  [phase1=1.3s bptt=2.9s elapsed=1849s]
+  heads (0/0 clipped)   trunk |g|=1185 lim=1500 x1.00
+    cube_stacking   rew=  -9.143  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1492  Descend=10%/0.1209  Grasp=10%/0.1209  Move=0%/0.1826  Release=100%/0.2314
+
+Iter  325:  Σrew=-14.668  grad=64.8  [phase1=1.3s bptt=2.9s elapsed=1875s]
+  heads (0/0 clipped)   trunk |g|=65 lim=1500 x1.00
+    cube_stacking   rew= -14.668  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2350  Descend=0%/0.1596  Grasp=0%/0.1596  Move=0%/0.1563  Release=100%/0.2039
+
+Iter  330:  Σrew=-16.219  grad=99.9  [phase1=1.3s bptt=2.9s elapsed=1899s]
+  heads (0/0 clipped)   trunk |g|=100 lim=1500 x1.00
+    cube_stacking   rew= -16.219  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2326  Descend=0%/0.1480  Grasp=0%/0.1480  Move=0%/0.1669  Release=100%/0.2153
+
+Iter  335:  Σrew=-14.959  grad=103.2  [phase1=1.3s bptt=2.9s elapsed=1923s]
+  heads (0/0 clipped)   trunk |g|=103 lim=1500 x1.00
+    cube_stacking   rew= -14.959  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2106  Descend=5%/0.1439  Grasp=5%/0.1439  Move=0%/0.1673  Release=100%/0.2162
+
+Iter  340:  Σrew=-10.894  grad=66.2  [phase1=1.3s bptt=2.9s elapsed=1947s]
+  heads (0/0 clipped)   trunk |g|=66 lim=1500 x1.00
+    cube_stacking   rew= -10.894  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1529  Descend=5%/0.0793  Grasp=5%/0.0793  Move=0%/0.1652  Release=100%/0.2132
+
+Iter  345:  Σrew=-9.795  grad=216.4  [phase1=1.3s bptt=2.9s elapsed=1973s]
+  heads (0/0 clipped)   trunk |g|=216 lim=1500 x1.00
+    cube_stacking   rew=  -9.795  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1507  Descend=5%/0.0823  Grasp=5%/0.0823  Move=0%/0.1974  Release=100%/0.2466
+
+Iter  350:  Σrew=-10.068  grad=147.3  [phase1=1.4s bptt=2.9s elapsed=1997s]
+  heads (0/0 clipped)   trunk |g|=147 lim=1500 x1.00
+    cube_stacking   rew= -10.068  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1562  Descend=5%/0.1014  Grasp=5%/0.1014  Move=0%/0.1780  Release=100%/0.2270
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 350
+
+Iter  355:  Σrew=-10.105  grad=235.1  [phase1=1.3s bptt=2.9s elapsed=2023s]
+  heads (0/0 clipped)   trunk |g|=235 lim=1500 x1.00
+    cube_stacking   rew= -10.105  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1551  Descend=5%/0.1128  Grasp=5%/0.1128  Move=0%/0.1979  Release=100%/0.2476
+
+Iter  360:  Σrew=-10.952  grad=70.6  [phase1=1.4s bptt=2.9s elapsed=2047s]
+  heads (0/0 clipped)   trunk |g|=71 lim=1500 x1.00
+    cube_stacking   rew= -10.952  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1589  Descend=0%/0.2022  Grasp=0%/0.2022  Move=5%/0.2567  Release=100%/0.3346
+
+Iter  365:  Σrew=-9.940  grad=125.7  [phase1=1.3s bptt=2.9s elapsed=2071s]
+  heads (0/0 clipped)   trunk |g|=126 lim=1500 x1.00
+    cube_stacking   rew=  -9.940  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1634  Descend=0%/0.1279  Grasp=0%/0.1279  Move=0%/0.1812  Release=100%/0.2298
+
+Iter  370:  Σrew=-10.782  grad=177.3  [phase1=1.3s bptt=2.9s elapsed=2095s]
+  heads (0/0 clipped)   trunk |g|=177 lim=1500 x1.00
+    cube_stacking   rew= -10.782  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1853  Descend=0%/0.1418  Grasp=0%/0.1418  Move=0%/0.1884  Release=100%/0.2377
+
+Iter  375:  Σrew=-11.687  grad=1286.9  [phase1=1.4s bptt=2.9s elapsed=2121s]
+  heads (0/0 clipped)   trunk |g|=1287 lim=1500 x1.00
+    cube_stacking   rew= -11.687  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1865  Descend=5%/0.0990  Grasp=5%/0.0990  Move=15%/0.1552  Release=100%/0.2014
+
+Iter  380:  Σrew=-27.136  grad=288.2  [phase1=1.3s bptt=2.9s elapsed=2145s]
+  heads (0/0 clipped)   trunk |g|=288 lim=1500 x1.00
+    cube_stacking   rew= -27.136  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3518  Descend=0%/0.4219  Grasp=0%/0.4219  Move=5%/0.1597  Release=100%/0.2075
+
+Iter  385:  Σrew=-30.447  grad=114.2  [phase1=1.4s bptt=2.9s elapsed=2169s]
+  heads (0/0 clipped)   trunk |g|=114 lim=1500 x1.00
+    cube_stacking   rew= -30.447  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3756  Descend=0%/0.1959  Grasp=0%/0.1959  Move=0%/0.1575  Release=100%/0.2052
+
+Iter  390:  Σrew=-20.795  grad=183.7  [phase1=1.3s bptt=2.9s elapsed=2193s]
+  heads (0/0 clipped)   trunk |g|=184 lim=1500 x1.00
+    cube_stacking   rew= -20.795  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2853  Descend=0%/0.1495  Grasp=0%/0.1495  Move=0%/0.1538  Release=100%/0.2002
+
+Iter  395:  Σrew=-18.901  grad=73.2  [phase1=1.3s bptt=2.9s elapsed=2218s]
+  heads (0/0 clipped)   trunk |g|=73 lim=1500 x1.00
+    cube_stacking   rew= -18.901  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2667  Descend=0%/0.1845  Grasp=0%/0.1845  Move=5%/0.1529  Release=100%/0.2002
+
+Iter  400:  Σrew=-16.800  grad=92.9  [phase1=1.3s bptt=2.9s elapsed=2242s]
+  heads (0/0 clipped)   trunk |g|=93 lim=1500 x1.00
+    cube_stacking   rew= -16.800  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2330  Descend=0%/0.1775  Grasp=0%/0.1775  Move=5%/0.1574  Release=100%/0.2036
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 400
+
+Iter  405:  Σrew=-12.213  grad=672.4  [phase1=1.3s bptt=2.9s elapsed=2268s]
+  heads (0/0 clipped)   trunk |g|=672 lim=1500 x1.00
+    cube_stacking   rew= -12.213  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1448  Descend=5%/0.1559  Grasp=5%/0.1559  Move=5%/0.1568  Release=100%/0.2042
+
+Iter  410:  Σrew=-11.788  grad=263.9  [phase1=1.3s bptt=2.9s elapsed=2292s]
+  heads (0/0 clipped)   trunk |g|=264 lim=1500 x1.00
+    cube_stacking   rew= -11.788  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1421  Descend=0%/0.1161  Grasp=0%/0.1161  Move=0%/0.1488  Release=100%/0.1957
+
+Iter  415:  Σrew=-14.127  grad=111.5  [phase1=1.3s bptt=2.9s elapsed=2316s]
+  heads (0/0 clipped)   trunk |g|=112 lim=1500 x1.00
+    cube_stacking   rew= -14.127  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1501  Descend=0%/0.1615  Grasp=0%/0.1615  Move=0%/0.1485  Release=100%/0.1954
+
+Iter  420:  Σrew=-21.499  grad=5903.2  [phase1=1.3s bptt=2.9s elapsed=2340s]
+  heads (0/0 clipped)   trunk |g|=5903 lim=1500 x0.25
+    cube_stacking   rew= -21.499  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3348  Descend=0%/0.2905  Grasp=0%/0.2905  Move=0%/0.1621  Release=100%/0.2103
+
+Iter  425:  Σrew=-20.182  grad=4915.9  [phase1=1.3s bptt=2.9s elapsed=2366s]
+  heads (0/0 clipped)   trunk |g|=4916 lim=1500 x0.31
+    cube_stacking   rew= -20.182  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3015  Descend=0%/0.2718  Grasp=0%/0.2718  Move=0%/0.1462  Release=100%/0.1930
+
+Iter  430:  Σrew=-21.212  grad=1010.3  [phase1=1.4s bptt=2.9s elapsed=2390s]
+  heads (0/0 clipped)   trunk |g|=1010 lim=1500 x1.00
+    cube_stacking   rew= -21.212  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3303  Descend=0%/0.3743  Grasp=0%/0.3743  Move=0%/0.1512  Release=100%/0.1986
+
+Iter  435:  Σrew=-15.791  grad=178.7  [phase1=1.3s bptt=2.9s elapsed=2414s]
+  heads (0/0 clipped)   trunk |g|=179 lim=1500 x1.00
+    cube_stacking   rew= -15.791  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1927  Descend=0%/0.2481  Grasp=0%/0.2481  Move=0%/0.1564  Release=100%/0.2042
+
+Iter  440:  Σrew=-14.834  grad=1415.8  [phase1=1.3s bptt=2.9s elapsed=2438s]
+  heads (0/0 clipped)   trunk |g|=1416 lim=1500 x1.00
+    cube_stacking   rew= -14.834  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1931  Descend=0%/0.1862  Grasp=0%/0.1862  Move=0%/0.1580  Release=100%/0.2057
+
+Iter  445:  Σrew=-16.914  grad=158.0  [phase1=1.3s bptt=2.9s elapsed=2464s]
+  heads (0/0 clipped)   trunk |g|=158 lim=1500 x1.00
+    cube_stacking   rew= -16.914  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2338  Descend=10%/0.1159  Grasp=10%/0.1159  Move=0%/0.1569  Release=100%/0.2043
+
+Iter  450:  Σrew=-19.180  grad=191.3  [phase1=1.4s bptt=2.9s elapsed=2488s]
+  heads (0/0 clipped)   trunk |g|=191 lim=1500 x1.00
+    cube_stacking   rew= -19.180  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2325  Descend=0%/0.1217  Grasp=0%/0.1217  Move=0%/0.1570  Release=100%/0.2044
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 450
+
+Iter  455:  Σrew=-15.853  grad=164.4  [phase1=1.3s bptt=2.9s elapsed=2513s]
+  heads (0/0 clipped)   trunk |g|=164 lim=1500 x1.00
+    cube_stacking   rew= -15.853  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1842  Descend=0%/0.1383  Grasp=0%/0.1383  Move=15%/0.1533  Release=100%/0.1997
+
+Iter  460:  Σrew=-16.665  grad=125.9  [phase1=1.3s bptt=2.9s elapsed=2537s]
+  heads (0/0 clipped)   trunk |g|=126 lim=1500 x1.00
+    cube_stacking   rew= -16.665  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1870  Descend=0%/0.2013  Grasp=0%/0.2013  Move=0%/0.1581  Release=100%/0.2060
+
+Iter  465:  Σrew=-15.861  grad=1130.9  [phase1=1.3s bptt=2.9s elapsed=2561s]
+  heads (0/0 clipped)   trunk |g|=1131 lim=1500 x1.00
+    cube_stacking   rew= -15.861  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1896  Descend=10%/0.1256  Grasp=10%/0.1256  Move=5%/0.1609  Release=100%/0.2087
+
+Iter  470:  Σrew=-16.743  grad=269.0  [phase1=1.3s bptt=2.9s elapsed=2585s]
+  heads (0/0 clipped)   trunk |g|=269 lim=1500 x1.00
+    cube_stacking   rew= -16.743  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2342  Descend=0%/0.1859  Grasp=0%/0.1859  Move=0%/0.1653  Release=100%/0.2142
+
+Iter  475:  Σrew=-13.845  grad=442.1  [phase1=1.4s bptt=2.9s elapsed=2611s]
+  heads (0/0 clipped)   trunk |g|=442 lim=1500 x1.00
+    cube_stacking   rew= -13.845  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1697  Descend=0%/0.1786  Grasp=0%/0.1786  Move=0%/0.1592  Release=100%/0.2075
+
+Iter  480:  Σrew=-12.663  grad=1127.2  [phase1=1.3s bptt=2.9s elapsed=2635s]
+  heads (0/0 clipped)   trunk |g|=1127 lim=1500 x1.00
+    cube_stacking   rew= -12.663  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1484  Descend=0%/0.1763  Grasp=0%/0.1763  Move=5%/0.1558  Release=100%/0.2028
+
+Iter  485:  Σrew=-13.245  grad=429.1  [phase1=1.3s bptt=2.9s elapsed=2659s]
+  heads (0/0 clipped)   trunk |g|=429 lim=1500 x1.00
+    cube_stacking   rew= -13.245  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1858  Descend=0%/0.1622  Grasp=0%/0.1622  Move=5%/0.1374  Release=100%/0.1832
+
+Iter  490:  Σrew=-15.682  grad=1823.2  [phase1=1.3s bptt=2.9s elapsed=2683s]
+  heads (0/0 clipped)   trunk |g|=1823 lim=1500 x0.82
+    cube_stacking   rew= -15.682  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2590  Descend=0%/0.2035  Grasp=0%/0.2035  Move=0%/0.1570  Release=100%/0.2045
+
+Iter  495:  Σrew=-12.891  grad=1170.6  [phase1=1.4s bptt=2.9s elapsed=2709s]
+  heads (0/0 clipped)   trunk |g|=1171 lim=1500 x1.00
+    cube_stacking   rew= -12.891  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2595  Descend=0%/0.1043  Grasp=0%/0.1043  Move=0%/0.1722  Release=100%/0.2207
+
+Iter  500:  Σrew=-14.125  grad=374.8  [phase1=1.3s bptt=2.9s elapsed=2733s]
+  heads (0/0 clipped)   trunk |g|=375 lim=1500 x1.00
+    cube_stacking   rew= -14.125  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2235  Descend=0%/0.1459  Grasp=0%/0.1459  Move=0%/0.1683  Release=100%/0.2179
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 500
+
+Iter  505:  Σrew=-14.837  grad=179.5  [phase1=1.3s bptt=2.9s elapsed=2759s]
+  heads (0/0 clipped)   trunk |g|=180 lim=1500 x1.00
+    cube_stacking   rew= -14.837  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2243  Descend=0%/0.1810  Grasp=0%/0.1810  Move=0%/0.1581  Release=100%/0.2057
+
+Iter  510:  Σrew=-15.482  grad=895.7  [phase1=1.3s bptt=2.9s elapsed=2783s]
+  heads (0/0 clipped)   trunk |g|=896 lim=1500 x1.00
+    cube_stacking   rew= -15.482  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2629  Descend=0%/0.1647  Grasp=0%/0.1647  Move=0%/0.1570  Release=100%/0.2051
+
+Iter  515:  Σrew=-18.318  grad=1243.8  [phase1=1.4s bptt=2.9s elapsed=2807s]
+  heads (0/0 clipped)   trunk |g|=1244 lim=1500 x1.00
+    cube_stacking   rew= -18.318  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2909  Descend=0%/0.2251  Grasp=0%/0.2251  Move=0%/0.1580  Release=100%/0.2059
+
+Iter  520:  Σrew=-23.749  grad=753.9  [phase1=1.3s bptt=2.9s elapsed=2831s]
+  heads (0/0 clipped)   trunk |g|=754 lim=1500 x1.00
+    cube_stacking   rew= -23.749  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3028  Descend=0%/0.3406  Grasp=0%/0.3406  Move=0%/0.1592  Release=100%/0.2070
+
+Iter  525:  Σrew=-23.873  grad=1134.3  [phase1=1.4s bptt=2.9s elapsed=2857s]
+  heads (0/0 clipped)   trunk |g|=1134 lim=1500 x1.00
+    cube_stacking   rew= -23.873  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3102  Descend=0%/0.2825  Grasp=0%/0.2825  Move=0%/0.1561  Release=100%/0.2036
+
+Iter  530:  Σrew=-22.403  grad=422.7  [phase1=1.3s bptt=2.9s elapsed=2881s]
+  heads (0/0 clipped)   trunk |g|=423 lim=1500 x1.00
+    cube_stacking   rew= -22.403  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2969  Descend=0%/0.2489  Grasp=0%/0.2489  Move=5%/0.1503  Release=100%/0.1971
+
+Iter  535:  Σrew=-19.017  grad=632.3  [phase1=1.4s bptt=2.9s elapsed=2905s]
+  heads (0/0 clipped)   trunk |g|=632 lim=1500 x1.00
+    cube_stacking   rew= -19.017  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3015  Descend=0%/0.2226  Grasp=0%/0.2226  Move=5%/0.1466  Release=100%/0.1931
+
+Iter  540:  Σrew=-19.206  grad=536.9  [phase1=1.3s bptt=2.9s elapsed=2929s]
+  heads (0/0 clipped)   trunk |g|=537 lim=1500 x1.00
+    cube_stacking   rew= -19.206  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3364  Descend=0%/0.3777  Grasp=0%/0.3777  Move=5%/0.1576  Release=100%/0.2051
+
+Iter  545:  Σrew=-28.733  grad=231.1  [phase1=1.3s bptt=2.9s elapsed=2955s]
+  heads (0/0 clipped)   trunk |g|=231 lim=1500 x1.00
+    cube_stacking   rew= -28.733  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4701  Descend=0%/0.5260  Grasp=0%/0.5260  Move=0%/0.1661  Release=100%/0.2146
+
+Iter  550:  Σrew=-32.305  grad=93.6  [phase1=1.3s bptt=2.9s elapsed=2979s]
+  heads (0/0 clipped)   trunk |g|=94 lim=1500 x1.00
+    cube_stacking   rew= -32.305  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.6078  Descend=0%/0.5079  Grasp=0%/0.5079  Move=0%/0.1537  Release=100%/0.2008
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 550
+
+Iter  555:  Σrew=-32.845  grad=84.0  [phase1=1.3s bptt=2.9s elapsed=3004s]
+  heads (0/0 clipped)   trunk |g|=84 lim=1500 x1.00
+    cube_stacking   rew= -32.845  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5728  Descend=0%/0.4430  Grasp=0%/0.4430  Move=0%/0.1548  Release=100%/0.2023
+
+Iter  560:  Σrew=-32.721  grad=296.0  [phase1=1.3s bptt=2.9s elapsed=3028s]
+  heads (0/0 clipped)   trunk |g|=296 lim=1500 x1.00
+    cube_stacking   rew= -32.721  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5248  Descend=0%/0.4159  Grasp=0%/0.4159  Move=0%/0.1676  Release=100%/0.2161
+
+Iter  565:  Σrew=-24.850  grad=180.7  [phase1=1.3s bptt=2.9s elapsed=3052s]
+  heads (0/0 clipped)   trunk |g|=181 lim=1500 x1.00
+    cube_stacking   rew= -24.850  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3731  Descend=0%/0.3074  Grasp=0%/0.3074  Move=0%/0.1612  Release=100%/0.2090
+
+Iter  570:  Σrew=-19.473  grad=451.9  [phase1=1.4s bptt=2.9s elapsed=3077s]
+  heads (0/0 clipped)   trunk |g|=452 lim=1500 x1.00
+    cube_stacking   rew= -19.473  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.2633  Descend=0%/0.3161  Grasp=0%/0.3161  Move=5%/0.1572  Release=100%/0.2048
+
+Iter  575:  Σrew=-17.376  grad=127.6  [phase1=1.3s bptt=2.9s elapsed=3102s]
+  heads (0/0 clipped)   trunk |g|=128 lim=1500 x1.00
+    cube_stacking   rew= -17.376  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2377  Descend=0%/0.2890  Grasp=0%/0.2890  Move=0%/0.1648  Release=100%/0.2133
+
+Iter  580:  Σrew=-16.341  grad=1573.5  [phase1=1.4s bptt=2.9s elapsed=3126s]
+  heads (0/0 clipped)   trunk |g|=1574 lim=1500 x0.95
+    cube_stacking   rew= -16.341  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1971  Descend=0%/0.3453  Grasp=0%/0.3453  Move=5%/0.1608  Release=100%/0.2074
+
+Iter  585:  Σrew=-14.814  grad=289.2  [phase1=1.3s bptt=2.9s elapsed=3150s]
+  heads (0/0 clipped)   trunk |g|=289 lim=1500 x1.00
+    cube_stacking   rew= -14.814  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1347  Descend=0%/0.2875  Grasp=0%/0.2875  Move=0%/0.1539  Release=100%/0.2013
+
+Iter  590:  Σrew=-11.326  grad=181.2  [phase1=1.3s bptt=2.9s elapsed=3174s]
+  heads (0/0 clipped)   trunk |g|=181 lim=1500 x1.00
+    cube_stacking   rew= -11.326  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=40%/0.0786  Descend=0%/0.2410  Grasp=0%/0.2410  Move=0%/0.1577  Release=100%/0.2057
+
+Iter  595:  Σrew=-10.492  grad=115.1  [phase1=1.3s bptt=2.9s elapsed=3200s]
+  heads (0/0 clipped)   trunk |g|=115 lim=1500 x1.00
+    cube_stacking   rew= -10.492  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=20%/0.0984  Descend=0%/0.1753  Grasp=0%/0.1753  Move=5%/0.1832  Release=100%/0.2308
+
+Iter  600:  Σrew=-8.621  grad=375.2  [phase1=1.3s bptt=2.9s elapsed=3224s]
+  heads (0/0 clipped)   trunk |g|=375 lim=1500 x1.00
+    cube_stacking   rew=  -8.621  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1116  Descend=5%/0.0902  Grasp=5%/0.0902  Move=0%/0.1817  Release=100%/0.2307
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 600
+
+Iter  605:  Σrew=-9.756  grad=366.5  [phase1=1.4s bptt=2.9s elapsed=3250s]
+  heads (0/0 clipped)   trunk |g|=367 lim=1500 x1.00
+    cube_stacking   rew=  -9.756  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1402  Descend=0%/0.1332  Grasp=0%/0.1332  Move=0%/0.1450  Release=100%/0.1913
+
+Iter  610:  Σrew=-8.172  grad=168.8  [phase1=1.3s bptt=2.9s elapsed=3274s]
+  heads (0/0 clipped)   trunk |g|=169 lim=1500 x1.00
+    cube_stacking   rew=  -8.172  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1063  Descend=5%/0.1005  Grasp=5%/0.1005  Move=5%/0.1982  Release=100%/0.2465
+
+Iter  615:  Σrew=-7.542  grad=2002.1  [phase1=1.4s bptt=2.9s elapsed=3298s]
+  heads (0/0 clipped)   trunk |g|=2002 lim=1500 x0.75
+    cube_stacking   rew=  -7.542  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1337  Descend=0%/0.0838  Grasp=0%/0.0838  Move=0%/0.1587  Release=100%/0.2064
+
+Iter  620:  Σrew=-11.241  grad=123.6  [phase1=1.3s bptt=2.9s elapsed=3322s]
+  heads (0/0 clipped)   trunk |g|=124 lim=1500 x1.00
+    cube_stacking   rew= -11.241  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1873  Descend=0%/0.1268  Grasp=0%/0.1268  Move=0%/0.1665  Release=100%/0.2143
+
+Iter  625:  Σrew=-11.004  grad=229.3  [phase1=1.4s bptt=2.9s elapsed=3348s]
+  heads (0/0 clipped)   trunk |g|=229 lim=1500 x1.00
+    cube_stacking   rew= -11.004  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1696  Descend=0%/0.1205  Grasp=0%/0.1205  Move=0%/0.1508  Release=100%/0.1975
+
+Iter  630:  Σrew=-9.400  grad=180.1  [phase1=1.4s bptt=2.9s elapsed=3372s]
+  heads (0/0 clipped)   trunk |g|=180 lim=1500 x1.00
+    cube_stacking   rew=  -9.400  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1308  Descend=0%/0.0977  Grasp=0%/0.0977  Move=0%/0.1816  Release=100%/0.2254
+
+Iter  635:  Σrew=-7.012  grad=43.0  [phase1=1.3s bptt=2.9s elapsed=3396s]
+  heads (0/0 clipped)   trunk |g|=43 lim=1500 x1.00
+    cube_stacking   rew=  -7.012  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1127  Descend=5%/0.0915  Grasp=5%/0.0915  Move=0%/0.1915  Release=100%/0.2395
+
+Iter  640:  Σrew=-8.843  grad=11354.1  [phase1=1.3s bptt=2.9s elapsed=3420s]
+  heads (0/0 clipped)   trunk |g|=11354 lim=1500 x0.13
+    cube_stacking   rew=  -8.843  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1186  Descend=0%/0.1768  Grasp=0%/0.1768  Move=0%/0.1698  Release=100%/0.2184
+
+Iter  645:  Σrew=-12.048  grad=74.1  [phase1=1.3s bptt=2.9s elapsed=3444s]
+  heads (0/0 clipped)   trunk |g|=74 lim=1500 x1.00
+    cube_stacking   rew= -12.048  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1342  Descend=0%/0.2083  Grasp=0%/0.2083  Move=5%/0.1716  Release=100%/0.2191
+
+Iter  650:  Σrew=-13.095  grad=118.1  [phase1=1.3s bptt=2.9s elapsed=3469s]
+  heads (0/0 clipped)   trunk |g|=118 lim=1500 x1.00
+    cube_stacking   rew= -13.095  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1148  Descend=0%/0.2581  Grasp=0%/0.2581  Move=0%/0.1554  Release=100%/0.2031
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 650
+
+Iter  655:  Σrew=-13.596  grad=4245.9  [phase1=1.3s bptt=2.9s elapsed=3495s]
+  heads (0/0 clipped)   trunk |g|=4246 lim=1500 x0.35
+    cube_stacking   rew= -13.596  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1249  Descend=0%/0.2328  Grasp=0%/0.2328  Move=0%/0.1813  Release=100%/0.2301
+
+Iter  660:  Σrew=-13.118  grad=265.3  [phase1=1.4s bptt=2.9s elapsed=3519s]
+  heads (0/0 clipped)   trunk |g|=265 lim=1500 x1.00
+    cube_stacking   rew= -13.118  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1464  Descend=0%/0.2274  Grasp=0%/0.2274  Move=0%/0.1539  Release=100%/0.2011
+
+Iter  665:  Σrew=-13.173  grad=288.8  [phase1=1.4s bptt=2.9s elapsed=3543s]
+  heads (0/0 clipped)   trunk |g|=289 lim=1500 x1.00
+    cube_stacking   rew= -13.173  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1848  Descend=5%/0.2243  Grasp=5%/0.2243  Move=0%/0.1607  Release=100%/0.2084
+
+Iter  670:  Σrew=-12.848  grad=87.9  [phase1=1.4s bptt=2.9s elapsed=3567s]
+  heads (0/0 clipped)   trunk |g|=88 lim=1500 x1.00
+    cube_stacking   rew= -12.848  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1760  Descend=0%/0.1906  Grasp=0%/0.1906  Move=0%/0.1524  Release=100%/0.1996
+
+Iter  675:  Σrew=-10.852  grad=1776.0  [phase1=1.3s bptt=2.9s elapsed=3593s]
+  heads (0/0 clipped)   trunk |g|=1776 lim=1500 x0.84
+    cube_stacking   rew= -10.852  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1915  Descend=0%/0.1531  Grasp=0%/0.1531  Move=0%/0.1555  Release=100%/0.2032
+
+Iter  680:  Σrew=-12.941  grad=686.0  [phase1=1.3s bptt=2.9s elapsed=3617s]
+  heads (0/0 clipped)   trunk |g|=686 lim=1500 x1.00
+    cube_stacking   rew= -12.941  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2255  Descend=0%/0.2014  Grasp=0%/0.2014  Move=0%/0.1645  Release=100%/0.2128
+
+Iter  685:  Σrew=-12.770  grad=148.6  [phase1=1.3s bptt=2.9s elapsed=3641s]
+  heads (0/0 clipped)   trunk |g|=149 lim=1500 x1.00
+    cube_stacking   rew= -12.770  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2291  Descend=0%/0.1824  Grasp=0%/0.1824  Move=0%/0.1640  Release=100%/0.2122
+
+Iter  690:  Σrew=-12.846  grad=1255.7  [phase1=1.3s bptt=2.9s elapsed=3665s]
+  heads (0/0 clipped)   trunk |g|=1256 lim=1500 x1.00
+    cube_stacking   rew= -12.846  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1776  Descend=0%/0.1574  Grasp=0%/0.1574  Move=0%/0.1649  Release=100%/0.2133
+
+Iter  695:  Σrew=-6.719  grad=542.7  [phase1=1.4s bptt=2.9s elapsed=3689s]
+  heads (0/0 clipped)   trunk |g|=543 lim=1500 x1.00
+    cube_stacking   rew=  -6.719  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1061  Descend=0%/0.0802  Grasp=0%/0.0802  Move=5%/0.1524  Release=100%/0.1986
+
+Iter  700:  Σrew=-10.110  grad=258.7  [phase1=1.3s bptt=2.9s elapsed=3714s]
+  heads (0/0 clipped)   trunk |g|=259 lim=1500 x1.00
+    cube_stacking   rew= -10.110  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1183  Descend=5%/0.0771  Grasp=5%/0.0771  Move=0%/0.1564  Release=100%/0.2020
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 700
+
+Iter  705:  Σrew=-12.020  grad=74.7  [phase1=1.4s bptt=2.9s elapsed=3740s]
+  heads (0/0 clipped)   trunk |g|=75 lim=1500 x1.00
+    cube_stacking   rew= -12.020  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1337  Descend=0%/0.1411  Grasp=0%/0.1411  Move=0%/0.1653  Release=100%/0.2136
+
+Iter  710:  Σrew=-13.738  grad=716.3  [phase1=1.3s bptt=2.9s elapsed=3764s]
+  heads (0/0 clipped)   trunk |g|=716 lim=1500 x1.00
+    cube_stacking   rew= -13.738  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1515  Descend=0%/0.1841  Grasp=0%/0.1841  Move=5%/0.1501  Release=100%/0.1969
+
+Iter  715:  Σrew=-15.143  grad=498.2  [phase1=1.4s bptt=2.9s elapsed=3788s]
+  heads (0/0 clipped)   trunk |g|=498 lim=1500 x1.00
+    cube_stacking   rew= -15.143  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1628  Descend=0%/0.2361  Grasp=0%/0.2361  Move=0%/0.1722  Release=100%/0.2207
+
+Iter  720:  Σrew=-12.385  grad=271.8  [phase1=1.4s bptt=2.9s elapsed=3812s]
+  heads (0/0 clipped)   trunk |g|=272 lim=1500 x1.00
+    cube_stacking   rew= -12.385  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1572  Descend=0%/0.1869  Grasp=0%/0.1869  Move=5%/0.1573  Release=100%/0.2046
+
+Iter  725:  Σrew=-11.620  grad=178.4  [phase1=1.4s bptt=2.9s elapsed=3838s]
+  heads (0/0 clipped)   trunk |g|=178 lim=1500 x1.00
+    cube_stacking   rew= -11.620  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1403  Descend=0%/0.1794  Grasp=0%/0.1794  Move=5%/0.1516  Release=100%/0.1987
+
+Iter  730:  Σrew=-10.692  grad=241.4  [phase1=1.3s bptt=2.9s elapsed=3862s]
+  heads (0/0 clipped)   trunk |g|=241 lim=1500 x1.00
+    cube_stacking   rew= -10.692  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1212  Descend=0%/0.1645  Grasp=0%/0.1645  Move=0%/0.1648  Release=100%/0.2132
+
+Iter  735:  Σrew=-8.321  grad=571.6  [phase1=1.3s bptt=2.9s elapsed=3886s]
+  heads (0/0 clipped)   trunk |g|=572 lim=1500 x1.00
+    cube_stacking   rew=  -8.321  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1234  Descend=10%/0.0984  Grasp=10%/0.0984  Move=0%/0.1476  Release=100%/0.1945
+
+Iter  740:  Σrew=-8.429  grad=132.0  [phase1=1.3s bptt=2.9s elapsed=3910s]
+  heads (0/0 clipped)   trunk |g|=132 lim=1500 x1.00
+    cube_stacking   rew=  -8.429  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1409  Descend=10%/0.0712  Grasp=10%/0.0712  Move=0%/0.1533  Release=100%/0.2005
+
+Iter  745:  Σrew=-9.879  grad=1194.2  [phase1=1.4s bptt=2.9s elapsed=3936s]
+  heads (0/0 clipped)   trunk |g|=1194 lim=1500 x1.00
+    cube_stacking   rew=  -9.879  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1574  Descend=5%/0.1058  Grasp=5%/0.1058  Move=10%/0.1523  Release=100%/0.1989
+
+Iter  750:  Σrew=-11.509  grad=1657.0  [phase1=1.4s bptt=2.9s elapsed=3960s]
+  heads (0/0 clipped)   trunk |g|=1657 lim=1500 x0.91
+    cube_stacking   rew= -11.509  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1420  Descend=5%/0.1301  Grasp=5%/0.1301  Move=10%/0.1927  Release=100%/0.2555
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 750
+
+Iter  755:  Σrew=-12.576  grad=132.8  [phase1=1.4s bptt=2.9s elapsed=3986s]
+  heads (0/0 clipped)   trunk |g|=133 lim=1500 x1.00
+    cube_stacking   rew= -12.576  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1384  Descend=5%/0.0822  Grasp=5%/0.0822  Move=5%/0.1541  Release=100%/0.2010
+
+Iter  760:  Σrew=-13.800  grad=778.1  [phase1=1.3s bptt=2.9s elapsed=4010s]
+  heads (0/0 clipped)   trunk |g|=778 lim=1500 x1.00
+    cube_stacking   rew= -13.800  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1622  Descend=5%/0.1713  Grasp=5%/0.1713  Move=10%/0.1417  Release=100%/0.1872
+
+Iter  765:  Σrew=-19.217  grad=99.9  [phase1=1.3s bptt=2.9s elapsed=4034s]
+  heads (0/0 clipped)   trunk |g|=100 lim=1500 x1.00
+    cube_stacking   rew= -19.217  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2078  Descend=0%/0.3706  Grasp=0%/0.3706  Move=0%/0.1560  Release=100%/0.2031
+
+Iter  770:  Σrew=-18.702  grad=504.8  [phase1=1.6s bptt=2.9s elapsed=4059s]
+  heads (0/0 clipped)   trunk |g|=505 lim=1500 x1.00
+    cube_stacking   rew= -18.702  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2118  Descend=0%/0.2334  Grasp=0%/0.2334  Move=0%/0.1406  Release=100%/0.1867
+
+Iter  775:  Σrew=-16.551  grad=210.4  [phase1=1.4s bptt=2.9s elapsed=4086s]
+  heads (0/0 clipped)   trunk |g|=210 lim=1500 x1.00
+    cube_stacking   rew= -16.551  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2080  Descend=0%/0.2026  Grasp=0%/0.2026  Move=0%/0.1600  Release=100%/0.2078
+
+Iter  780:  Σrew=-16.664  grad=171.4  [phase1=1.4s bptt=2.9s elapsed=4110s]
+  heads (0/0 clipped)   trunk |g|=171 lim=1500 x1.00
+    cube_stacking   rew= -16.664  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1781  Descend=0%/0.2162  Grasp=0%/0.2162  Move=5%/0.1442  Release=100%/0.1904
+
+Iter  785:  Σrew=-13.020  grad=173.6  [phase1=1.4s bptt=2.9s elapsed=4134s]
+  heads (0/0 clipped)   trunk |g|=174 lim=1500 x1.00
+    cube_stacking   rew= -13.020  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1625  Descend=0%/0.2086  Grasp=0%/0.2086  Move=5%/0.2073  Release=100%/0.2724
+
+Iter  790:  Σrew=-15.151  grad=363.3  [phase1=1.4s bptt=2.9s elapsed=4159s]
+  heads (0/0 clipped)   trunk |g|=363 lim=1500 x1.00
+    cube_stacking   rew= -15.151  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1727  Descend=0%/0.1900  Grasp=0%/0.1900  Move=0%/0.1636  Release=100%/0.2102
+
+Iter  795:  Σrew=-14.072  grad=342.5  [phase1=1.4s bptt=2.9s elapsed=4186s]
+  heads (0/0 clipped)   trunk |g|=343 lim=1500 x1.00
+    cube_stacking   rew= -14.072  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1715  Descend=0%/0.1510  Grasp=0%/0.1510  Move=0%/0.1735  Release=100%/0.2216
+
+Iter  800:  Σrew=-11.437  grad=109.3  [phase1=1.4s bptt=2.9s elapsed=4210s]
+  heads (0/0 clipped)   trunk |g|=109 lim=1500 x1.00
+    cube_stacking   rew= -11.437  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1439  Descend=0%/0.1687  Grasp=0%/0.1687  Move=10%/0.1596  Release=100%/0.2060
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 800
+
+Iter  805:  Σrew=-13.116  grad=110.8  [phase1=1.5s bptt=2.9s elapsed=4237s]
+  heads (0/0 clipped)   trunk |g|=111 lim=1500 x1.00
+    cube_stacking   rew= -13.116  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1740  Descend=5%/0.2065  Grasp=5%/0.2065  Move=0%/0.1895  Release=100%/0.2378
+
+Iter  810:  Σrew=-14.008  grad=69.7  [phase1=1.4s bptt=2.9s elapsed=4261s]
+  heads (0/0 clipped)   trunk |g|=70 lim=1500 x1.00
+    cube_stacking   rew= -14.008  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1804  Descend=0%/0.2029  Grasp=0%/0.2029  Move=0%/0.1798  Release=100%/0.2288
+
+Iter  815:  Σrew=-14.682  grad=121.3  [phase1=1.4s bptt=2.8s elapsed=4286s]
+  heads (0/0 clipped)   trunk |g|=121 lim=1500 x1.00
+    cube_stacking   rew= -14.682  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1868  Descend=0%/0.2198  Grasp=0%/0.2198  Move=0%/0.1537  Release=100%/0.2011
+
+Iter  820:  Σrew=-17.566  grad=105.2  [phase1=1.4s bptt=2.9s elapsed=4310s]
+  heads (0/0 clipped)   trunk |g|=105 lim=1500 x1.00
+    cube_stacking   rew= -17.566  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2103  Descend=0%/0.2203  Grasp=0%/0.2203  Move=0%/0.1663  Release=100%/0.2146
+
+Iter  825:  Σrew=-15.553  grad=94.0  [phase1=1.5s bptt=2.9s elapsed=4337s]
+  heads (0/0 clipped)   trunk |g|=94 lim=1500 x1.00
+    cube_stacking   rew= -15.553  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1847  Descend=0%/0.2061  Grasp=0%/0.2061  Move=0%/0.1595  Release=100%/0.2066
+
+Iter  830:  Σrew=-14.000  grad=99.6  [phase1=1.5s bptt=2.9s elapsed=4361s]
+  heads (0/0 clipped)   trunk |g|=100 lim=1500 x1.00
+    cube_stacking   rew= -14.000  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1691  Descend=0%/0.1681  Grasp=0%/0.1681  Move=0%/0.1575  Release=100%/0.2049
+
+Iter  835:  Σrew=-14.382  grad=188.3  [phase1=1.5s bptt=2.9s elapsed=4386s]
+  heads (0/0 clipped)   trunk |g|=188 lim=1500 x1.00
+    cube_stacking   rew= -14.382  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1927  Descend=0%/0.2300  Grasp=0%/0.2300  Move=0%/0.2161  Release=100%/0.2868
+
+Iter  840:  Σrew=-12.261  grad=551.5  [phase1=1.3s bptt=2.9s elapsed=4410s]
+  heads (0/0 clipped)   trunk |g|=552 lim=1500 x1.00
+    cube_stacking   rew= -12.261  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1955  Descend=10%/0.1416  Grasp=10%/0.1416  Move=10%/0.1583  Release=100%/0.2021
+
+Iter  845:  Σrew=-12.948  grad=324.1  [phase1=3.1s bptt=2.9s elapsed=4435s]
+  heads (0/0 clipped)   trunk |g|=324 lim=1500 x1.00
+    cube_stacking   rew= -12.948  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1814  Descend=0%/0.1523  Grasp=0%/0.1523  Move=0%/0.1584  Release=100%/0.2051
+
+Iter  850:  Σrew=-10.954  grad=266.9  [phase1=1.4s bptt=2.9s elapsed=4459s]
+  heads (0/0 clipped)   trunk |g|=267 lim=1500 x1.00
+    cube_stacking   rew= -10.954  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1979  Descend=0%/0.1319  Grasp=0%/0.1319  Move=0%/0.1474  Release=100%/0.1941
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 850
+
+Iter  855:  Σrew=-12.221  grad=398.0  [phase1=1.4s bptt=2.9s elapsed=4485s]
+  heads (0/0 clipped)   trunk |g|=398 lim=1500 x1.00
+    cube_stacking   rew= -12.221  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1896  Descend=0%/0.2918  Grasp=0%/0.2918  Move=5%/0.1497  Release=100%/0.1967
+
+Iter  860:  Σrew=-11.789  grad=101.0  [phase1=1.4s bptt=2.9s elapsed=4509s]
+  heads (0/0 clipped)   trunk |g|=101 lim=1500 x1.00
+    cube_stacking   rew= -11.789  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1688  Descend=0%/0.2394  Grasp=0%/0.2394  Move=0%/0.1602  Release=100%/0.2083
+
+Iter  865:  Σrew=-8.820  grad=345.2  [phase1=1.3s bptt=2.9s elapsed=4533s]
+  heads (0/0 clipped)   trunk |g|=345 lim=1500 x1.00
+    cube_stacking   rew=  -8.820  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1212  Descend=5%/0.1294  Grasp=5%/0.1294  Move=0%/0.1623  Release=100%/0.2101
+
+Iter  870:  Σrew=-6.733  grad=3884.8  [phase1=1.3s bptt=2.9s elapsed=4557s]
+  heads (0/0 clipped)   trunk |g|=3885 lim=1500 x0.39
+    cube_stacking   rew=  -6.733  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1160  Descend=0%/0.0879  Grasp=0%/0.0879  Move=0%/0.1503  Release=100%/0.1972
+
+Iter  875:  Σrew=-7.615  grad=245.2  [phase1=1.3s bptt=2.9s elapsed=4583s]
+  heads (0/0 clipped)   trunk |g|=245 lim=1500 x1.00
+    cube_stacking   rew=  -7.615  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1139  Descend=0%/0.1363  Grasp=0%/0.1363  Move=0%/0.1797  Release=100%/0.2272
+
+Iter  880:  Σrew=-12.033  grad=1834.2  [phase1=1.4s bptt=2.9s elapsed=4607s]
+  heads (0/0 clipped)   trunk |g|=1834 lim=1500 x0.82
+    cube_stacking   rew= -12.033  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.0969  Descend=0%/0.3905  Grasp=0%/0.3905  Move=0%/0.1716  Release=100%/0.2202
+
+Iter  885:  Σrew=-19.985  grad=1937.2  [phase1=1.3s bptt=2.9s elapsed=4631s]
+  heads (0/0 clipped)   trunk |g|=1937 lim=1500 x0.77
+    cube_stacking   rew= -19.985  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2054  Descend=0%/0.5094  Grasp=0%/0.5094  Move=0%/0.1627  Release=100%/0.2108
+
+Iter  890:  Σrew=-40.093  grad=633.8  [phase1=1.4s bptt=2.9s elapsed=4655s]
+  heads (0/0 clipped)   trunk |g|=634 lim=1500 x1.00
+    cube_stacking   rew= -40.093  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4836  Descend=0%/0.9519  Grasp=0%/0.9519  Move=0%/0.1576  Release=100%/0.2054
+
+Iter  895:  Σrew=-46.652  grad=88.7  [phase1=3.1s bptt=2.9s elapsed=4681s]
+  heads (0/0 clipped)   trunk |g|=89 lim=1500 x1.00
+    cube_stacking   rew= -46.652  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5804  Descend=0%/0.8568  Grasp=0%/0.8568  Move=5%/0.1577  Release=100%/0.2054
+
+Iter  900:  Σrew=-45.564  grad=141.7  [phase1=1.4s bptt=2.9s elapsed=4705s]
+  heads (0/0 clipped)   trunk |g|=142 lim=1500 x1.00
+    cube_stacking   rew= -45.564  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.6272  Descend=0%/0.6551  Grasp=0%/0.6551  Move=0%/0.1582  Release=100%/0.2061
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 900
+
+Iter  905:  Σrew=-42.789  grad=78.3  [phase1=1.3s bptt=2.9s elapsed=4731s]
+  heads (0/0 clipped)   trunk |g|=78 lim=1500 x1.00
+    cube_stacking   rew= -42.789  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5522  Descend=0%/0.6330  Grasp=0%/0.6330  Move=0%/0.1482  Release=100%/0.1951
+
+Iter  910:  Σrew=-37.587  grad=63.2  [phase1=1.3s bptt=2.9s elapsed=4755s]
+  heads (0/0 clipped)   trunk |g|=63 lim=1500 x1.00
+    cube_stacking   rew= -37.587  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4384  Descend=0%/0.6699  Grasp=0%/0.6699  Move=0%/0.1527  Release=100%/0.1998
+
+Iter  915:  Σrew=-34.812  grad=273.7  [phase1=1.4s bptt=2.9s elapsed=4779s]
+  heads (0/0 clipped)   trunk |g|=274 lim=1500 x1.00
+    cube_stacking   rew= -34.812  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3671  Descend=0%/0.6326  Grasp=0%/0.6326  Move=0%/0.1558  Release=100%/0.2033
+
+Iter  920:  Σrew=-30.874  grad=341.9  [phase1=1.4s bptt=2.9s elapsed=4803s]
+  heads (0/0 clipped)   trunk |g|=342 lim=1500 x1.00
+    cube_stacking   rew= -30.874  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3172  Descend=0%/0.5499  Grasp=0%/0.5499  Move=0%/0.1582  Release=100%/0.2060
+
+Iter  925:  Σrew=-25.524  grad=691.4  [phase1=1.3s bptt=2.9s elapsed=4829s]
+  heads (0/0 clipped)   trunk |g|=691 lim=1500 x1.00
+    cube_stacking   rew= -25.524  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2369  Descend=0%/0.4025  Grasp=0%/0.4025  Move=0%/0.1555  Release=100%/0.2029
+
+Iter  930:  Σrew=-19.992  grad=69.3  [phase1=1.3s bptt=2.9s elapsed=4853s]
+  heads (0/0 clipped)   trunk |g|=69 lim=1500 x1.00
+    cube_stacking   rew= -19.992  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1409  Descend=0%/0.2910  Grasp=0%/0.2910  Move=0%/0.1509  Release=100%/0.1982
+
+Iter  935:  Σrew=-16.460  grad=123.9  [phase1=1.3s bptt=2.9s elapsed=4877s]
+  heads (0/0 clipped)   trunk |g|=124 lim=1500 x1.00
+    cube_stacking   rew= -16.460  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1210  Descend=0%/0.2686  Grasp=0%/0.2686  Move=5%/0.1469  Release=100%/0.1932
+
+Iter  940:  Σrew=-16.235  grad=334.3  [phase1=1.3s bptt=2.9s elapsed=4901s]
+  heads (0/0 clipped)   trunk |g|=334 lim=1500 x1.00
+    cube_stacking   rew= -16.235  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.1209  Descend=0%/0.3917  Grasp=0%/0.3917  Move=10%/0.2610  Release=100%/0.3537
+
+Iter  945:  Σrew=-14.930  grad=69.8  [phase1=1.3s bptt=2.9s elapsed=4926s]
+  heads (0/0 clipped)   trunk |g|=70 lim=1500 x1.00
+    cube_stacking   rew= -14.930  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1191  Descend=0%/0.2876  Grasp=0%/0.2876  Move=10%/0.1878  Release=100%/0.2474
+
+Iter  950:  Σrew=-11.783  grad=75.5  [phase1=1.3s bptt=2.9s elapsed=4950s]
+  heads (0/0 clipped)   trunk |g|=76 lim=1500 x1.00
+    cube_stacking   rew= -11.783  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1216  Descend=0%/0.1809  Grasp=0%/0.1809  Move=5%/0.1587  Release=100%/0.2055
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 950
+
+Iter  955:  Σrew=-11.930  grad=7476.2  [phase1=1.3s bptt=2.9s elapsed=4976s]
+  heads (0/0 clipped)   trunk |g|=7476 lim=1500 x0.20
+    cube_stacking   rew= -11.930  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1494  Descend=0%/0.1787  Grasp=0%/0.1787  Move=15%/0.1654  Release=100%/0.2142
+
+Iter  960:  Σrew=-18.450  grad=69.0  [phase1=1.4s bptt=2.9s elapsed=5000s]
+  heads (0/0 clipped)   trunk |g|=69 lim=1500 x1.00
+    cube_stacking   rew= -18.450  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2494  Descend=0%/0.2780  Grasp=0%/0.2780  Move=5%/0.1591  Release=100%/0.2065
+
+Iter  965:  Σrew=-21.155  grad=5313.2  [phase1=1.4s bptt=2.9s elapsed=5025s]
+  heads (0/0 clipped)   trunk |g|=5313 lim=1500 x0.28
+    cube_stacking   rew= -21.155  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2752  Descend=0%/0.2556  Grasp=0%/0.2556  Move=0%/0.1554  Release=100%/0.2034
+
+Iter  970:  Σrew=-16.156  grad=149.7  [phase1=1.4s bptt=2.9s elapsed=5051s]
+  heads (0/0 clipped)   trunk |g|=150 lim=1500 x1.00
+    cube_stacking   rew= -16.156  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1580  Descend=0%/0.2850  Grasp=0%/0.2850  Move=15%/0.2161  Release=100%/0.2852
+
+Iter  975:  Σrew=-16.367  grad=471.9  [phase1=1.3s bptt=2.9s elapsed=5075s]
+  heads (0/0 clipped)   trunk |g|=472 lim=1500 x1.00
+    cube_stacking   rew= -16.367  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1495  Descend=0%/0.3060  Grasp=0%/0.3060  Move=5%/0.2909  Release=100%/0.3979
+
+Iter  980:  Σrew=-11.584  grad=739.7  [phase1=1.4s bptt=2.9s elapsed=5099s]
+  heads (0/0 clipped)   trunk |g|=740 lim=1500 x1.00
+    cube_stacking   rew= -11.584  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1588  Descend=0%/0.1264  Grasp=0%/0.1264  Move=5%/0.1583  Release=100%/0.2057
+
+Iter  985:  Σrew=-9.022  grad=678.1  [phase1=1.3s bptt=2.9s elapsed=5123s]
+  heads (0/0 clipped)   trunk |g|=678 lim=1500 x1.00
+    cube_stacking   rew=  -9.022  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1373  Descend=0%/0.1097  Grasp=0%/0.1097  Move=10%/0.1472  Release=100%/0.1929
+
+Iter  990:  Σrew=-11.254  grad=297.0  [phase1=1.3s bptt=2.9s elapsed=5148s]
+  heads (0/0 clipped)   trunk |g|=297 lim=1500 x1.00
+    cube_stacking   rew= -11.254  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2146  Descend=0%/0.1230  Grasp=0%/0.1230  Move=5%/0.1498  Release=100%/0.1967
+
+Iter  995:  Σrew=-9.335  grad=487.5  [phase1=1.3s bptt=2.9s elapsed=5172s]
+  heads (0/0 clipped)   trunk |g|=488 lim=1500 x1.00
+    cube_stacking   rew=  -9.335  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1491  Descend=5%/0.0878  Grasp=5%/0.0878  Move=10%/0.1443  Release=100%/0.1904
+
+Training stopped: reached --iters after 999 iters, 5192.2s this run
+  ✓ saved vision_primitives_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 999 (final)

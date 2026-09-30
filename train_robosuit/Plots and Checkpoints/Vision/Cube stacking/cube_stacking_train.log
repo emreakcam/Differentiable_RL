@@ -1,0 +1,727 @@
+
+######################################################################
+# run started 2026-09-17 18:51:33
+# train_primitives_vison.py --tasks cube_stacking --out-prefix cube_stacking
+######################################################################
+======================================================================
+JOINT VISION-PRIMITIVE TRAINING — robosuite
+  Tasks: cube_stacking
+  Batch: {'cube_stacking': 20}
+  Proprio dim: 31 (shared trunk)
+  Viewer: on
+  Saving to cube_stacking_*  every 50 iters
+======================================================================
+
+[1] DINOv3 backbone (shared)...
+  DINOv3: 64x64 → 4x4 patches, dim=768
+
+[2] Shared primitive policy...
+
+  Primitive Policy:
+    Projection: 768 → 128 (1 camera) → spatial softmax → 256
+    Trunk: 287 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 239,038   Heads: 388,400   Total trainable: 627,438
+
+[3] Building task 'cube_stacking' (cube_stacking env) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_stack.xml
+  ee_site: 3
+  hand_body: 13
+  cube1: 25
+  cube2: 26
+  left_finger: 16
+  right_finger: 18
+  nq=23, nu=9, nsite=10
+  Steps: 100, Chunks: 20, Chunk size: 5
+  Feature slots: 21, frame_dt: 0.0400s
+
+[2] Creating MJWarp GPU renderer...
+Warp 1.16.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/emre/.cache/warp/1.16.0
+Module mujoco.mjx.third_party.mujoco_warp._src.render_util 97c6606 load on device 'cuda:0' took 0.71 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.io 89aaeca load on device 'cuda:0' took 3.50 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.bvh f2c5137 load on device 'cuda:0' took 4.38 ms  (cached)
+  Camera: robot0_eye_in_hand → cam_id: 5
+  Render context: nworld=20, 64x64
+Module mujoco.mjx.warp.ffi 7a22eb4 load on device 'cuda:0' took 0.57 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.smooth 47158eb load on device 'cuda:0' took 4.13 ms  (cached)
+Module _nxn_broadphase__locals__kernel_3e896ca5 3e896ca load on device 'cuda:0' took 0.56 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 ef3754c load on device 'cuda:0' took 1.53 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 231e976 load on device 'cuda:0' took 5.09 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_caf42918 caf4291 load on device 'cuda:0' took 0.80 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.constraint 36c8060 load on device 'cuda:0' took 0.37 ms  (cached)
+Module _friction_dof__locals__kernel_a6ed3529 a6ed352 load on device 'cuda:0' took 0.58 ms  (cached)
+Module _limit_slide_hinge__locals__kernel_56cb53b3 56cb53b load on device 'cuda:0' took 0.58 ms  (cached)
+Module _efc_contact_init__locals__kernel_0bd15084 0bd1508 load on device 'cuda:0' took 0.50 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_f15eda8d 1ff2125 load on device 'cuda:0' took 0.41 ms  (cached)
+Module _efc_contact_update__locals__kernel_8c34abe6 8c34abe load on device 'cuda:0' took 0.53 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward 81c85c8 load on device 'cuda:0' took 3.35 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.passive efc109c load on device 'cuda:0' took 1.02 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward fc5c4e4 load on device 'cuda:0' took 1.05 ms  (cached)
+Module _qfrc_smooth__locals__kernel_b98573a2 b98573a load on device 'cuda:0' took 0.39 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.support ca784c5 load on device 'cuda:0' took 0.42 ms  (cached)
+Module _tile_cholesky_factorize_solve_block__locals__kernel_8d2c83d3 bb4c15e load on device 'cuda:0' took 26.07 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.solver 4a1f2fb load on device 'cuda:0' took 1.65 ms  (cached)
+Module _solve_init_jaref_kernel__locals__kernel_a190cee0 a190cee load on device 'cuda:0' took 2.47 ms  (cached)
+Module mul_m_kernel__locals___mul_m_dc7994af dc7994a load on device 'cuda:0' took 3.18 ms  (cached)
+Module _update_constraint_efc__locals__kernel_34351367 3435136 load on device 'cuda:0' took 0.50 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_626172ab 626172a load on device 'cuda:0' took 0.39 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_d22ec30a d22ec30 load on device 'cuda:0' took 0.38 ms  (cached)
+Module _update_gradient_grad__locals__kernel_30531d0a 30531d0 load on device 'cuda:0' took 0.37 ms  (cached)
+Module _update_gradient_JTDAJ_dense_tiled__locals__kernel_0a788f5b 5791943 load on device 'cuda:0' took 2.20 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_2c36253a e542b74 load on device 'cuda:0' took 37.47 ms  (cached)
+Module _linesearch_iterative_kernel__locals__kernel_fd8c9e1b c7b3998 load on device 'cuda:0' took 0.76 ms  (cached)
+Module _update_constraint_efc__locals__kernel_8791d97d 8791d97 load on device 'cuda:0' took 0.44 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_e7e36618 e7e3661 load on device 'cuda:0' took 3.84 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_e3354673 e335467 load on device 'cuda:0' took 0.38 ms  (cached)
+Module _update_gradient_grad__locals__kernel_f92b7b33 f92b7b3 load on device 'cuda:0' took 0.38 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_fbdf5714 76985a6 load on device 'cuda:0' took 127.92 ms  (cached)
+Module _solve_zero_search_dot__locals__kernel_a3b7406e a3b7406 load on device 'cuda:0' took 0.44 ms  (cached)
+Module _solve_search_update__locals__kernel_f542f3c2 f542f3c load on device 'cuda:0' took 0.45 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.sensor de892d8 load on device 'cuda:0' took 4.93 ms  (cached)
+    segments [25, 20, 10, 35, 10] → primitives ['reach', 'descend', 'grasp', 'move', 'release']
+
+  Task minibatching: off (one update per iteration).
+
+  Active primitives: reach, descend, grasp, move, release
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+Module render__locals___render_megakernel_b55cbe04 a6579b0 load on device 'cuda:0' took 0.98 ms  (cached)
+  [warmup 2 iters, 4000 samples]  std min=1.581e-04 (dim 25) max=1.885e-01
+  ! dim 25 std=1.581e-04 → normalising amplifies it 6324x; expect a gradient spike. A variance floor in helpers/obs.py would be the actual fix.
+
+Iter    2:  Σrew=-48.762  grad=220.8  [phase1=1.5s bptt=2.9s elapsed=245s]
+  heads (0/5 clipped)   trunk |g|=31 lim=1500 x1.00
+          reach x1  |g|=     178 lim=  3000 x1.00       descend x1  |g|=     128 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew= -48.762  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5732  Descend=0%/0.6450  Grasp=0%/0.6450  Move=0%/0.1677  Release=100%/0.2163
+
+Iter    5:  Σrew=-38.344  grad=143.5  [phase1=1.3s bptt=2.9s elapsed=309s]
+  heads (0/5 clipped)   trunk |g|=22 lim=1500 x1.00
+          reach x1  |g|=     120 lim=  3000 x1.00       descend x1  |g|=      75 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew= -38.344  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4716  Descend=0%/0.5315  Grasp=0%/0.5315  Move=0%/0.1547  Release=100%/0.2022
+
+Iter   10:  Σrew=-27.106  grad=133.0  [phase1=1.3s bptt=2.8s elapsed=333s]
+  heads (0/5 clipped)   trunk |g|=21 lim=1500 x1.00
+          reach x1  |g|=      98 lim=  3000 x1.00       descend x1  |g|=      88 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew= -27.106  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3477  Descend=0%/0.3906  Grasp=0%/0.3906  Move=0%/0.1574  Release=100%/0.2050
+
+Iter   15:  Σrew=-23.832  grad=122.0  [phase1=1.3s bptt=2.9s elapsed=357s]
+  heads (0/5 clipped)   trunk |g|=17 lim=1500 x1.00
+          reach x1  |g|=      97 lim=  3000 x1.00       descend x1  |g|=      73 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew= -23.832  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3250  Descend=0%/0.4200  Grasp=0%/0.4200  Move=0%/0.1585  Release=100%/0.2061
+
+Iter   20:  Σrew=-19.251  grad=113.5  [phase1=1.4s bptt=2.9s elapsed=381s]
+  heads (0/5 clipped)   trunk |g|=15 lim=1500 x1.00
+          reach x1  |g|=      81 lim=  3000 x1.00       descend x1  |g|=      78 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew= -19.251  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2545  Descend=0%/0.2713  Grasp=0%/0.2713  Move=0%/0.1538  Release=100%/0.2010
+
+Iter   25:  Σrew=-9.602  grad=211.6  [phase1=1.3s bptt=2.8s elapsed=405s]
+  heads (0/5 clipped)   trunk |g|=32 lim=1500 x1.00
+          reach x1  |g|=     157 lim=  3000 x1.00       descend x1  |g|=     138 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -9.602  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1346  Descend=0%/0.1018  Grasp=0%/0.1018  Move=5%/0.1554  Release=100%/0.2024
+
+Iter   30:  Σrew=-4.647  grad=188.2  [phase1=1.3s bptt=2.9s elapsed=431s]
+  heads (0/5 clipped)   trunk |g|=28 lim=1500 x1.00
+        descend x1  |g|=     174 lim=  1500 x1.00         reach x1  |g|=      66 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -4.647  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1287  Descend=0%/0.0972  Grasp=0%/0.0972  Move=5%/0.1577  Release=100%/0.2049
+
+Iter   35:  Σrew=-4.091  grad=114.6  [phase1=1.4s bptt=2.8s elapsed=455s]
+  heads (0/5 clipped)   trunk |g|=20 lim=1500 x1.00
+        descend x1  |g|=      87 lim=  1500 x1.00         reach x1  |g|=      72 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -4.091  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1305  Descend=15%/0.0962  Grasp=15%/0.0962  Move=25%/0.1346  Release=100%/0.1788
+
+Iter   40:  Σrew=-2.307  grad=112.2  [phase1=1.3s bptt=2.9s elapsed=480s]
+  heads (0/5 clipped)   trunk |g|=20 lim=1500 x1.00
+        descend x1  |g|=      98 lim=  1500 x1.00         reach x1  |g|=      51 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -2.307  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1114  Descend=10%/0.0917  Grasp=10%/0.0917  Move=5%/0.1568  Release=100%/0.2041
+
+Iter   45:  Σrew=-1.958  grad=213.8  [phase1=1.3s bptt=2.9s elapsed=504s]
+  heads (0/5 clipped)   trunk |g|=39 lim=1500 x1.00
+        descend x1  |g|=     155 lim=  1500 x1.00         reach x1  |g|=     142 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -1.958  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=30%/0.0848  Descend=25%/0.0542  Grasp=25%/0.0542  Move=5%/0.1460  Release=100%/0.1922
+
+Iter   50:  Σrew=-0.179  grad=182.2  [phase1=1.3s bptt=2.9s elapsed=528s]
+  heads (0/5 clipped)   trunk |g|=29 lim=1500 x1.00
+          reach x1  |g|=     140 lim=  3000 x1.00       descend x1  |g|=     113 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -0.179  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=25%/0.0930  Descend=25%/0.0681  Grasp=25%/0.0681  Move=15%/0.1523  Release=100%/0.1986
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 50
+
+Iter   55:  Σrew=-0.539  grad=349.1  [phase1=1.3s bptt=2.9s elapsed=554s]
+  heads (0/5 clipped)   trunk |g|=55 lim=1500 x1.00
+          reach x1  |g|=     313 lim=  3000 x1.00       descend x1  |g|=     145 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  -0.539  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=40%/0.0653  Descend=10%/0.0732  Grasp=10%/0.0732  Move=0%/0.1559  Release=100%/0.2026
+
+Iter   60:  Σrew=2.441  grad=264.5  [phase1=1.3s bptt=2.9s elapsed=578s]
+  heads (0/5 clipped)   trunk |g|=49 lim=1500 x1.00
+          reach x1  |g|=     229 lim=  3000 x1.00       descend x1  |g|=     123 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=   2.441  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=50%/0.0715  Descend=15%/0.0680  Grasp=15%/0.0680  Move=0%/0.1576  Release=100%/0.2051
+
+Iter   65:  Σrew=0.926  grad=600.5  [phase1=1.3s bptt=2.9s elapsed=603s]
+  heads (0/5 clipped)   trunk |g|=134 lim=1500 x1.00
+        descend x1  |g|=     453 lim=  1500 x1.00         reach x1  |g|=     371 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=   0.926  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0598  Descend=30%/0.0552  Grasp=30%/0.0552  Move=10%/0.1523  Release=100%/0.1990
+    ──→ cube_stacking: phase 1, active=55
+
+Iter   70:  Σrew=6.290  grad=557.1  [phase1=1.6s bptt=3.5s elapsed=631s]
+  heads (0/5 clipped)   trunk |g|=78 lim=1500 x1.00
+          reach x1  |g|=     528 lim=  3000 x1.00       descend x1  |g|=     156 lim=  1500 x1.00  
+          grasp x1  |g|=      40 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=   6.290  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0539  Descend=60%/0.0391  Grasp=25%/0.0713  Move=0%/0.1622  Release=100%/0.2096
+
+Iter   75:  Σrew=7.992  grad=413.6  [phase1=1.5s bptt=3.5s elapsed=660s]
+  heads (0/5 clipped)   trunk |g|=63 lim=1500 x1.00
+          reach x1  |g|=     396 lim=  3000 x1.00       descend x1  |g|=      98 lim=  1500 x1.00  
+          grasp x1  |g|=      28 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=   7.992  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=20%/0.0854  Descend=50%/0.0615  Grasp=35%/0.0890  Move=0%/0.1845  Release=100%/0.2284
+    ──→ cube_stacking: phase 2, active=90
+
+Iter   80:  Σrew=17.061  grad=453.6  [phase1=2.5s bptt=5.6s elapsed=706s]
+  heads (0/5 clipped)   trunk |g|=71 lim=1500 x1.00
+          reach x1  |g|=     423 lim=  3000 x1.00       descend x1  |g|=     125 lim=  1500 x1.00  
+           move x1  |g|=      76 lim=  1000 x1.00         grasp x1  |g|=      17 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  17.061  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0606  Descend=20%/0.0717  Grasp=15%/0.0818  Move=10%/0.1560  Release=100%/0.2021
+
+Iter   85:  Σrew=36.614  grad=546.9  [phase1=2.4s bptt=5.6s elapsed=753s]
+  heads (0/5 clipped)   trunk |g|=97 lim=1500 x1.00
+          reach x1  |g|=     480 lim=  3000 x1.00          move x1  |g|=     216 lim=  1000 x1.00  
+        descend x1  |g|=     110 lim=  1500 x1.00         grasp x1  |g|=      25 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  36.614  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0592  Descend=65%/0.0359  Grasp=50%/0.0482  Move=15%/0.1670  Release=100%/0.2218
+
+Iter   90:  Σrew=17.151  grad=520.3  [phase1=2.5s bptt=5.6s elapsed=799s]
+  heads (0/5 clipped)   trunk |g|=87 lim=1500 x1.00
+          reach x1  |g|=     413 lim=  3000 x1.00       descend x1  |g|=     261 lim=  1500 x1.00  
+           move x1  |g|=     150 lim=  1000 x1.00         grasp x1  |g|=      39 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  17.151  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0642  Descend=30%/0.0509  Grasp=30%/0.0591  Move=25%/0.1300  Release=100%/0.1733
+
+Iter   95:  Σrew=36.250  grad=4123.3  [phase1=2.5s bptt=5.5s elapsed=845s]
+  heads (1/5 clipped)   trunk |g|=1028 lim=1500 x1.00
+           move x1  |g|=    3940 lim=  1000 x0.25         reach x1  |g|=     469 lim=  3000 x1.00  
+        descend x1  |g|=     450 lim=  1500 x1.00         grasp x1  |g|=      17 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  36.250  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=35%/0.0702  Descend=10%/0.0734  Grasp=5%/0.1161  Move=5%/0.1855  Release=100%/0.2347
+
+Iter  100:  Σrew=30.626  grad=632.9  [phase1=4.2s bptt=5.6s elapsed=894s]
+  heads (0/5 clipped)   trunk |g|=102 lim=1500 x1.00
+        descend x1  |g|=     525 lim=  1500 x1.00         reach x1  |g|=     284 lim=  3000 x1.00  
+           move x1  |g|=     166 lim=  1000 x1.00         grasp x1  |g|=      78 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  30.626  ph=2  success=1/20 (5%) (partial) streak=0  | Reach=70%/0.0518  Descend=30%/0.0497  Grasp=40%/0.0430  Move=25%/0.1345  Release=100%/0.1804
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 100
+
+Iter  105:  Σrew=21.416  grad=482.9  [phase1=2.4s bptt=5.6s elapsed=942s]
+  heads (0/5 clipped)   trunk |g|=132 lim=1500 x1.00
+        descend x1  |g|=     424 lim=  1500 x1.00         reach x1  |g|=     167 lim=  3000 x1.00  
+          grasp x1  |g|=      63 lim=  1000 x1.00          move x1  |g|=      62 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  21.416  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=75%/0.0445  Descend=20%/0.0535  Grasp=55%/0.0407  Move=15%/0.1333  Release=100%/0.1784
+
+Iter  110:  Σrew=17.345  grad=281.1  [phase1=2.5s bptt=5.5s elapsed=989s]
+  heads (0/5 clipped)   trunk |g|=56 lim=1500 x1.00
+          reach x1  |g|=     211 lim=  3000 x1.00       descend x1  |g|=     162 lim=  1500 x1.00  
+          grasp x1  |g|=      51 lim=  1000 x1.00          move x1  |g|=      49 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  17.345  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0448  Descend=15%/0.0485  Grasp=40%/0.0499  Move=15%/0.1450  Release=100%/0.1867
+
+Iter  115:  Σrew=23.841  grad=1045.4  [phase1=2.7s bptt=5.6s elapsed=1035s]
+  heads (0/5 clipped)   trunk |g|=318 lim=1500 x1.00
+           move x1  |g|=     931 lim=  1000 x1.00         reach x1  |g|=     338 lim=  3000 x1.00  
+        descend x1  |g|=     104 lim=  1500 x1.00         grasp x1  |g|=      22 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  23.841  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0384  Descend=30%/0.0421  Grasp=40%/0.0419  Move=30%/0.1426  Release=100%/0.1824
+
+Iter  120:  Σrew=34.281  grad=501.5  [phase1=2.4s bptt=5.6s elapsed=1084s]
+  heads (0/5 clipped)   trunk |g|=124 lim=1500 x1.00
+        descend x1  |g|=     378 lim=  1500 x1.00         reach x1  |g|=     254 lim=  3000 x1.00  
+           move x1  |g|=     163 lim=  1000 x1.00         grasp x1  |g|=      46 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  34.281  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=70%/0.0428  Descend=60%/0.0380  Grasp=65%/0.0354  Move=20%/0.1208  Release=100%/0.1620
+
+Iter  125:  Σrew=31.690  grad=413.9  [phase1=2.5s bptt=5.6s elapsed=1131s]
+  heads (0/5 clipped)   trunk |g|=74 lim=1500 x1.00
+        descend x1  |g|=     261 lim=  1500 x1.00         reach x1  |g|=     246 lim=  3000 x1.00  
+           move x1  |g|=     192 lim=  1000 x1.00         grasp x1  |g|=      20 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00  
+    cube_stacking   rew=  31.690  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0433  Descend=45%/0.0443  Grasp=85%/0.0339  Move=15%/0.1316  Release=100%/0.1734
+    ──→ cube_stacking: phase 3, active=100
+
+Iter  130:  Σrew=41.382  grad=588.8  [phase1=2.8s bptt=6.2s elapsed=1181s]
+  heads (0/5 clipped)   trunk |g|=115 lim=1500 x1.00
+        descend x1  |g|=     378 lim=  1500 x1.00          move x1  |g|=     318 lim=  1000 x1.00  
+          reach x1  |g|=     296 lim=  3000 x1.00         grasp x1  |g|=      32 lim=  1000 x1.00  
+        release x1  |g|=      29 lim=   500 x1.00  
+    cube_stacking   rew=  41.382  ph=3  success=1/20 (5%) streak=0  | Reach=85%/0.0420  Descend=65%/0.0327  Grasp=60%/0.0306  Move=45%/0.1160  Release=100%/0.1812
+
+Iter  135:  Σrew=32.218  grad=899.8  [phase1=2.7s bptt=6.2s elapsed=1233s]
+  heads (0/5 clipped)   trunk |g|=187 lim=1500 x1.00
+           move x1  |g|=     834 lim=  1000 x1.00       descend x1  |g|=     225 lim=  1500 x1.00  
+          reach x1  |g|=     152 lim=  3000 x1.00         grasp x1  |g|=      75 lim=  1000 x1.00  
+        release x1  |g|=      18 lim=   500 x1.00  
+    cube_stacking   rew=  32.218  ph=3  success=0/20 (0%) streak=0  | Reach=85%/0.0403  Descend=45%/0.0445  Grasp=20%/0.0513  Move=10%/0.1440  Release=100%/0.1864
+
+Iter  140:  Σrew=56.144  grad=813.2  [phase1=2.7s bptt=6.2s elapsed=1286s]
+  heads (0/5 clipped)   trunk |g|=195 lim=1500 x1.00
+           move x1  |g|=     502 lim=  1000 x1.00         reach x1  |g|=     474 lim=  3000 x1.00  
+        descend x1  |g|=     382 lim=  1500 x1.00         grasp x1  |g|=      26 lim=  1000 x1.00  
+        release x1  |g|=      19 lim=   500 x1.00  
+    cube_stacking   rew=  56.144  ph=3  success=0/20 (0%) streak=0  | Reach=95%/0.0369  Descend=55%/0.0347  Grasp=35%/0.0444  Move=25%/0.1336  Release=100%/0.1790
+
+Iter  145:  Σrew=47.808  grad=802.7  [phase1=2.7s bptt=6.2s elapsed=1337s]
+  heads (0/5 clipped)   trunk |g|=199 lim=1500 x1.00
+           move x1  |g|=     512 lim=  1000 x1.00         reach x1  |g|=     431 lim=  3000 x1.00  
+        descend x1  |g|=     392 lim=  1500 x1.00       release x1  |g|=      39 lim=   500 x1.00  
+          grasp x1  |g|=      32 lim=  1000 x1.00  
+    cube_stacking   rew=  47.808  ph=3  success=0/20 (0%) streak=0  | Reach=80%/0.0459  Descend=40%/0.0391  Grasp=20%/0.0532  Move=40%/0.1290  Release=100%/0.1842
+
+Iter  150:  Σrew=45.536  grad=722.1  [phase1=2.8s bptt=6.2s elapsed=1389s]
+  heads (0/5 clipped)   trunk |g|=149 lim=1500 x1.00
+          reach x1  |g|=     559 lim=  3000 x1.00       descend x1  |g|=     320 lim=  1500 x1.00  
+           move x1  |g|=     286 lim=  1000 x1.00       release x1  |g|=      43 lim=   500 x1.00  
+          grasp x1  |g|=      29 lim=  1000 x1.00  
+    cube_stacking   rew=  45.536  ph=3  success=0/20 (0%) streak=0  | Reach=90%/0.0358  Descend=85%/0.0232  Grasp=85%/0.0239  Move=70%/0.0827  Release=100%/0.1413
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 150
+
+Iter  155:  Σrew=59.403  grad=781.9  [phase1=2.7s bptt=6.3s elapsed=1442s]
+  heads (0/5 clipped)   trunk |g|=167 lim=1500 x1.00
+          reach x1  |g|=     580 lim=  3000 x1.00          move x1  |g|=     462 lim=  1000 x1.00  
+        descend x1  |g|=     172 lim=  1500 x1.00       release x1  |g|=      51 lim=   500 x1.00  
+          grasp x1  |g|=      44 lim=  1000 x1.00  
+    cube_stacking   rew=  59.403  ph=3  success=0/20 (0%) streak=0  | Reach=90%/0.0317  Descend=75%/0.0276  Grasp=70%/0.0267  Move=70%/0.0792  Release=100%/0.1428
+    ──→ cube_stacking: phase 4, active=100
+
+Iter  160:  Σrew=59.728  grad=5524.0  [phase1=2.7s bptt=6.2s elapsed=1494s]
+  heads (1/5 clipped)   trunk |g|=1523 lim=1500 x0.98
+           move x1  |g|=    5301 lim=  1000 x0.19         reach x1  |g|=     211 lim=  3000 x1.00  
+        descend x1  |g|=     208 lim=  1500 x1.00       release x1  |g|=      34 lim=   500 x1.00  
+          grasp x1  |g|=      31 lim=  1000 x1.00  
+    cube_stacking   rew=  59.728  ph=4  success=4/20 (20%) streak=0  | Reach=95%/0.0355  Descend=90%/0.0207  Grasp=80%/0.0221  Move=65%/0.0828  Release=100%/0.1280
+
+Iter  165:  Σrew=72.334  grad=904.5  [phase1=2.8s bptt=6.2s elapsed=1545s]
+  heads (0/5 clipped)   trunk |g|=211 lim=1500 x1.00
+           move x1  |g|=     627 lim=  1000 x1.00         reach x1  |g|=     570 lim=  3000 x1.00  
+        descend x1  |g|=     217 lim=  1500 x1.00         grasp x1  |g|=      75 lim=  1000 x1.00  
+        release x1  |g|=      56 lim=   500 x1.00  
+    cube_stacking   rew=  72.334  ph=4  success=5/20 (25%) streak=0  | Reach=90%/0.0322  Descend=95%/0.0168  Grasp=95%/0.0148  Move=75%/0.0587  Release=100%/0.0997
+
+Iter  170:  Σrew=48.056  grad=3674.1  [phase1=2.7s bptt=6.2s elapsed=1598s]
+  heads (1/5 clipped)   trunk |g|=636 lim=1500 x1.00
+           move x1  |g|=    3596 lim=  1000 x0.28         reach x1  |g|=     383 lim=  3000 x1.00  
+        descend x1  |g|=     109 lim=  1500 x1.00       release x1  |g|=      44 lim=   500 x1.00  
+          grasp x1  |g|=      34 lim=  1000 x1.00  
+    cube_stacking   rew=  48.056  ph=4  success=1/20 (5%) streak=0  | Reach=95%/0.0333  Descend=70%/0.0274  Grasp=75%/0.0303  Move=45%/0.1241  Release=100%/0.1821
+
+Iter  175:  Σrew=67.391  grad=1174.8  [phase1=2.7s bptt=6.3s elapsed=1650s]
+  heads (0/5 clipped)   trunk |g|=249 lim=1500 x1.00
+          reach x1  |g|=     828 lim=  3000 x1.00          move x1  |g|=     788 lim=  1000 x1.00  
+        descend x1  |g|=      93 lim=  1500 x1.00       release x1  |g|=      38 lim=   500 x1.00  
+          grasp x1  |g|=      35 lim=  1000 x1.00  
+    cube_stacking   rew=  67.391  ph=4  success=1/20 (5%) streak=0  | Reach=100%/0.0303  Descend=95%/0.0205  Grasp=70%/0.0233  Move=65%/0.0780  Release=100%/0.1383
+
+Iter  180:  Σrew=76.325  grad=865.1  [phase1=2.8s bptt=6.2s elapsed=1701s]
+  heads (0/5 clipped)   trunk |g|=199 lim=1500 x1.00
+           move x1  |g|=     793 lim=  1000 x1.00       descend x1  |g|=     233 lim=  1500 x1.00  
+          reach x1  |g|=     155 lim=  3000 x1.00       release x1  |g|=      38 lim=   500 x1.00  
+          grasp x1  |g|=      26 lim=  1000 x1.00  
+    cube_stacking   rew=  76.325  ph=4  success=1/20 (5%) streak=0  | Reach=95%/0.0341  Descend=90%/0.0199  Grasp=90%/0.0196  Move=80%/0.0816  Release=100%/0.1352
+
+Iter  185:  Σrew=72.668  grad=1133.9  [phase1=3.1s bptt=6.2s elapsed=1754s]
+  heads (1/5 clipped)   trunk |g|=229 lim=1500 x1.00
+           move x1  |g|=    1049 lim=  1000 x0.95       descend x1  |g|=     319 lim=  1500 x1.00  
+          reach x1  |g|=     150 lim=  3000 x1.00       release x1  |g|=      82 lim=   500 x1.00  
+          grasp x1  |g|=      47 lim=  1000 x1.00  
+    cube_stacking   rew=  72.668  ph=4  success=5/20 (25%) streak=0  | Reach=100%/0.0297  Descend=80%/0.0235  Grasp=90%/0.0159  Move=85%/0.0605  Release=100%/0.0937
+
+Iter  190:  Σrew=73.986  grad=706.5  [phase1=3.0s bptt=6.2s elapsed=1806s]
+  heads (0/5 clipped)   trunk |g|=155 lim=1500 x1.00
+           move x1  |g|=     561 lim=  1000 x1.00       descend x1  |g|=     302 lim=  1500 x1.00  
+          reach x1  |g|=     257 lim=  3000 x1.00         grasp x1  |g|=      35 lim=  1000 x1.00  
+        release x1  |g|=      35 lim=   500 x1.00  
+    cube_stacking   rew=  73.986  ph=4  success=3/20 (15%) streak=0  | Reach=95%/0.0303  Descend=95%/0.0199  Grasp=85%/0.0138  Move=95%/0.0555  Release=100%/0.1025
+
+Iter  195:  Σrew=83.657  grad=1089.9  [phase1=3.0s bptt=6.2s elapsed=1861s]
+  heads (0/5 clipped)   trunk |g|=271 lim=1500 x1.00
+           move x1  |g|=     780 lim=  1000 x1.00         reach x1  |g|=     530 lim=  3000 x1.00  
+        descend x1  |g|=     463 lim=  1500 x1.00         grasp x1  |g|=      90 lim=  1000 x1.00  
+        release x1  |g|=      54 lim=   500 x1.00  
+    cube_stacking   rew=  83.657  ph=4  success=0/20 (0%) streak=0  | Reach=100%/0.0307  Descend=100%/0.0226  Grasp=75%/0.0338  Move=45%/0.0994  Release=100%/0.1586
+
+Iter  200:  Σrew=64.761  grad=603.2  [phase1=2.9s bptt=6.2s elapsed=1913s]
+  heads (0/5 clipped)   trunk |g|=146 lim=1500 x1.00
+          reach x1  |g|=     502 lim=  3000 x1.00          move x1  |g|=     280 lim=  1000 x1.00  
+        descend x1  |g|=      85 lim=  1500 x1.00         grasp x1  |g|=      66 lim=  1000 x1.00  
+        release x1  |g|=      30 lim=   500 x1.00  
+    cube_stacking   rew=  64.761  ph=4  success=5/20 (25%) streak=0  | Reach=95%/0.0308  Descend=95%/0.0201  Grasp=90%/0.0177  Move=70%/0.0688  Release=100%/0.1080
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 200
+
+Iter  205:  Σrew=85.439  grad=1023.7  [phase1=2.9s bptt=6.2s elapsed=1967s]
+  heads (0/5 clipped)   trunk |g|=216 lim=1500 x1.00
+          reach x1  |g|=     848 lim=  3000 x1.00       descend x1  |g|=     431 lim=  1500 x1.00  
+           move x1  |g|=     282 lim=  1000 x1.00         grasp x1  |g|=     105 lim=  1000 x1.00  
+        release x1  |g|=      68 lim=   500 x1.00  
+    cube_stacking   rew=  85.439  ph=4  success=0/20 (0%) streak=0  | Reach=80%/0.0471  Descend=45%/0.0377  Grasp=20%/0.0506  Move=55%/0.1087  Release=100%/0.1544
+
+Iter  210:  Σrew=76.133  grad=731.3  [phase1=2.9s bptt=6.2s elapsed=2020s]
+  heads (0/5 clipped)   trunk |g|=189 lim=1500 x1.00
+          reach x1  |g|=     483 lim=  3000 x1.00          move x1  |g|=     403 lim=  1000 x1.00  
+        descend x1  |g|=     300 lim=  1500 x1.00         grasp x1  |g|=     106 lim=  1000 x1.00  
+        release x1  |g|=      47 lim=   500 x1.00  
+    cube_stacking   rew=  76.133  ph=4  success=1/20 (5%) streak=0  | Reach=90%/0.0354  Descend=100%/0.0151  Grasp=95%/0.0177  Move=90%/0.0543  Release=100%/0.1206
+
+Iter  215:  Σrew=80.658  grad=892.8  [phase1=3.0s bptt=6.3s elapsed=2072s]
+  heads (0/5 clipped)   trunk |g|=173 lim=1500 x1.00
+           move x1  |g|=     808 lim=  1000 x1.00         reach x1  |g|=     274 lim=  3000 x1.00  
+        descend x1  |g|=     180 lim=  1500 x1.00         grasp x1  |g|=      71 lim=  1000 x1.00  
+        release x1  |g|=      50 lim=   500 x1.00  
+    cube_stacking   rew=  80.658  ph=4  success=5/20 (25%) streak=0  | Reach=100%/0.0246  Descend=100%/0.0141  Grasp=95%/0.0142  Move=95%/0.0452  Release=100%/0.0907
+
+Iter  220:  Σrew=79.342  grad=782.4  [phase1=2.9s bptt=6.3s elapsed=2124s]
+  heads (0/5 clipped)   trunk |g|=205 lim=1500 x1.00
+        descend x1  |g|=     533 lim=  1500 x1.00          move x1  |g|=     385 lim=  1000 x1.00  
+          reach x1  |g|=     364 lim=  3000 x1.00         grasp x1  |g|=      55 lim=  1000 x1.00  
+        release x1  |g|=      45 lim=   500 x1.00  
+    cube_stacking   rew=  79.342  ph=4  success=4/20 (20%) streak=0  | Reach=100%/0.0283  Descend=75%/0.0251  Grasp=65%/0.0262  Move=80%/0.0593  Release=100%/0.0950
+
+Iter  225:  Σrew=72.938  grad=862.0  [phase1=4.6s bptt=6.2s elapsed=2177s]
+  heads (0/5 clipped)   trunk |g|=215 lim=1500 x1.00
+        descend x1  |g|=     711 lim=  1500 x1.00          move x1  |g|=     403 lim=  1000 x1.00  
+          reach x1  |g|=     151 lim=  3000 x1.00         grasp x1  |g|=      61 lim=  1000 x1.00  
+        release x1  |g|=      52 lim=   500 x1.00  
+    cube_stacking   rew=  72.938  ph=4  success=6/20 (30%) streak=0  | Reach=90%/0.0335  Descend=90%/0.0204  Grasp=75%/0.0200  Move=65%/0.0826  Release=100%/0.1132
+
+Iter  230:  Σrew=78.911  grad=1237.4  [phase1=2.7s bptt=6.2s elapsed=2229s]
+  heads (1/5 clipped)   trunk |g|=360 lim=1500 x1.00
+           move x1  |g|=    1024 lim=  1000 x0.98       descend x1  |g|=     520 lim=  1500 x1.00  
+          reach x1  |g|=     274 lim=  3000 x1.00         grasp x1  |g|=      70 lim=  1000 x1.00  
+        release x1  |g|=      40 lim=   500 x1.00  
+    cube_stacking   rew=  78.911  ph=4  success=5/20 (25%) streak=0  | Reach=100%/0.0319  Descend=95%/0.0214  Grasp=85%/0.0217  Move=70%/0.0693  Release=100%/0.1082
+
+Iter  235:  Σrew=50.259  grad=939.0  [phase1=2.7s bptt=6.3s elapsed=2280s]
+  heads (0/5 clipped)   trunk |g|=274 lim=1500 x1.00
+        descend x1  |g|=     659 lim=  1500 x1.00          move x1  |g|=     450 lim=  1000 x1.00  
+          reach x1  |g|=     393 lim=  3000 x1.00         grasp x1  |g|=     103 lim=  1000 x1.00  
+        release x1  |g|=      70 lim=   500 x1.00  
+    cube_stacking   rew=  50.259  ph=4  success=3/20 (15%) streak=0  | Reach=90%/0.0350  Descend=85%/0.0279  Grasp=65%/0.0411  Move=60%/0.0863  Release=100%/0.1344
+
+Iter  240:  Σrew=80.726  grad=1064.1  [phase1=2.7s bptt=6.2s elapsed=2332s]
+  heads (0/5 clipped)   trunk |g|=259 lim=1500 x1.00
+           move x1  |g|=     663 lim=  1000 x1.00         reach x1  |g|=     591 lim=  3000 x1.00  
+        descend x1  |g|=     481 lim=  1500 x1.00         grasp x1  |g|=     199 lim=  1000 x1.00  
+        release x1  |g|=      67 lim=   500 x1.00  
+    cube_stacking   rew=  80.726  ph=4  success=9/20 (45%) streak=0  | Reach=95%/0.0301  Descend=90%/0.0188  Grasp=100%/0.0126  Move=85%/0.0519  Release=100%/0.0777
+
+Iter  245:  Σrew=97.374  grad=1178.3  [phase1=2.8s bptt=6.2s elapsed=2383s]
+  heads (0/5 clipped)   trunk |g|=264 lim=1500 x1.00
+           move x1  |g|=     948 lim=  1000 x1.00         reach x1  |g|=     611 lim=  3000 x1.00  
+        descend x1  |g|=     200 lim=  1500 x1.00         grasp x1  |g|=      58 lim=  1000 x1.00  
+        release x1  |g|=      46 lim=   500 x1.00  
+    cube_stacking   rew=  97.374  ph=4  success=2/20 (10%) streak=0  | Reach=100%/0.0269  Descend=100%/0.0163  Grasp=95%/0.0156  Move=90%/0.0556  Release=100%/0.1223
+
+Iter  250:  Σrew=83.620  grad=725.6  [phase1=2.7s bptt=6.2s elapsed=2437s]
+  heads (0/5 clipped)   trunk |g|=156 lim=1500 x1.00
+           move x1  |g|=     552 lim=  1000 x1.00         reach x1  |g|=     367 lim=  3000 x1.00  
+        descend x1  |g|=     225 lim=  1500 x1.00         grasp x1  |g|=      99 lim=  1000 x1.00  
+        release x1  |g|=      51 lim=   500 x1.00  
+    cube_stacking   rew=  83.620  ph=4  success=4/20 (20%) streak=0  | Reach=100%/0.0376  Descend=95%/0.0220  Grasp=65%/0.0302  Move=65%/0.0704  Release=100%/0.1159
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 250
+
+Iter  255:  Σrew=74.323  grad=2001.3  [phase1=2.7s bptt=6.2s elapsed=2490s]
+  heads (1/5 clipped)   trunk |g|=353 lim=1500 x1.00
+           move x1  |g|=    1705 lim=  1000 x0.59         reach x1  |g|=     699 lim=  3000 x1.00  
+        descend x1  |g|=     685 lim=  1500 x1.00         grasp x1  |g|=     107 lim=  1000 x1.00  
+        release x1  |g|=      64 lim=   500 x1.00  
+    cube_stacking   rew=  74.323  ph=4  success=4/20 (20%) streak=0  | Reach=100%/0.0298  Descend=85%/0.0215  Grasp=75%/0.0268  Move=70%/0.0894  Release=100%/0.1500
+
+Iter  260:  Σrew=72.544  grad=770.1  [phase1=2.9s bptt=6.2s elapsed=2542s]
+  heads (0/5 clipped)   trunk |g|=181 lim=1500 x1.00
+           move x1  |g|=     496 lim=  1000 x1.00         reach x1  |g|=     487 lim=  3000 x1.00  
+        descend x1  |g|=     258 lim=  1500 x1.00         grasp x1  |g|=      90 lim=  1000 x1.00  
+        release x1  |g|=      57 lim=   500 x1.00  
+    cube_stacking   rew=  72.544  ph=4  success=7/20 (35%) streak=0  | Reach=100%/0.0213  Descend=100%/0.0139  Grasp=95%/0.0164  Move=80%/0.0758  Release=100%/0.1130
+
+Iter  265:  Σrew=89.517  grad=1026.6  [phase1=2.7s bptt=6.2s elapsed=2593s]
+  heads (0/5 clipped)   trunk |g|=191 lim=1500 x1.00
+           move x1  |g|=     995 lim=  1000 x1.00       descend x1  |g|=     108 lim=  1500 x1.00  
+          grasp x1  |g|=      85 lim=  1000 x1.00       release x1  |g|=      69 lim=   500 x1.00  
+          reach x1  |g|=      66 lim=  3000 x1.00  
+    cube_stacking   rew=  89.517  ph=4  success=5/20 (25%) streak=0  | Reach=80%/0.0365  Descend=90%/0.0238  Grasp=90%/0.0212  Move=70%/0.0732  Release=100%/0.1180
+
+Iter  270:  Σrew=88.289  grad=1557.6  [phase1=2.7s bptt=6.3s elapsed=2647s]
+  heads (1/5 clipped)   trunk |g|=296 lim=1500 x1.00
+           move x1  |g|=    1457 lim=  1000 x0.69         reach x1  |g|=     395 lim=  3000 x1.00  
+        descend x1  |g|=     234 lim=  1500 x1.00         grasp x1  |g|=      58 lim=  1000 x1.00  
+        release x1  |g|=      48 lim=   500 x1.00  
+    cube_stacking   rew=  88.289  ph=4  success=9/20 (45%) streak=0  | Reach=100%/0.0298  Descend=85%/0.0164  Grasp=90%/0.0134  Move=90%/0.0398  Release=100%/0.0682
+
+Iter  275:  Σrew=87.008  grad=768.5  [phase1=2.8s bptt=6.2s elapsed=2698s]
+  heads (0/5 clipped)   trunk |g|=192 lim=1500 x1.00
+           move x1  |g|=     521 lim=  1000 x1.00         reach x1  |g|=     503 lim=  3000 x1.00  
+        descend x1  |g|=     142 lim=  1500 x1.00       release x1  |g|=      70 lim=   500 x1.00  
+          grasp x1  |g|=      62 lim=  1000 x1.00  
+    cube_stacking   rew=  87.008  ph=4  success=10/20 (50%) streak=0  | Reach=100%/0.0272  Descend=95%/0.0154  Grasp=90%/0.0136  Move=95%/0.0406  Release=100%/0.0734
+
+Iter  280:  Σrew=105.111  grad=1193.5  [phase1=2.8s bptt=6.2s elapsed=2750s]
+  heads (0/5 clipped)   trunk |g|=269 lim=1500 x1.00
+           move x1  |g|=     908 lim=  1000 x1.00         reach x1  |g|=     692 lim=  3000 x1.00  
+        descend x1  |g|=     198 lim=  1500 x1.00       release x1  |g|=      67 lim=   500 x1.00  
+          grasp x1  |g|=      59 lim=  1000 x1.00  
+    cube_stacking   rew= 105.111  ph=4  success=4/20 (20%) streak=0  | Reach=95%/0.0258  Descend=95%/0.0228  Grasp=65%/0.0307  Move=65%/0.0758  Release=100%/0.1226
+
+Iter  285:  Σrew=103.279  grad=1185.9  [phase1=3.2s bptt=6.2s elapsed=2802s]
+  heads (1/5 clipped)   trunk |g|=249 lim=1500 x1.00
+           move x1  |g|=    1056 lim=  1000 x0.95         reach x1  |g|=     430 lim=  3000 x1.00  
+        descend x1  |g|=     195 lim=  1500 x1.00       release x1  |g|=      60 lim=   500 x1.00  
+          grasp x1  |g|=      45 lim=  1000 x1.00  
+    cube_stacking   rew= 103.279  ph=4  success=8/20 (40%) streak=0  | Reach=100%/0.0327  Descend=100%/0.0188  Grasp=85%/0.0210  Move=80%/0.0546  Release=100%/0.0882
+
+Iter  290:  Σrew=101.221  grad=879.1  [phase1=3.1s bptt=6.2s elapsed=2857s]
+  heads (0/5 clipped)   trunk |g|=181 lim=1500 x1.00
+           move x1  |g|=     798 lim=  1000 x1.00       descend x1  |g|=     257 lim=  1500 x1.00  
+          reach x1  |g|=     179 lim=  3000 x1.00         grasp x1  |g|=      59 lim=  1000 x1.00  
+        release x1  |g|=      44 lim=   500 x1.00  
+    cube_stacking   rew= 101.221  ph=4  success=11/20 (55%) streak=0  | Reach=100%/0.0240  Descend=100%/0.0168  Grasp=95%/0.0151  Move=90%/0.0438  Release=100%/0.0706
+
+Iter  295:  Σrew=100.493  grad=1205.0  [phase1=3.1s bptt=6.2s elapsed=2910s]
+  heads (0/5 clipped)   trunk |g|=258 lim=1500 x1.00
+           move x1  |g|=     975 lim=  1000 x1.00         reach x1  |g|=     577 lim=  3000 x1.00  
+        descend x1  |g|=     314 lim=  1500 x1.00         grasp x1  |g|=      42 lim=  1000 x1.00  
+        release x1  |g|=      31 lim=   500 x1.00  
+    cube_stacking   rew= 100.493  ph=4  success=12/20 (60%) streak=0  | Reach=100%/0.0270  Descend=100%/0.0162  Grasp=100%/0.0147  Move=95%/0.0343  Release=100%/0.0638
+
+Iter  300:  Σrew=106.672  grad=907.3  [phase1=2.8s bptt=6.3s elapsed=2962s]
+  heads (0/5 clipped)   trunk |g|=221 lim=1500 x1.00
+           move x1  |g|=     761 lim=  1000 x1.00         reach x1  |g|=     344 lim=  3000 x1.00  
+        descend x1  |g|=     262 lim=  1500 x1.00         grasp x1  |g|=      78 lim=  1000 x1.00  
+        release x1  |g|=      48 lim=   500 x1.00  
+    cube_stacking   rew= 106.672  ph=4  success=5/20 (25%) streak=0  | Reach=100%/0.0239  Descend=100%/0.0174  Grasp=100%/0.0196  Move=80%/0.0532  Release=100%/0.1092
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 300
+
+Iter  305:  Σrew=88.536  grad=1399.5  [phase1=3.0s bptt=6.2s elapsed=3017s]
+  heads (1/5 clipped)   trunk |g|=282 lim=1500 x1.00
+           move x1  |g|=    1274 lim=  1000 x0.78         reach x1  |g|=     418 lim=  3000 x1.00  
+        descend x1  |g|=     249 lim=  1500 x1.00         grasp x1  |g|=     122 lim=  1000 x1.00  
+        release x1  |g|=      62 lim=   500 x1.00  
+    cube_stacking   rew=  88.536  ph=4  success=9/20 (45%) streak=0  | Reach=95%/0.0421  Descend=70%/0.0225  Grasp=70%/0.0217  Move=80%/0.0537  Release=100%/0.0844
+
+Iter  310:  Σrew=96.508  grad=1243.7  [phase1=2.9s bptt=6.3s elapsed=3069s]
+  heads (1/5 clipped)   trunk |g|=290 lim=1500 x1.00
+           move x1  |g|=    1112 lim=  1000 x0.90         reach x1  |g|=     415 lim=  3000 x1.00  
+        descend x1  |g|=     206 lim=  1500 x1.00       release x1  |g|=      92 lim=   500 x1.00  
+          grasp x1  |g|=      58 lim=  1000 x1.00  
+    cube_stacking   rew=  96.508  ph=4  success=4/20 (20%) streak=0  | Reach=95%/0.0311  Descend=95%/0.0136  Grasp=95%/0.0171  Move=95%/0.0438  Release=100%/0.0963
+
+Iter  315:  Σrew=89.540  grad=960.2  [phase1=2.9s bptt=6.2s elapsed=3121s]
+  heads (0/5 clipped)   trunk |g|=232 lim=1500 x1.00
+           move x1  |g|=     850 lim=  1000 x1.00       descend x1  |g|=     294 lim=  1500 x1.00  
+          grasp x1  |g|=     166 lim=  1000 x1.00         reach x1  |g|=     161 lim=  3000 x1.00  
+        release x1  |g|=      75 lim=   500 x1.00  
+    cube_stacking   rew=  89.540  ph=4  success=3/20 (15%) streak=0  | Reach=100%/0.0297  Descend=100%/0.0215  Grasp=70%/0.0357  Move=35%/0.1107  Release=100%/0.1538
+
+Iter  320:  Σrew=102.502  grad=921.4  [phase1=2.9s bptt=6.2s elapsed=3173s]
+  heads (0/5 clipped)   trunk |g|=241 lim=1500 x1.00
+           move x1  |g|=     685 lim=  1000 x1.00       descend x1  |g|=     439 lim=  1500 x1.00  
+          reach x1  |g|=     330 lim=  3000 x1.00         grasp x1  |g|=     113 lim=  1000 x1.00  
+        release x1  |g|=      85 lim=   500 x1.00  
+    cube_stacking   rew= 102.502  ph=4  success=14/20 (70%) streak=0  | Reach=100%/0.0283  Descend=95%/0.0134  Grasp=95%/0.0106  Move=95%/0.0292  Release=100%/0.0535
+
+Iter  325:  Σrew=114.984  grad=1160.9  [phase1=2.7s bptt=6.2s elapsed=3226s]
+  heads (0/5 clipped)   trunk |g|=261 lim=1500 x1.00
+           move x1  |g|=     945 lim=  1000 x1.00         reach x1  |g|=     521 lim=  3000 x1.00  
+        descend x1  |g|=     303 lim=  1500 x1.00       release x1  |g|=     144 lim=   500 x1.00  
+          grasp x1  |g|=      53 lim=  1000 x1.00  
+    cube_stacking   rew= 114.984  ph=4  success=18/20 (90%) streak=1  | Reach=100%/0.0217  Descend=100%/0.0091  Grasp=100%/0.0076  Move=100%/0.0199  Release=100%/0.0252
+
+Iter  330:  Σrew=113.808  grad=1204.6  [phase1=2.8s bptt=6.3s elapsed=3277s]
+  heads (1/5 clipped)   trunk |g|=261 lim=1500 x1.00
+           move x1  |g|=    1085 lim=  1000 x0.92         reach x1  |g|=     299 lim=  3000 x1.00  
+        descend x1  |g|=     270 lim=  1500 x1.00       release x1  |g|=     196 lim=   500 x1.00  
+          grasp x1  |g|=      75 lim=  1000 x1.00  
+    cube_stacking   rew= 113.808  ph=4  success=14/20 (70%) streak=0  | Reach=100%/0.0222  Descend=90%/0.0135  Grasp=95%/0.0126  Move=85%/0.0386  Release=100%/0.0618
+
+Iter  335:  Σrew=96.601  grad=1794.8  [phase1=2.7s bptt=6.2s elapsed=3329s]
+  heads (1/5 clipped)   trunk |g|=323 lim=1500 x1.00
+           move x1  |g|=    1710 lim=  1000 x0.58         reach x1  |g|=     353 lim=  3000 x1.00  
+        descend x1  |g|=     242 lim=  1500 x1.00       release x1  |g|=      95 lim=   500 x1.00  
+          grasp x1  |g|=      46 lim=  1000 x1.00  
+    cube_stacking   rew=  96.601  ph=4  success=8/20 (40%) streak=0  | Reach=100%/0.0265  Descend=100%/0.0105  Grasp=100%/0.0086  Move=95%/0.0404  Release=100%/0.0841
+
+Iter  340:  Σrew=111.928  grad=677.1  [phase1=2.7s bptt=6.2s elapsed=3381s]
+  heads (0/5 clipped)   trunk |g|=187 lim=1500 x1.00
+          reach x1  |g|=     461 lim=  3000 x1.00          move x1  |g|=     412 lim=  1000 x1.00  
+        descend x1  |g|=     176 lim=  1500 x1.00       release x1  |g|=      78 lim=   500 x1.00  
+          grasp x1  |g|=      59 lim=  1000 x1.00  
+    cube_stacking   rew= 111.928  ph=4  success=14/20 (70%) streak=0  | Reach=100%/0.0212  Descend=100%/0.0092  Grasp=100%/0.0061  Move=100%/0.0184  Release=100%/0.0346
+
+Iter  345:  Σrew=113.564  grad=601.8  [phase1=4.5s bptt=6.3s elapsed=3434s]
+  heads (0/5 clipped)   trunk |g|=157 lim=1500 x1.00
+          reach x1  |g|=     415 lim=  3000 x1.00          move x1  |g|=     371 lim=  1000 x1.00  
+        descend x1  |g|=     129 lim=  1500 x1.00         grasp x1  |g|=      90 lim=  1000 x1.00  
+        release x1  |g|=      50 lim=   500 x1.00  
+    cube_stacking   rew= 113.564  ph=4  success=15/20 (75%) streak=0  | Reach=100%/0.0230  Descend=95%/0.0127  Grasp=95%/0.0098  Move=95%/0.0230  Release=100%/0.0483
+
+Iter  350:  Σrew=107.486  grad=677.4  [phase1=2.8s bptt=6.3s elapsed=3486s]
+  heads (0/5 clipped)   trunk |g|=162 lim=1500 x1.00
+           move x1  |g|=     482 lim=  1000 x1.00         reach x1  |g|=     390 lim=  3000 x1.00  
+        descend x1  |g|=     196 lim=  1500 x1.00       release x1  |g|=      90 lim=   500 x1.00  
+          grasp x1  |g|=      48 lim=  1000 x1.00  
+    cube_stacking   rew= 107.486  ph=4  success=9/20 (45%) streak=0  | Reach=100%/0.0245  Descend=100%/0.0122  Grasp=90%/0.0124  Move=85%/0.0415  Release=100%/0.0787
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 350
+
+Iter  355:  Σrew=112.792  grad=1530.6  [phase1=2.7s bptt=6.2s elapsed=3539s]
+  heads (1/5 clipped)   trunk |g|=253 lim=1500 x1.00
+           move x1  |g|=    1367 lim=  1000 x0.73         reach x1  |g|=     599 lim=  3000 x1.00  
+        descend x1  |g|=     198 lim=  1500 x1.00         grasp x1  |g|=      85 lim=  1000 x1.00  
+        release x1  |g|=      71 lim=   500 x1.00  
+    cube_stacking   rew= 112.792  ph=4  success=12/20 (60%) streak=0  | Reach=100%/0.0212  Descend=95%/0.0159  Grasp=85%/0.0192  Move=85%/0.0405  Release=100%/0.0670
+
+Iter  360:  Σrew=110.141  grad=737.2  [phase1=2.8s bptt=6.2s elapsed=3591s]
+  heads (0/5 clipped)   trunk |g|=195 lim=1500 x1.00
+          reach x1  |g|=     523 lim=  3000 x1.00          move x1  |g|=     387 lim=  1000 x1.00  
+        descend x1  |g|=     242 lim=  1500 x1.00         grasp x1  |g|=     132 lim=  1000 x1.00  
+        release x1  |g|=      79 lim=   500 x1.00  
+    cube_stacking   rew= 110.141  ph=4  success=9/20 (45%) streak=0  | Reach=100%/0.0228  Descend=100%/0.0103  Grasp=95%/0.0148  Move=80%/0.0388  Release=100%/0.0699
+
+Iter  365:  Σrew=115.763  grad=869.4  [phase1=2.8s bptt=6.3s elapsed=3643s]
+  heads (0/5 clipped)   trunk |g|=191 lim=1500 x1.00
+           move x1  |g|=     595 lim=  1000 x1.00         reach x1  |g|=     515 lim=  3000 x1.00  
+        descend x1  |g|=     227 lim=  1500 x1.00       release x1  |g|=     175 lim=   500 x1.00  
+          grasp x1  |g|=     134 lim=  1000 x1.00  
+    cube_stacking   rew= 115.763  ph=4  success=11/20 (55%) streak=0  | Reach=100%/0.0211  Descend=100%/0.0094  Grasp=100%/0.0086  Move=100%/0.0201  Release=100%/0.0508
+
+Iter  370:  Σrew=115.329  grad=525.8  [phase1=2.9s bptt=6.2s elapsed=3696s]
+  heads (0/5 clipped)   trunk |g|=146 lim=1500 x1.00
+          reach x1  |g|=     402 lim=  3000 x1.00       descend x1  |g|=     189 lim=  1500 x1.00  
+           move x1  |g|=     184 lim=  1000 x1.00         grasp x1  |g|=     139 lim=  1000 x1.00  
+        release x1  |g|=      68 lim=   500 x1.00  
+    cube_stacking   rew= 115.329  ph=4  success=14/20 (70%) streak=0  | Reach=100%/0.0171  Descend=100%/0.0112  Grasp=100%/0.0095  Move=95%/0.0246  Release=100%/0.0505
+
+Iter  375:  Σrew=114.724  grad=852.8  [phase1=2.8s bptt=6.2s elapsed=3748s]
+  heads (0/5 clipped)   trunk |g|=198 lim=1500 x1.00
+        descend x1  |g|=     543 lim=  1500 x1.00         reach x1  |g|=     460 lim=  3000 x1.00  
+           move x1  |g|=     386 lim=  1000 x1.00         grasp x1  |g|=     150 lim=  1000 x1.00  
+        release x1  |g|=      99 lim=   500 x1.00  
+    cube_stacking   rew= 114.724  ph=4  success=4/20 (20%) streak=0  | Reach=100%/0.0181  Descend=100%/0.0134  Grasp=100%/0.0161  Move=90%/0.0370  Release=100%/0.1069
+
+Iter  380:  Σrew=121.020  grad=802.3  [phase1=2.8s bptt=6.2s elapsed=3799s]
+  heads (0/5 clipped)   trunk |g|=238 lim=1500 x1.00
+           move x1  |g|=     598 lim=  1000 x1.00         reach x1  |g|=     377 lim=  3000 x1.00  
+        descend x1  |g|=     259 lim=  1500 x1.00       release x1  |g|=     134 lim=   500 x1.00  
+          grasp x1  |g|=      46 lim=  1000 x1.00  
+    cube_stacking   rew= 121.020  ph=4  success=17/20 (85%) streak=1  | Reach=100%/0.0193  Descend=100%/0.0092  Grasp=95%/0.0093  Move=95%/0.0210  Release=100%/0.0382
+
+Iter  385:  Σrew=114.804  grad=630.7  [phase1=2.9s bptt=6.3s elapsed=3851s]
+  heads (0/5 clipped)   trunk |g|=186 lim=1500 x1.00
+           move x1  |g|=     453 lim=  1000 x1.00         reach x1  |g|=     338 lim=  3000 x1.00  
+        descend x1  |g|=     168 lim=  1500 x1.00       release x1  |g|=     111 lim=   500 x1.00  
+          grasp x1  |g|=      55 lim=  1000 x1.00  
+    cube_stacking   rew= 114.804  ph=4  success=11/20 (55%) streak=0  | Reach=100%/0.0166  Descend=100%/0.0117  Grasp=95%/0.0076  Move=95%/0.0220  Release=100%/0.0507
+
+Iter  390:  Σrew=113.864  grad=972.8  [phase1=3.1s bptt=6.2s elapsed=3906s]
+  heads (0/5 clipped)   trunk |g|=239 lim=1500 x1.00
+           move x1  |g|=     773 lim=  1000 x1.00         reach x1  |g|=     500 lim=  3000 x1.00  
+        release x1  |g|=     153 lim=   500 x1.00       descend x1  |g|=     125 lim=  1500 x1.00  
+          grasp x1  |g|=      55 lim=  1000 x1.00  
+    cube_stacking   rew= 113.864  ph=4  success=14/20 (70%) streak=0  | Reach=100%/0.0199  Descend=100%/0.0095  Grasp=95%/0.0080  Move=100%/0.0294  Release=100%/0.0440
+
+Iter  395:  Σrew=118.975  grad=921.7  [phase1=2.9s bptt=6.3s elapsed=3959s]
+  heads (0/5 clipped)   trunk |g|=196 lim=1500 x1.00
+           move x1  |g|=     786 lim=  1000 x1.00         reach x1  |g|=     400 lim=  3000 x1.00  
+        release x1  |g|=     120 lim=   500 x1.00       descend x1  |g|=     109 lim=  1500 x1.00  
+          grasp x1  |g|=      87 lim=  1000 x1.00  
+    cube_stacking   rew= 118.975  ph=4  success=16/20 (80%) streak=1  | Reach=100%/0.0200  Descend=100%/0.0099  Grasp=100%/0.0077  Move=100%/0.0168  Release=100%/0.0424
+
+Iter  400:  Σrew=123.757  grad=622.7  [phase1=2.9s bptt=6.2s elapsed=4011s]
+  heads (0/5 clipped)   trunk |g|=213 lim=1500 x1.00
+           move x1  |g|=     483 lim=  1000 x1.00         reach x1  |g|=     285 lim=  3000 x1.00  
+        descend x1  |g|=     137 lim=  1500 x1.00       release x1  |g|=      84 lim=   500 x1.00  
+          grasp x1  |g|=      49 lim=  1000 x1.00  
+    cube_stacking   rew= 123.757  ph=4  success=6/20 (30%) streak=0  | Reach=100%/0.0232  Descend=100%/0.0144  Grasp=100%/0.0158  Move=95%/0.0176  Release=100%/0.0917
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 400
+
+Iter  405:  Σrew=117.471  grad=1496.0  [phase1=2.9s bptt=6.3s elapsed=4066s]
+  heads (1/5 clipped)   trunk |g|=342 lim=1500 x1.00
+           move x1  |g|=    1379 lim=  1000 x0.73       descend x1  |g|=     365 lim=  1500 x1.00  
+          reach x1  |g|=     270 lim=  3000 x1.00       release x1  |g|=      85 lim=   500 x1.00  
+          grasp x1  |g|=      79 lim=  1000 x1.00  
+    cube_stacking   rew= 117.471  ph=4  success=17/20 (85%) streak=1  | Reach=100%/0.0178  Descend=100%/0.0123  Grasp=95%/0.0126  Move=95%/0.0193  Release=100%/0.0372
+
+Iter  410:  Σrew=121.420  grad=1217.2  [phase1=3.1s bptt=6.2s elapsed=4119s]
+  heads (0/5 clipped)   trunk |g|=281 lim=1500 x1.00
+           move x1  |g|=     943 lim=  1000 x1.00         reach x1  |g|=     593 lim=  3000 x1.00  
+        descend x1  |g|=     299 lim=  1500 x1.00         grasp x1  |g|=     212 lim=  1000 x1.00  
+        release x1  |g|=     165 lim=   500 x1.00  
+    cube_stacking   rew= 121.420  ph=4  success=17/20 (85%) streak=2  | Reach=100%/0.0219  Descend=100%/0.0110  Grasp=100%/0.0096  Move=95%/0.0201  Release=100%/0.0426
+
+Iter  415:  Σrew=120.512  grad=749.6  [phase1=3.0s bptt=6.2s elapsed=4171s]
+  heads (0/5 clipped)   trunk |g|=200 lim=1500 x1.00
+          reach x1  |g|=     494 lim=  3000 x1.00          move x1  |g|=     425 lim=  1000 x1.00  
+        release x1  |g|=     227 lim=   500 x1.00         grasp x1  |g|=     169 lim=  1000 x1.00  
+        descend x1  |g|=     131 lim=  1500 x1.00  
+    cube_stacking   rew= 120.512  ph=4  success=16/20 (80%) streak=3  | Reach=100%/0.0187  Descend=100%/0.0107  Grasp=100%/0.0102  Move=100%/0.0209  Release=100%/0.0413
+
+Iter  420:  Σrew=124.161  grad=1095.3  [phase1=2.8s bptt=6.3s elapsed=4223s]
+  heads (0/5 clipped)   trunk |g|=264 lim=1500 x1.00
+           move x1  |g|=     861 lim=  1000 x1.00         reach x1  |g|=     510 lim=  3000 x1.00  
+        descend x1  |g|=     326 lim=  1500 x1.00         grasp x1  |g|=     143 lim=  1000 x1.00  
+        release x1  |g|=      49 lim=   500 x1.00  
+  ✓ cube_stacking   rew= 124.161  ph=4  success=16/20 (80%) streak=4  | Reach=100%/0.0167  Descend=100%/0.0105  Grasp=100%/0.0100  Move=95%/0.0181  Release=100%/0.0391
+
+✓ All 1 tasks solved (4 consecutive ≥80%) at iter 420.
+
+Training stopped: all tasks solved after 420 iters, 4229.3s this run
+  ✓ saved cube_stacking_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 420 (final)

@@ -1,0 +1,450 @@
+
+######################################################################
+# run started 2026-09-17 15:39:15
+# train_primitives_vison.py --tasks drawer_open --out-prefix drawer_open
+######################################################################
+======================================================================
+JOINT VISION-PRIMITIVE TRAINING — robosuite
+  Tasks: drawer_open
+  Batch: {'drawer_open': 20}
+  Proprio dim: 31 (shared trunk)
+  Viewer: on
+  Saving to drawer_open_*  every 50 iters
+======================================================================
+
+[1] DINOv3 backbone (shared)...
+  DINOv3: 64x64 → 4x4 patches, dim=768
+
+[2] Shared primitive policy...
+
+  Primitive Policy:
+    Projection: 768 → 128 (1 camera) → spatial softmax → 256
+    Trunk: 287 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 239,038   Heads: 388,400   Total trainable: 627,438
+
+[3] Building task 'drawer_open' (articulated env) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_drawer.xml
+  ee_site: 3
+  hand_body: 13
+  handle_site: 8
+  joint_qpos_idx: 9
+  nq=10, nu=9, nsite=9
+  Steps: 80, Chunks: 16, Chunk size: 5
+  Feature slots: 17, frame_dt: 0.0400s
+
+[2] Creating MJWarp GPU renderer...
+Warp 1.16.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/emre/.cache/warp/1.16.0
+Module mujoco.mjx.third_party.mujoco_warp._src.render_util 97c6606 load on device 'cuda:0' took 0.69 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.io 89aaeca load on device 'cuda:0' took 3.34 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.bvh f2c5137 load on device 'cuda:0' took 0.98 ms  (cached)
+  Camera: robot0_eye_in_hand → cam_id: 5
+  Render context: nworld=20, 64x64
+Module mujoco.mjx.warp.ffi 7a22eb4 load on device 'cuda:0' took 0.56 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.smooth 47158eb load on device 'cuda:0' took 6.96 ms  (cached)
+Module _nxn_broadphase__locals__kernel_3e896ca5 3e896ca load on device 'cuda:0' took 0.79 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 ef3754c load on device 'cuda:0' took 3.09 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 231e976 load on device 'cuda:0' took 1.76 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_7427b724 7427b72 load on device 'cuda:0' took 1.81 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.constraint 36c8060 load on device 'cuda:0' took 0.48 ms  (cached)
+Module _equality_weld__locals__kernel_6467ae94 6467ae9 load on device 'cuda:0' took 49.49 ms  (cached)
+Module _friction_dof__locals__kernel_a6ed3529 a6ed352 load on device 'cuda:0' took 2.80 ms  (cached)
+Module _limit_slide_hinge__locals__kernel_56cb53b3 56cb53b load on device 'cuda:0' took 0.71 ms  (cached)
+Module _efc_contact_init__locals__kernel_0bd15084 0bd1508 load on device 'cuda:0' took 3.65 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_f15eda8d 1ff2125 load on device 'cuda:0' took 0.56 ms  (cached)
+Module _efc_contact_update__locals__kernel_8c34abe6 8c34abe load on device 'cuda:0' took 0.59 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward 81c85c8 load on device 'cuda:0' took 1.29 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.passive efc109c load on device 'cuda:0' took 1.05 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward fc5c4e4 load on device 'cuda:0' took 1.21 ms  (cached)
+Module _qfrc_smooth__locals__kernel_b98573a2 b98573a load on device 'cuda:0' took 0.71 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.support ca784c5 load on device 'cuda:0' took 0.66 ms  (cached)
+Module _tile_cholesky_factorize_solve_block__locals__kernel_8d2c83d3 bb4c15e load on device 'cuda:0' took 28.73 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.solver 4a1f2fb load on device 'cuda:0' took 2.15 ms  (cached)
+Module _solve_init_jaref_kernel__locals__kernel_2818534b 2818534 load on device 'cuda:0' took 0.60 ms  (cached)
+Module mul_m_kernel__locals___mul_m_dc7994af dc7994a load on device 'cuda:0' took 0.69 ms  (cached)
+Module _update_constraint_efc__locals__kernel_34351367 3435136 load on device 'cuda:0' took 0.51 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_626172ab 626172a load on device 'cuda:0' took 0.40 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_d22ec30a d22ec30 load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_gradient_grad__locals__kernel_30531d0a 30531d0 load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_gradient_JTDAJ_dense_tiled__locals__kernel_688e8ced ac20d88 load on device 'cuda:0' took 0.99 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_31aec00c a48e6c9 load on device 'cuda:0' took 35.15 ms  (cached)
+Module _linesearch_iterative_kernel__locals__kernel_fd8c9e1b c7b3998 load on device 'cuda:0' took 0.65 ms  (cached)
+Module _update_constraint_efc__locals__kernel_8791d97d 8791d97 load on device 'cuda:0' took 1.96 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_e7e36618 e7e3661 load on device 'cuda:0' took 0.58 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_e3354673 e335467 load on device 'cuda:0' took 0.44 ms  (cached)
+Module _update_gradient_grad__locals__kernel_f92b7b33 f92b7b3 load on device 'cuda:0' took 0.42 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_3d2c3cb7 3d6531e load on device 'cuda:0' took 31.53 ms  (cached)
+Module _solve_zero_search_dot__locals__kernel_a3b7406e a3b7406 load on device 'cuda:0' took 0.83 ms  (cached)
+Module _solve_search_update__locals__kernel_f542f3c2 f542f3c load on device 'cuda:0' took 0.93 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.sensor de892d8 load on device 'cuda:0' took 2.49 ms  (cached)
+    segments [35, 10, 35] → primitives ['reach', 'grasp', 'pull_drawer']
+
+  Task minibatching: off (one update per iteration).
+
+  Active primitives: reach, grasp, pull_drawer
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+Module render__locals___render_megakernel_0c616e8d cf68ab5 load on device 'cuda:0' took 1.10 ms  (cached)
+  [warmup 2 iters, 3200 samples]  std min=1.768e-04 (dim 25) max=1.904e-01
+  ! dim 25 std=1.768e-04 → normalising amplifies it 5657x; expect a gradient spike. A variance floor in helpers/obs.py would be the actual fix.
+
+Iter    2:  Σrew=-34.740  grad=493.6  [phase1=1.3s bptt=2.7s elapsed=268s]
+  heads (0/3 clipped)   trunk |g|=72 lim=1500 x1.00
+          reach x1  |g|=     488 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew= -34.740  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.6038  Grasp=0%/0.5952  Pull=0%/0.1486
+
+Iter    5:  Σrew=-24.683  grad=264.2  [phase1=1.3s bptt=2.7s elapsed=326s]
+  heads (0/3 clipped)   trunk |g|=39 lim=1500 x1.00
+          reach x1  |g|=     261 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew= -24.683  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.4526  Grasp=0%/0.4435  Pull=0%/0.1510
+
+Iter   10:  Σrew=-17.428  grad=213.5  [phase1=1.2s bptt=2.7s elapsed=349s]
+  heads (0/3 clipped)   trunk |g|=27 lim=1500 x1.00
+          reach x1  |g|=     212 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew= -17.428  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.3557  Grasp=0%/0.3078  Pull=0%/0.1503
+
+Iter   15:  Σrew=-12.223  grad=183.6  [phase1=1.2s bptt=2.7s elapsed=372s]
+  heads (0/3 clipped)   trunk |g|=24 lim=1500 x1.00
+          reach x1  |g|=     182 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew= -12.223  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.2146  Grasp=0%/0.1876  Pull=0%/0.1497
+
+Iter   20:  Σrew=-7.205  grad=297.8  [phase1=1.2s bptt=2.7s elapsed=395s]
+  heads (0/3 clipped)   trunk |g|=34 lim=1500 x1.00
+          reach x1  |g|=     295 lim=  3000 x1.00         grasp x1  |g|=      18 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -7.205  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1017  Grasp=10%/0.0865  Pull=0%/0.1509
+
+Iter   25:  Σrew=-6.031  grad=461.3  [phase1=3.1s bptt=2.7s elapsed=420s]
+  heads (0/3 clipped)   trunk |g|=42 lim=1500 x1.00
+          reach x1  |g|=     459 lim=  3000 x1.00         grasp x1  |g|=      27 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -6.031  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0952  Grasp=0%/0.1069  Pull=0%/0.1478
+
+Iter   30:  Σrew=-3.348  grad=390.3  [phase1=1.3s bptt=2.7s elapsed=443s]
+  heads (0/3 clipped)   trunk |g|=34 lim=1500 x1.00
+          reach x1  |g|=     389 lim=  3000 x1.00         grasp x1  |g|=       6 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -3.348  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1051  Grasp=0%/0.1336  Pull=0%/0.1439
+
+Iter   35:  Σrew=-1.130  grad=225.9  [phase1=1.3s bptt=2.7s elapsed=466s]
+  heads (0/3 clipped)   trunk |g|=29 lim=1500 x1.00
+          reach x1  |g|=     224 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -1.130  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0821  Grasp=0%/0.0893  Pull=0%/0.1562
+
+Iter   40:  Σrew=-1.930  grad=496.8  [phase1=1.3s bptt=2.7s elapsed=488s]
+  heads (0/3 clipped)   trunk |g|=48 lim=1500 x1.00
+          reach x1  |g|=     494 lim=  3000 x1.00         grasp x1  |g|=       2 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -1.930  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0935  Grasp=0%/0.1386  Pull=0%/0.1510
+
+Iter   45:  Σrew=-0.973  grad=245.2  [phase1=1.2s bptt=2.7s elapsed=511s]
+  heads (0/3 clipped)   trunk |g|=26 lim=1500 x1.00
+          reach x1  |g|=     244 lim=  3000 x1.00         grasp x1  |g|=       2 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -0.973  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0754  Grasp=0%/0.1143  Pull=0%/0.1500
+
+Iter   50:  Σrew=-0.270  grad=1007.5  [phase1=1.3s bptt=2.7s elapsed=536s]
+  heads (0/3 clipped)   trunk |g|=116 lim=1500 x1.00
+          reach x1  |g|=    1001 lim=  3000 x1.00         grasp x1  |g|=      10 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -0.270  ph=0  success=1/20 (5%) streak=0  | Reach=25%/0.0499  Grasp=0%/0.1109  Pull=5%/0.1384
+  ✓ saved drawer_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 50
+
+Iter   55:  Σrew=-2.403  grad=530.1  [phase1=1.3s bptt=2.7s elapsed=561s]
+  heads (0/3 clipped)   trunk |g|=53 lim=1500 x1.00
+          reach x1  |g|=     527 lim=  3000 x1.00         grasp x1  |g|=       7 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  -2.403  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0850  Grasp=0%/0.1790  Pull=0%/0.1533
+
+Iter   60:  Σrew=6.165  grad=1058.3  [phase1=1.2s bptt=2.6s elapsed=584s]
+  heads (0/3 clipped)   trunk |g|=116 lim=1500 x1.00
+          reach x1  |g|=    1048 lim=  3000 x1.00         grasp x1  |g|=      91 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=   6.165  ph=0  success=0/20 (0%) streak=0  | Reach=70%/0.0283  Grasp=40%/0.0405  Pull=0%/0.1339
+
+Iter   65:  Σrew=4.916  grad=594.4  [phase1=1.4s bptt=2.7s elapsed=607s]
+  heads (0/3 clipped)   trunk |g|=73 lim=1500 x1.00
+          reach x1  |g|=     573 lim=  3000 x1.00         grasp x1  |g|=     142 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=   4.916  ph=0  success=0/20 (0%) streak=0  | Reach=5%/0.0643  Grasp=10%/0.0611  Pull=0%/0.1531
+
+Iter   70:  Σrew=6.944  grad=571.4  [phase1=1.3s bptt=2.7s elapsed=629s]
+  heads (0/3 clipped)   trunk |g|=84 lim=1500 x1.00
+          reach x1  |g|=     559 lim=  3000 x1.00         grasp x1  |g|=      80 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=   6.944  ph=0  success=0/20 (0%) streak=0  | Reach=30%/0.0432  Grasp=10%/0.0595  Pull=0%/0.1385
+
+Iter   75:  Σrew=8.448  grad=1194.8  [phase1=1.3s bptt=2.7s elapsed=652s]
+  heads (0/3 clipped)   trunk |g|=197 lim=1500 x1.00
+          reach x1  |g|=    1172 lim=  3000 x1.00         grasp x1  |g|=     124 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=   8.448  ph=0  success=0/20 (0%) streak=0  | Reach=35%/0.0365  Grasp=50%/0.0312  Pull=0%/0.1422
+
+Iter   80:  Σrew=5.750  grad=807.8  [phase1=1.3s bptt=2.7s elapsed=677s]
+  heads (0/3 clipped)   trunk |g|=128 lim=1500 x1.00
+          reach x1  |g|=     793 lim=  3000 x1.00         grasp x1  |g|=      88 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=   5.750  ph=0  success=0/20 (0%) streak=0  | Reach=35%/0.0457  Grasp=45%/0.0453  Pull=0%/0.1426
+
+Iter   85:  Σrew=18.434  grad=1246.0  [phase1=1.3s bptt=2.7s elapsed=700s]
+  heads (0/3 clipped)   trunk |g|=236 lim=1500 x1.00
+          reach x1  |g|=    1213 lim=  3000 x1.00         grasp x1  |g|=     162 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  18.434  ph=0  success=0/20 (0%) streak=0  | Reach=50%/0.0316  Grasp=15%/0.0413  Pull=0%/0.1564
+
+Iter   90:  Σrew=17.609  grad=751.0  [phase1=1.3s bptt=2.7s elapsed=723s]
+  heads (0/3 clipped)   trunk |g|=123 lim=1500 x1.00
+          reach x1  |g|=     685 lim=  3000 x1.00         grasp x1  |g|=     283 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  17.609  ph=0  success=0/20 (0%) streak=0  | Reach=35%/0.0346  Grasp=40%/0.0331  Pull=0%/0.1439
+
+Iter   95:  Σrew=16.749  grad=580.7  [phase1=1.3s bptt=2.7s elapsed=746s]
+  heads (0/3 clipped)   trunk |g|=123 lim=1500 x1.00
+          reach x1  |g|=     501 lim=  3000 x1.00         grasp x1  |g|=     267 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  16.749  ph=0  success=0/20 (0%) streak=0  | Reach=60%/0.0288  Grasp=65%/0.0274  Pull=0%/0.1520
+
+Iter  100:  Σrew=20.703  grad=763.6  [phase1=1.3s bptt=2.7s elapsed=771s]
+  heads (0/3 clipped)   trunk |g|=137 lim=1500 x1.00
+          reach x1  |g|=     702 lim=  3000 x1.00         grasp x1  |g|=     268 lim=  1000 x1.00  
+    pull_drawer x1  |g|=       0 lim=  1000 x1.00  
+    drawer_open     rew=  20.703  ph=0  success=0/20 (0%) streak=0  | Reach=65%/0.0252  Grasp=75%/0.0225  Pull=0%/0.1304
+    ──→ drawer_open: phase 1, active=80
+  ✓ saved drawer_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 100
+
+Iter  105:  Σrew=44.658  grad=1661.5  [phase1=2.1s bptt=4.7s elapsed=810s]
+  heads (0/3 clipped)   trunk |g|=285 lim=1500 x1.00
+          reach x1  |g|=    1533 lim=  3000 x1.00   pull_drawer x1  |g|=     512 lim=  1000 x1.00  
+          grasp x1  |g|=     256 lim=  1000 x1.00  
+    drawer_open     rew=  44.658  ph=1  success=0/20 (0%) streak=0  | Reach=70%/0.0276  Grasp=80%/0.0244  Pull=0%/0.1564
+
+Iter  110:  Σrew=44.604  grad=4870.3  [phase1=2.2s bptt=4.6s elapsed=849s]
+  heads (1/3 clipped)   trunk |g|=687 lim=1500 x1.00
+          reach x1  |g|=    4798 lim=  3000 x0.63   pull_drawer x1  |g|=     408 lim=  1000 x1.00  
+          grasp x1  |g|=     251 lim=  1000 x1.00  
+    drawer_open     rew=  44.604  ph=1  success=0/20 (0%) streak=0  | Reach=50%/0.0333  Grasp=70%/0.0279  Pull=0%/0.1376
+    ──→ drawer_open: phase 2, active=80
+
+Iter  115:  Σrew=56.305  grad=1720.2  [phase1=2.2s bptt=4.7s elapsed=889s]
+  heads (0/3 clipped)   trunk |g|=259 lim=1500 x1.00
+          reach x1  |g|=    1678 lim=  3000 x1.00   pull_drawer x1  |g|=     225 lim=  1000 x1.00  
+          grasp x1  |g|=     163 lim=  1000 x1.00  
+    drawer_open     rew=  56.305  ph=2  success=0/20 (0%) streak=0  | Reach=95%/0.0191  Grasp=90%/0.0171  Pull=0%/0.1477
+
+Iter  120:  Σrew=67.769  grad=2726.0  [phase1=2.2s bptt=4.6s elapsed=928s]
+  heads (0/3 clipped)   trunk |g|=347 lim=1500 x1.00
+          reach x1  |g|=    2657 lim=  3000 x1.00   pull_drawer x1  |g|=     467 lim=  1000 x1.00  
+          grasp x1  |g|=     185 lim=  1000 x1.00  
+    drawer_open     rew=  67.769  ph=2  success=0/20 (0%) streak=0  | Reach=70%/0.0247  Grasp=90%/0.0154  Pull=0%/0.1007
+
+Iter  125:  Σrew=49.446  grad=1149.3  [phase1=2.1s bptt=4.7s elapsed=969s]
+  heads (0/3 clipped)   trunk |g|=173 lim=1500 x1.00
+          reach x1  |g|=    1078 lim=  3000 x1.00         grasp x1  |g|=     288 lim=  1000 x1.00  
+    pull_drawer x1  |g|=     212 lim=  1000 x1.00  
+    drawer_open     rew=  49.446  ph=2  success=0/20 (0%) streak=0  | Reach=100%/0.0161  Grasp=95%/0.0123  Pull=0%/0.1107
+
+Iter  130:  Σrew=68.835  grad=1024.7  [phase1=2.2s bptt=4.7s elapsed=1009s]
+  heads (0/3 clipped)   trunk |g|=138 lim=1500 x1.00
+    pull_drawer x1  |g|=     775 lim=  1000 x1.00         reach x1  |g|=     624 lim=  3000 x1.00  
+          grasp x1  |g|=     205 lim=  1000 x1.00  
+    drawer_open     rew=  68.835  ph=2  success=0/20 (0%) streak=0  | Reach=95%/0.0151  Grasp=100%/0.0117  Pull=0%/0.0939
+
+Iter  135:  Σrew=75.026  grad=1366.4  [phase1=2.1s bptt=4.7s elapsed=1049s]
+  heads (0/3 clipped)   trunk |g|=236 lim=1500 x1.00
+          reach x1  |g|=    1237 lim=  3000 x1.00   pull_drawer x1  |g|=     427 lim=  1000 x1.00  
+          grasp x1  |g|=     312 lim=  1000 x1.00  
+    drawer_open     rew=  75.026  ph=2  success=12/20 (60%) streak=0  | Reach=100%/0.0144  Grasp=95%/0.0147  Pull=60%/0.0298
+
+Iter  140:  Σrew=49.118  grad=1190.8  [phase1=4.1s bptt=4.7s elapsed=1090s]
+  heads (0/3 clipped)   trunk |g|=162 lim=1500 x1.00
+          reach x1  |g|=    1116 lim=  3000 x1.00   pull_drawer x1  |g|=     353 lim=  1000 x1.00  
+          grasp x1  |g|=     149 lim=  1000 x1.00  
+    drawer_open     rew=  49.118  ph=2  success=7/20 (35%) streak=0  | Reach=35%/0.0510  Grasp=35%/0.0507  Pull=35%/0.0984
+
+Iter  145:  Σrew=73.681  grad=1596.2  [phase1=2.2s bptt=4.6s elapsed=1130s]
+  heads (1/3 clipped)   trunk |g|=189 lim=1500 x1.00
+    pull_drawer x1  |g|=    1343 lim=  1000 x0.74         reach x1  |g|=     776 lim=  3000 x1.00  
+          grasp x1  |g|=     326 lim=  1000 x1.00  
+    drawer_open     rew=  73.681  ph=2  success=17/20 (85%) streak=1  | Reach=85%/0.0220  Grasp=95%/0.0131  Pull=85%/0.0198
+
+Iter  150:  Σrew=92.485  grad=3065.0  [phase1=2.3s bptt=4.7s elapsed=1169s]
+  heads (0/3 clipped)   trunk |g|=499 lim=1500 x1.00
+          reach x1  |g|=    2974 lim=  3000 x1.00         grasp x1  |g|=     414 lim=  1000 x1.00  
+    pull_drawer x1  |g|=     360 lim=  1000 x1.00  
+    drawer_open     rew=  92.485  ph=2  success=18/20 (90%) streak=2  | Reach=90%/0.0163  Grasp=95%/0.0146  Pull=90%/0.0154
+  ✓ saved drawer_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 150
+
+Iter  155:  Σrew=70.424  grad=1663.7  [phase1=2.1s bptt=4.7s elapsed=1211s]
+  heads (0/3 clipped)   trunk |g|=264 lim=1500 x1.00
+          reach x1  |g|=    1442 lim=  3000 x1.00   pull_drawer x1  |g|=     717 lim=  1000 x1.00  
+          grasp x1  |g|=     323 lim=  1000 x1.00  
+    drawer_open     rew=  70.424  ph=2  success=1/20 (5%) streak=0  | Reach=100%/0.0169  Grasp=75%/0.0242  Pull=5%/0.1379
+
+Iter  160:  Σrew=98.409  grad=1538.2  [phase1=2.3s bptt=4.7s elapsed=1250s]
+  heads (1/3 clipped)   trunk |g|=221 lim=1500 x1.00
+    pull_drawer x1  |g|=    1196 lim=  1000 x0.84         reach x1  |g|=     887 lim=  3000 x1.00  
+          grasp x1  |g|=     319 lim=  1000 x1.00  
+    drawer_open     rew=  98.409  ph=2  success=17/20 (85%) streak=1  | Reach=90%/0.0166  Grasp=100%/0.0124  Pull=85%/0.0114
+
+Iter  165:  Σrew=102.476  grad=1966.7  [phase1=2.1s bptt=4.7s elapsed=1290s]
+  heads (0/3 clipped)   trunk |g|=385 lim=1500 x1.00
+          reach x1  |g|=    1774 lim=  3000 x1.00   pull_drawer x1  |g|=     666 lim=  1000 x1.00  
+          grasp x1  |g|=     359 lim=  1000 x1.00  
+    drawer_open     rew= 102.476  ph=2  success=18/20 (90%) streak=2  | Reach=90%/0.0171  Grasp=95%/0.0125  Pull=90%/0.0040
+
+Iter  170:  Σrew=109.719  grad=1635.5  [phase1=4.0s bptt=4.6s elapsed=1331s]
+  heads (1/3 clipped)   trunk |g|=174 lim=1500 x1.00
+    pull_drawer x1  |g|=    1467 lim=  1000 x0.68         reach x1  |g|=     696 lim=  3000 x1.00  
+          grasp x1  |g|=      90 lim=  1000 x1.00  
+    drawer_open     rew= 109.719  ph=2  success=7/20 (35%) streak=0  | Reach=95%/0.0187  Grasp=100%/0.0164  Pull=35%/0.0955
+
+Iter  175:  Σrew=107.299  grad=2041.8  [phase1=2.2s bptt=4.7s elapsed=1370s]
+  heads (1/3 clipped)   trunk |g|=363 lim=1500 x1.00
+          reach x1  |g|=    1554 lim=  3000 x1.00   pull_drawer x1  |g|=    1220 lim=  1000 x0.82  
+          grasp x1  |g|=     366 lim=  1000 x1.00  
+    drawer_open     rew= 107.299  ph=2  success=8/20 (40%) streak=0  | Reach=100%/0.0131  Grasp=100%/0.0121  Pull=40%/0.0788
+
+Iter  180:  Σrew=108.481  grad=1459.0  [phase1=2.1s bptt=4.6s elapsed=1410s]
+  heads (1/3 clipped)   trunk |g|=232 lim=1500 x1.00
+    pull_drawer x1  |g|=    1258 lim=  1000 x0.80         reach x1  |g|=     638 lim=  3000 x1.00  
+          grasp x1  |g|=     293 lim=  1000 x1.00  
+    drawer_open     rew= 108.481  ph=2  success=16/20 (80%) streak=1  | Reach=75%/0.0234  Grasp=75%/0.0245  Pull=80%/0.0283
+
+Iter  185:  Σrew=73.776  grad=2691.5  [phase1=2.1s bptt=4.7s elapsed=1449s]
+  heads (0/3 clipped)   trunk |g|=509 lim=1500 x1.00
+          reach x1  |g|=    2601 lim=  3000 x1.00   pull_drawer x1  |g|=     344 lim=  1000 x1.00  
+          grasp x1  |g|=     322 lim=  1000 x1.00  
+    drawer_open     rew=  73.776  ph=2  success=4/20 (20%) streak=0  | Reach=25%/0.0446  Grasp=30%/0.0485  Pull=20%/0.1187
+
+Iter  190:  Σrew=56.401  grad=1104.7  [phase1=2.2s bptt=4.7s elapsed=1489s]
+  heads (0/3 clipped)   trunk |g|=189 lim=1500 x1.00
+          reach x1  |g|=     959 lim=  3000 x1.00   pull_drawer x1  |g|=     500 lim=  1000 x1.00  
+          grasp x1  |g|=     123 lim=  1000 x1.00  
+    drawer_open     rew=  56.401  ph=2  success=10/20 (50%) streak=0  | Reach=45%/0.0494  Grasp=50%/0.0462  Pull=50%/0.0770
+
+Iter  195:  Σrew=75.242  grad=1772.2  [phase1=2.1s bptt=4.6s elapsed=1530s]
+  heads (1/3 clipped)   trunk |g|=211 lim=1500 x1.00
+    pull_drawer x1  |g|=    1568 lim=  1000 x0.64         reach x1  |g|=     754 lim=  3000 x1.00  
+          grasp x1  |g|=     265 lim=  1000 x1.00  
+    drawer_open     rew=  75.242  ph=2  success=10/20 (50%) streak=0  | Reach=75%/0.0275  Grasp=90%/0.0135  Pull=50%/0.0390
+
+Iter  200:  Σrew=94.276  grad=1827.1  [phase1=2.1s bptt=4.7s elapsed=1570s]
+  heads (1/3 clipped)   trunk |g|=296 lim=1500 x1.00
+    pull_drawer x1  |g|=    1285 lim=  1000 x0.78         reach x1  |g|=    1252 lim=  3000 x1.00  
+          grasp x1  |g|=     178 lim=  1000 x1.00  
+    drawer_open     rew=  94.276  ph=2  success=17/20 (85%) streak=1  | Reach=85%/0.0249  Grasp=90%/0.0181  Pull=85%/0.0171
+  ✓ saved drawer_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 200
+
+Iter  205:  Σrew=82.805  grad=2017.0  [phase1=2.1s bptt=4.7s elapsed=1611s]
+  heads (1/3 clipped)   trunk |g|=355 lim=1500 x1.00
+    pull_drawer x1  |g|=    1525 lim=  1000 x0.66         reach x1  |g|=    1202 lim=  3000 x1.00  
+          grasp x1  |g|=     413 lim=  1000 x1.00  
+    drawer_open     rew=  82.805  ph=2  success=14/20 (70%) streak=0  | Reach=70%/0.0265  Grasp=80%/0.0260  Pull=70%/0.0253
+
+Iter  210:  Σrew=105.869  grad=1536.5  [phase1=2.1s bptt=4.7s elapsed=1651s]
+  heads (0/3 clipped)   trunk |g|=392 lim=1500 x1.00
+          reach x1  |g|=    1152 lim=  3000 x1.00   pull_drawer x1  |g|=     890 lim=  1000 x1.00  
+          grasp x1  |g|=     297 lim=  1000 x1.00  
+    drawer_open     rew= 105.869  ph=2  success=17/20 (85%) streak=1  | Reach=95%/0.0160  Grasp=95%/0.0103  Pull=85%/0.0174
+
+Iter  215:  Σrew=105.657  grad=2506.5  [phase1=2.3s bptt=4.7s elapsed=1690s]
+  heads (1/3 clipped)   trunk |g|=520 lim=1500 x1.00
+          reach x1  |g|=    2083 lim=  3000 x1.00   pull_drawer x1  |g|=    1267 lim=  1000 x0.79  
+          grasp x1  |g|=     255 lim=  1000 x1.00  
+    drawer_open     rew= 105.657  ph=2  success=12/20 (60%) streak=0  | Reach=65%/0.0279  Grasp=70%/0.0258  Pull=60%/0.0367
+
+Iter  220:  Σrew=66.832  grad=1411.7  [phase1=2.1s bptt=4.7s elapsed=1730s]
+  heads (0/3 clipped)   trunk |g|=210 lim=1500 x1.00
+          reach x1  |g|=    1030 lim=  3000 x1.00   pull_drawer x1  |g|=     929 lim=  1000 x1.00  
+          grasp x1  |g|=     159 lim=  1000 x1.00  
+    drawer_open     rew=  66.832  ph=2  success=3/20 (15%) streak=0  | Reach=60%/0.0228  Grasp=75%/0.0227  Pull=15%/0.1265
+
+Iter  225:  Σrew=68.686  grad=1093.4  [phase1=2.3s bptt=4.7s elapsed=1770s]
+  heads (0/3 clipped)   trunk |g|=250 lim=1500 x1.00
+          reach x1  |g|=     972 lim=  3000 x1.00   pull_drawer x1  |g|=     390 lim=  1000 x1.00  
+          grasp x1  |g|=     191 lim=  1000 x1.00  
+    drawer_open     rew=  68.686  ph=2  success=8/20 (40%) streak=0  | Reach=95%/0.0166  Grasp=100%/0.0123  Pull=40%/0.0453
+
+Iter  230:  Σrew=84.128  grad=1260.7  [phase1=2.3s bptt=4.7s elapsed=1814s]
+  heads (0/3 clipped)   trunk |g|=267 lim=1500 x1.00
+          reach x1  |g|=     997 lim=  3000 x1.00   pull_drawer x1  |g|=     696 lim=  1000 x1.00  
+          grasp x1  |g|=     200 lim=  1000 x1.00  
+    drawer_open     rew=  84.128  ph=2  success=5/20 (25%) streak=0  | Reach=90%/0.0175  Grasp=75%/0.0208  Pull=25%/0.0708
+
+Iter  235:  Σrew=109.558  grad=1248.9  [phase1=2.3s bptt=4.6s elapsed=1854s]
+  heads (1/3 clipped)   trunk |g|=175 lim=1500 x1.00
+    pull_drawer x1  |g|=    1146 lim=  1000 x0.87         grasp x1  |g|=     347 lim=  1000 x1.00  
+          reach x1  |g|=     310 lim=  3000 x1.00  
+    drawer_open     rew= 109.558  ph=2  success=6/20 (30%) streak=0  | Reach=85%/0.0231  Grasp=85%/0.0213  Pull=30%/0.0953
+
+Iter  240:  Σrew=119.192  grad=2894.3  [phase1=2.3s bptt=4.7s elapsed=1894s]
+  heads (1/3 clipped)   trunk |g|=620 lim=1500 x1.00
+          reach x1  |g|=    2371 lim=  3000 x1.00   pull_drawer x1  |g|=    1467 lim=  1000 x0.68  
+          grasp x1  |g|=     470 lim=  1000 x1.00  
+    drawer_open     rew= 119.192  ph=2  success=12/20 (60%) streak=0  | Reach=80%/0.0247  Grasp=80%/0.0174  Pull=60%/0.0481
+
+Iter  245:  Σrew=94.318  grad=2682.8  [phase1=2.3s bptt=4.7s elapsed=1934s]
+  heads (1/3 clipped)   trunk |g|=569 lim=1500 x1.00
+          reach x1  |g|=    2338 lim=  3000 x1.00   pull_drawer x1  |g|=    1175 lim=  1000 x0.85  
+          grasp x1  |g|=     167 lim=  1000 x1.00  
+    drawer_open     rew=  94.318  ph=2  success=15/20 (75%) streak=0  | Reach=85%/0.0177  Grasp=95%/0.0114  Pull=75%/0.0297
+
+Iter  250:  Σrew=112.225  grad=1756.5  [phase1=2.4s bptt=4.7s elapsed=1975s]
+  heads (1/3 clipped)   trunk |g|=292 lim=1500 x1.00
+    pull_drawer x1  |g|=    1516 lim=  1000 x0.66         reach x1  |g|=     819 lim=  3000 x1.00  
+          grasp x1  |g|=     181 lim=  1000 x1.00  
+    drawer_open     rew= 112.225  ph=2  success=19/20 (95%) streak=1  | Reach=95%/0.0142  Grasp=95%/0.0118  Pull=95%/0.0048
+  ✓ saved drawer_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 250
+
+Iter  255:  Σrew=120.321  grad=1418.5  [phase1=2.4s bptt=4.6s elapsed=2018s]
+  heads (0/3 clipped)   trunk |g|=344 lim=1500 x1.00
+          reach x1  |g|=    1191 lim=  3000 x1.00   pull_drawer x1  |g|=     651 lim=  1000 x1.00  
+          grasp x1  |g|=     226 lim=  1000 x1.00  
+    drawer_open     rew= 120.321  ph=2  success=20/20 (100%) streak=2  | Reach=90%/0.0142  Grasp=90%/0.0154  Pull=100%/0.0004
+
+Iter  260:  Σrew=117.908  grad=1438.6  [phase1=2.4s bptt=4.7s elapsed=2058s]
+  heads (1/3 clipped)   trunk |g|=160 lim=1500 x1.00
+    pull_drawer x1  |g|=    1361 lim=  1000 x0.73         reach x1  |g|=     362 lim=  3000 x1.00  
+          grasp x1  |g|=     244 lim=  1000 x1.00  
+    drawer_open     rew= 117.908  ph=2  success=17/20 (85%) streak=3  | Reach=90%/0.0141  Grasp=95%/0.0104  Pull=85%/0.0167
+
+Iter  265:  Σrew=126.392  grad=1267.9  [phase1=2.4s bptt=4.7s elapsed=2099s]
+  heads (0/3 clipped)   trunk |g|=281 lim=1500 x1.00
+          reach x1  |g|=    1063 lim=  3000 x1.00   pull_drawer x1  |g|=     588 lim=  1000 x1.00  
+          grasp x1  |g|=     232 lim=  1000 x1.00  
+  ✓ drawer_open     rew= 126.392  ph=2  success=20/20 (100%) streak=4  | Reach=100%/0.0115  Grasp=100%/0.0073  Pull=100%/0.0021
+
+✓ All 1 tasks solved (4 consecutive ≥80%) at iter 265.
+
+Training stopped: all tasks solved after 265 iters, 2104.0s this run
+  ✓ saved drawer_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 265 (final)

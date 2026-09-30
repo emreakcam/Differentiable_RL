@@ -1,71 +1,79 @@
 # Differentiable Reinforcement Learning in Aerial Manipulation
 
-First-order analytic policy gradients (BPTT) through differentiable physics for Franka Emika Panda manipulation tasks, implemented in MuJoCo MJX (JAX).
+First-order analytic policy gradients (BPTT) through differentiable physics for Franka Emika Panda manipulation, implemented in MuJoCo MJX (JAX).
 
-This project trains neural network policies by backpropagating directly through the physics simulator — computing exact analytical gradients of the task reward with respect to policy parameters, rather than estimating them from sampled rollouts (as in PPO). Five manipulation tasks of increasing complexity demonstrate the approach.
-
----
-
-## Tasks
-
-### 1. Cube Stacking
-
-Pick up a cube and stack it on a second cube.
-
-<!-- VIDEO: cube stacking -->
-
-https://github.com/user-attachments/assets/fecb58d7-15a2-46b2-8e5f-d0a4e4d7eb80
-
-5 segments: pre-grasp → descend → grasp → move → release
-Batch: 32 envs with randomized cube positions.
+Policies are trained by backpropagating the task reward directly through the physics simulator — exact analytic gradients of the return with respect to the policy parameters, rather than estimates from sampled rollouts (as in PPO). A single policy serves every task: a **shared trunk** plus one **head per motion primitive** (`reach`, `grasp`, `pull_drawer`, …), so every task that reaches trains the same `reach` head. The policy is trained either from **state** (exact object coordinates from the simulator) or from **vision** (frozen DINOv3 features of a 64×64 wrist-camera image).
 
 ---
 
-### 2. Drawer Opening + Cube Placement
+## Results
 
-Open a drawer, pick up a nearby cube, place it inside, close the drawer.
+Each clip is one evaluation episode of a separately trained checkpoint — click it for the full recording, five episodes sampled one per 20 of the 100 evaluation trials. A **green** frame means the episode met its final segment's criterion, **red** that it did not. In *Reach* and *Pick and place* the translucent sphere is the goal, drawn at the success-threshold radius (3 cm).
 
-<!-- VIDEO: drawer -->
+<table>
+<tr>
+<td align="center" width="50%">
+<a href="videos/reach.mp4"><img src="videos/reach.gif" width="400"></a><br>
+<b>Reach</b> · state<br>
+<code>reach</code> · 35 steps
+</td>
+<td align="center" width="50%">
+<a href="videos/pick_and_place.mp4"><img src="videos/pick_and_place.gif" width="400"></a><br>
+<b>Pick and place</b> · state<br>
+<code>reach → descend → grasp → move</code> · 90 steps
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="videos/cube_stacking.mp4"><img src="videos/cube_stacking.gif" width="400"></a><br>
+<b>Cube stacking</b> · state<br>
+<code>reach → descend → grasp → move → release</code> · 100 steps
+</td>
+<td align="center">
+<a href="videos/container_vision.mp4"><img src="videos/container_vision.gif" width="400"></a><br>
+<b>Container sorting</b> · vision<br>
+<code>3 × (reach → descend → grasp → move → release)</code> · 270 steps
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="videos/drawer_open.mp4"><img src="videos/drawer_open.gif" width="400"></a><br>
+<b>Drawer open</b> · state<br>
+<code>reach → grasp → pull_drawer</code> · 80 steps
+</td>
+<td align="center">
+<a href="videos/drawer_close.mp4"><img src="videos/drawer_close.gif" width="400"></a><br>
+<b>Drawer close</b> · state<br>
+<code>reach → grasp → push_drawer</code> · 80 steps
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="videos/window_open.mp4"><img src="videos/window_open.gif" width="400"></a><br>
+<b>Window open</b> · state<br>
+<code>reach → grasp → slide_open</code> · 80 steps
+</td>
+<td align="center">
+<a href="videos/window_close.mp4"><img src="videos/window_close.gif" width="400"></a><br>
+<b>Window close</b> · state<br>
+<code>reach → grasp → slide_close</code> · 80 steps
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="videos/dial_turn.mp4"><img src="videos/dial_turn.gif" width="400"></a><br>
+<b>Dial turn</b> · state<br>
+<code>reach → descend → grasp → turn</code> · 115 steps
+</td>
+<td align="center">
+<a href="videos/door_open.mp4"><img src="videos/door_open.gif" width="400"></a><br>
+<b>Door open</b> · state<br>
+<code>reach → grasp → swing</code> · 110 steps
+</td>
+</tr>
+</table>
 
-https://github.com/user-attachments/assets/6bead930-2bc3-419a-bdec-5c4d9ea2da66
-
-10 segments: approach handle → grasp → pull → release+lift → above cube → descend → grasp cube → place → re-handle → push closed.
-
----
-
-### 3. Peg Insertion
-
-Pick up a peg from the table and insert it into a tight-clearance slot (5mm per side).
-
-<!-- VIDEO: peg insertion -->
-
-https://github.com/user-attachments/assets/b166cbb2-8637-4b3e-8f0f-1c2a5c02cc4c
-
-7 segments: pre-grasp → descend → grasp → lift → align → insert → release.
-
----
-
-### 4. Container Sorting
-
-Pick up three different objects (ball, cube, prism) and place them into a container, one by one.
-
-<!-- VIDEO: container sorting -->
-
-https://github.com/user-attachments/assets/576896bb-3d5e-4fab-a838-8cd6919e983e
-
-15 segments: 3 objects × (pre-grasp → descend → grasp → move → release).
-
----
-
-### 5. Hinge Cabinet Door Opening
-
-Approach a cabinet handle, grasp it, and swing the door open.
-
-<!-- VIDEO: cabinet door -->
-
-https://github.com/user-attachments/assets/15bb50c7-183b-4193-a118-ef046032110c
-
-4 segments: approach → grasp → pull → release.
+One control step is 0.04 s (4 physics substeps of 10 ms). Every task, its segments, rewards and success criteria are defined in [`configs/tasks_state.yaml`](configs/tasks_state.yaml) (state) and [`configs/tasks.yaml`](configs/tasks.yaml) (vision).
 
 ---
 
@@ -73,37 +81,73 @@ https://github.com/user-attachments/assets/15bb50c7-183b-4193-a118-ef046032110c
 
 ### Backpropagation Through Time (BPTT)
 
-The policy network is a neural network that maps observations to joint velocity commands. The entire rollout — observation → policy → physics step → reward — forms a differentiable computation graph. `jax.grad` computes exact gradients of the cumulative reward with respect to all policy parameters in a single backward pass.
+The policy maps observations to joint velocity commands and a gripper target. The entire rollout — observation → policy → physics step → reward — forms a differentiable computation graph, and `jax.grad` computes exact gradients of the cumulative reward with respect to all policy parameters in a single backward pass.
 
 ```
-obs → MLP → joint velocities → mjx.step → next state → reward
- ↑                                  ↓
- └──────────── jax.lax.scan ────────┘
-                    ↓
-          jax.grad(total_reward) → parameter update
+obs → policy → joint velocities → mjx.step → next state → reward
+ ↑                                    ↓
+ └───────────── jax.lax.scan ─────────┘
+                     ↓
+           jax.grad(total_reward) → parameter update
 ```
 
-### Segmented Training
+### Primitive Policy: Shared Trunk + Per-Primitive Heads
 
-Each task is decomposed into temporal segments, each with its own MLP head and reward function. At segment boundaries, `jax.lax.stop_gradient` cuts the gradient chain and resets the discount factor. This addresses BPTT's core weakness — gradient vanishing/exploding over long horizons — while keeping exact gradients within each segment.
+Each task is a sequence of segments, and each segment is driven by one of 14 primitives:
+`reach, descend, grasp, move, release, align, insert, pull_drawer, push_drawer, push_object, slide_open, slide_close, turn, swing`.
+Heads are keyed by primitive name rather than by segment index, so a head accumulates gradient from every task that uses it.
 
 ```
-[Seg 0: approach]──stop_grad──[Seg 1: grasp]──stop_grad──[Seg 2: move]──...
-    ↑ own MLP                     ↑ own MLP                  ↑ own MLP
-    ↑ own reward                  ↑ own reward                ↑ own reward
+State   obs: 25 proprio + 6 object slots × 3 ──────────────────────────┐
+                                                                        ├→ shared trunk → head[active primitive] → joint velocities + gripper
+Vision  camera 64×64 → DINOv3 (frozen) → projection → spatial softmax ─┤
+        proprio (31) ───────────────────────────────────────────────────┘
 ```
 
-### Progressive Training
+- **Trunk:** 256 hidden units, shared by every task.
+- **Heads:** 2 hidden layers each, width scaled by how many segments use the primitive (16 per segment, at least 32). Output is tanh-scaled joint velocities and a sigmoid finger target.
+- **State observation (43 dims):** end-effector position and velocity, finger width, joint positions and velocities, end-effector orientation, plus six fixed-width object slots (a body/site/mocap position, or `[q, target, target − q]` for an articulated joint). Unused slots are zero, so one trunk and one normaliser serve every task.
+- **Vision observation:** the `robot0_eye_in_hand` camera rendered on the GPU with MJWarp, DINOv3 (`vit_base_patch16_dinov3`, frozen) → 4×4 patch grid of 768-d features → projection to 128 channels → spatial softmax, concatenated with 31-dim proprioception.
 
-Segments are activated incrementally based on convergence criteria. Training starts with only the first two segments active. When the current phase meets its success criterion for `PATIENCE` consecutive evaluations, the next segment is activated. This prevents early segments from receiving noisy gradients through unconverged later segments.
+### Segmented Credit Assignment
+
+At every segment boundary `jax.lax.stop_gradient` cuts the gradient chain and the discount restarts. This addresses BPTT's core weakness — gradients vanishing or exploding over long horizons — while keeping exact gradients within each segment. Each primitive is credited only for its own segment, under its own reward.
+
+```
+[reach]──stop_grad──[grasp]──stop_grad──[pull_drawer]
+   ↑ reach head         ↑ grasp head        ↑ pull_drawer head   (shared across tasks)
+   ↑ own reward         ↑ own reward        ↑ own reward
+```
+
+### Curriculum
+
+Segments unlock one phase at a time: steps past the active horizon are frozen. The next segment unlocks once at least 50% of the batch meets the current segment's criterion for 2 consecutive evaluations. Task success counts only on full-length rollouts, and a run stops once every task holds ≥ 80% success for 4 consecutive evaluations.
+
+### Multi-Task Optimisation
+
+All selected tasks train together: one combined loss, one `value_and_grad`, one backward pass through the shared trunk and every head. Each task keeps its own MJX model, batch and curriculum phase. The trunk gets a global-norm-clipped Adam; each primitive head gets its own optimizer and its own clip.
+
+### Vision: Chunked Rendering
+
+Rendering and DINOv3 run outside JAX, so a vision iteration has two phases. First the episode is rolled forward chunk by chunk (5 steps), rendering once per chunk and caching the features. Then BPTT replays the episode against that cache, which keeps the renderer out of the backward graph.
 
 ### Gradient Checkpointing
 
-`jax.checkpoint` (rematerialization) is applied at two levels — frame steps and physics substeps. During the backward pass, intermediate activations are recomputed on the fly instead of being stored in memory, reducing VRAM usage by approximately 4× at a ~1.5× compute cost. This makes batch sizes of 32 feasible on a 16GB GPU.
+`jax.checkpoint` (rematerialization) is applied at two levels — frame steps and physics substeps. During the backward pass, intermediate activations are recomputed on the fly instead of being stored, reducing VRAM usage by approximately 4× at a ~1.5× compute cost.
 
 ### Observation Normalization
 
-A running mean/variance estimator (`ObsRMS`) normalizes observations online. Statistics are updated each iteration using the full batch of rollout observations returned via `has_aux=True`, avoiding an extra forward pass.
+A running mean/variance estimator normalizes observations online; for state observations a variance floor keeps constant dimensions (e.g. unused object slots) from being blown up. Statistics are updated each iteration from the rollout observations returned via `has_aux=True`, avoiding an extra forward pass.
+
+---
+
+## Baselines and Ablations
+
+- **PPO** ([`ppo_baseline/`](ppo_baseline)): the same state environment, network, reward and curriculum, trained with PPO (rsl_rl) instead of analytic gradients. The network is ported to PyTorch and checked against the JAX original by `verify_policy_match.py`.
+- **Ablations** (vision trainer flags, all run on cube stacking), with checkpoints and learning curves under `train_robosuit/Plots and Checkpoints/`:
+  - `--no-curriculum` — every segment active from iteration 0 (`no-curriculum/`)
+  - `--full-chain` — no gradient cut at segment boundaries; run together with `--no-curriculum`, so it compares against the run above (`full-chain/`)
+  - `--monolithic` — one fully-connected MLP with the primitive as a one-hot input instead of per-primitive heads (`fully-connected-MLP/`)
 
 ---
 
@@ -115,15 +159,11 @@ MJX's constraint solver uses `jax.lax.while_loop`, which does not support revers
 
 ### Mixed Precision
 
-Physics runs in float64 (`jax.config.update("jax_enable_x64", True)`) to avoid NaN gradients in contact resolution. The policy MLP runs in float32 for efficiency. Observations are cast to float32 before entering the network.
-
-### Independent Per-Segment MLPs
-
-Each segment has its own two-layer MLP (32 neurons per layer) rather than sharing a trunk. This was found to outperform shared-trunk architectures because segments require qualitatively different behaviors. `jax.lax.switch` or nested `jnp.where` selects the active head based on the current step index.
+Physics runs in float64 (`jax.config.update("jax_enable_x64", True)`) to avoid NaN gradients in contact resolution. The policy runs in float32 for efficiency. Observations are cast to float32 before entering the network.
 
 ### Shaped Distance Reward
 
-A custom reward shaping function provides smooth gradients at all distances:
+A reward shaping function provides smooth gradients at all distances:
 
 ```python
 def shaped_distance(a, b, s, t):
@@ -133,7 +173,7 @@ def shaped_distance(a, b, s, t):
     return where(dist < t, 1.0, shaped)
 ```
 
-The parameter `s` controls the gradient falloff width, `t` is the "close enough" threshold below which the reward saturates to 1.0.
+The parameter `s` controls the gradient falloff width, `t` is the "close enough" threshold below which the reward saturates to 1.0. The per-primitive rewards in [`rewards/primitive_rewards.py`](rewards/primitive_rewards.py) are built from it.
 
 ### MJX Constraints
 
@@ -152,34 +192,63 @@ The parameter `s` controls the gradient falloff width, `t` is the "close enough"
 ```
 Python 3.10+
 JAX with GPU support
-MuJoCo >= 3.0
-mujoco-mjx
+MuJoCo >= 3.0, with MJX (and MJWarp for vision)
 optax
+PyTorch + timm       (vision: DINOv3 backbone)
+rsl_rl               (PPO baseline)
+ffmpeg               (evaluation recordings)
 ```
 
 ### Training
 
 ```bash
-# Cube stacking
-python train.py --iters 900 --batch 32
+cd train_robosuit
 
-# Drawer + cube (progressive, ~3000 iters)
-python train_drawer.py --iters 3000 --no-viewer
+# State — one task (opens a MuJoCo viewer replaying env 0), or several jointly
+python train_primitives_state.py --tasks drawer_open
+python train_primitives_state.py --tasks all --batch 20 --grad-groups 11
 
-# Peg insertion
-python train_peg.py --iters 3000 --batch 32
+# Vision
+python train_primitives_vision.py --tasks drawer_open
+python train_primitives_vision.py --tasks all --batch 10 --grad-groups 11
 
-# Container sorting (3 objects, 15 segments)
-python train_container.py --iters 3000 --batch 32
+# Tasks retired from the joint sweep train on their own
+python train_primitives_vision.py --tasks container --out-prefix container_vision
 
-# Cabinet door opening
-python train_cabinet.py --iters 2000 --batch 32
-
-# Cabinet door — single segment variant (no stop_gradient)
-python train_cabinet_single.py --batch 16 --grad-clip 800
+# PPO baseline
+python ../ppo_baseline/train_ppo.py --task cube_stacking
 ```
 
-Each script saves trained parameters as a `.pkl` file and a training plot as `.png`.
+Params, observation statistics and learning/gradient plots are saved every 50 iterations and on exit (including Ctrl+C). `--no-viewer` suppresses the viewer.
+
+### Evaluation
+
+```bash
+cd train_robosuit/Eval
+
+python eval_primitives_state.py --tasks drawer_open --run "Drawer open"
+python eval_primitives_vison.py --tasks container \
+    --ckpt-root "../Plots and Checkpoints/hard_tasks" --run vision_container
+```
+
+Each task is evaluated on 100 trials (5 batches of 20) under its own success criterion. A single-task eval opens a MuJoCo viewer that replays env 0 of each batch, and writes the same replays to `eval_<task>.mp4` next to the checkpoint — the videos in this README. `--no-viewer` runs headless (still recording), `--no-record` skips the video.
+
+---
+
+## Repository Layout
+
+```
+configs/          task definitions: robot, primitives, segments, rewards, criteria
+envs/             one environment class per task family (base.py vision, state_base.py state)
+models/           primitive_policy.py (vision), state_policy.py (state), vision_backbone.py (DINOv3)
+rewards/          per-primitive reward functions
+helpers/          MJX solver patch, observation normalisation, XLA settings
+train_robosuit/   trainers; Eval/ (evaluation + recording); Plots and Checkpoints/
+ppo_baseline/     PPO baseline; ppo_runs/ holds its runs
+assets/           MuJoCo XMLs, meshes, textures
+videos/           the evaluation recordings shown above
+old_files/        earlier per-task scripts, superseded
+```
 
 ---
 

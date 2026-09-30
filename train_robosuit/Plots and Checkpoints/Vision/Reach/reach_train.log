@@ -1,0 +1,300 @@
+
+######################################################################
+# run started 2026-09-17 14:07:40
+# train_primitives_vison.py --tasks reach --out-prefix reach
+######################################################################
+======================================================================
+JOINT VISION-PRIMITIVE TRAINING — robosuite
+  Tasks: reach
+  Batch: {'reach': 20}
+  Proprio dim: 31 (shared trunk)
+  Viewer: on
+  Saving to reach_*  every 50 iters
+======================================================================
+
+[1] DINOv3 backbone (shared)...
+  DINOv3: 64x64 → 4x4 patches, dim=768
+
+[2] Shared primitive policy...
+
+  Primitive Policy:
+    Projection: 768 → 128 (1 camera) → spatial softmax → 256
+    Trunk: 287 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 239,038   Heads: 388,400   Total trainable: 627,438
+
+[3] Building task 'reach' (reach env) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_reach.xml
+  ee_site: 3
+  hand_body: 13
+  mocap_idx: 2
+  nq=9, nu=9, nsite=9
+  Steps: 35, Chunks: 7, Chunk size: 5
+  Feature slots: 8, frame_dt: 0.0400s
+
+[2] Creating MJWarp GPU renderer...
+Warp 1.16.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/emre/.cache/warp/1.16.0
+Module mujoco.mjx.third_party.mujoco_warp._src.render_util 97c6606 load on device 'cuda:0' took 0.70 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.io 89aaeca load on device 'cuda:0' took 3.37 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.bvh f2c5137 load on device 'cuda:0' took 0.90 ms  (cached)
+  Camera: robot0_eye_in_hand → cam_id: 5
+  Render context: nworld=20, 64x64
+Module mujoco.mjx.warp.ffi 7a22eb4 load on device 'cuda:0' took 2.46 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.smooth 47158eb load on device 'cuda:0' took 4.23 ms  (cached)
+Module _nxn_broadphase__locals__kernel_3e896ca5 3e896ca load on device 'cuda:0' took 0.62 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 ef3754c load on device 'cuda:0' took 2.05 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 231e976 load on device 'cuda:0' took 1.73 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_caf42918 caf4291 load on device 'cuda:0' took 3.15 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.constraint 36c8060 load on device 'cuda:0' took 0.38 ms  (cached)
+Module _friction_dof__locals__kernel_a6ed3529 a6ed352 load on device 'cuda:0' took 0.59 ms  (cached)
+Module _limit_slide_hinge__locals__kernel_56cb53b3 56cb53b load on device 'cuda:0' took 0.48 ms  (cached)
+Module _efc_contact_init__locals__kernel_0bd15084 0bd1508 load on device 'cuda:0' took 0.52 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_f15eda8d 1ff2125 load on device 'cuda:0' took 0.53 ms  (cached)
+Module _efc_contact_update__locals__kernel_8c34abe6 8c34abe load on device 'cuda:0' took 0.46 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward 81c85c8 load on device 'cuda:0' took 1.10 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.passive efc109c load on device 'cuda:0' took 1.04 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward fc5c4e4 load on device 'cuda:0' took 1.20 ms  (cached)
+Module _qfrc_smooth__locals__kernel_b98573a2 b98573a load on device 'cuda:0' took 0.42 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.support ca784c5 load on device 'cuda:0' took 0.47 ms  (cached)
+Module _tile_cholesky_factorize_solve_block__locals__kernel_8d2c83d3 bb4c15e load on device 'cuda:0' took 32.13 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.solver 4a1f2fb load on device 'cuda:0' took 1.57 ms  (cached)
+Module _solve_init_jaref_kernel__locals__kernel_4fe4ddfc 4fe4ddf load on device 'cuda:0' took 2.60 ms  (cached)
+Module mul_m_kernel__locals___mul_m_dc7994af dc7994a load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_constraint_efc__locals__kernel_34351367 3435136 load on device 'cuda:0' took 0.50 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_626172ab 626172a load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_d22ec30a d22ec30 load on device 'cuda:0' took 0.50 ms  (cached)
+Module _update_gradient_grad__locals__kernel_30531d0a 30531d0 load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_gradient_JTDAJ_dense_tiled__locals__kernel_df0dabf3 cd45c83 load on device 'cuda:0' took 2.17 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_77119fd2 2ba69e6 load on device 'cuda:0' took 36.05 ms  (cached)
+Module _linesearch_iterative_kernel__locals__kernel_fd8c9e1b c7b3998 load on device 'cuda:0' took 0.83 ms  (cached)
+Module _update_constraint_efc__locals__kernel_8791d97d 8791d97 load on device 'cuda:0' took 2.86 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_e7e36618 e7e3661 load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_e3354673 e335467 load on device 'cuda:0' took 0.41 ms  (cached)
+Module _update_gradient_grad__locals__kernel_f92b7b33 f92b7b3 load on device 'cuda:0' took 0.37 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_7c0b1d43 9bc7802 load on device 'cuda:0' took 36.80 ms  (cached)
+Module _solve_zero_search_dot__locals__kernel_a3b7406e a3b7406 load on device 'cuda:0' took 0.47 ms  (cached)
+Module _solve_search_update__locals__kernel_f542f3c2 f542f3c load on device 'cuda:0' took 0.44 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.sensor de892d8 load on device 'cuda:0' took 2.17 ms  (cached)
+    segments [35] → primitives ['reach']
+
+  Task minibatching: off (one update per iteration).
+
+  Active primitives: reach
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+Module render__locals___render_megakernel_b55cbe04 a6579b0 load on device 'cuda:0' took 45.13 ms  (cached)
+  [warmup 2 iters, 1400 samples]  std min=2.673e-04 (dim 28) max=1.692e-01
+  ! dim 28 std=2.673e-04 → normalising amplifies it 3742x; expect a gradient spike. A variance floor in helpers/obs.py would be the actual fix.
+
+Iter    2:  Σrew=-33.643  grad=351.3  [phase1=1.0s bptt=1.7s elapsed=212s]
+  heads (0/1 clipped)   trunk |g|=51 lim=1500 x1.00
+          reach x1  |g|=     348 lim=  3000 x1.00  
+    reach           rew= -33.643  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.6259
+
+Iter    5:  Σrew=-26.630  grad=279.4  [phase1=1.0s bptt=1.7s elapsed=265s]
+  heads (0/1 clipped)   trunk |g|=37 lim=1500 x1.00
+          reach x1  |g|=     277 lim=  3000 x1.00  
+    reach           rew= -26.630  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.5159
+
+Iter   10:  Σrew=-20.033  grad=199.0  [phase1=1.0s bptt=1.7s elapsed=281s]
+  heads (0/1 clipped)   trunk |g|=28 lim=1500 x1.00
+          reach x1  |g|=     197 lim=  3000 x1.00  
+    reach           rew= -20.033  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.4273
+
+Iter   15:  Σrew=-14.977  grad=173.4  [phase1=2.4s bptt=1.7s elapsed=298s]
+  heads (0/1 clipped)   trunk |g|=21 lim=1500 x1.00
+          reach x1  |g|=     172 lim=  3000 x1.00  
+    reach           rew= -14.977  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.3291
+
+Iter   20:  Σrew=-11.760  grad=173.5  [phase1=1.0s bptt=1.7s elapsed=314s]
+  heads (0/1 clipped)   trunk |g|=24 lim=1500 x1.00
+          reach x1  |g|=     172 lim=  3000 x1.00  
+    reach           rew= -11.760  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.2199
+
+Iter   25:  Σrew=-5.349  grad=237.9  [phase1=0.9s bptt=1.7s elapsed=329s]
+  heads (0/1 clipped)   trunk |g|=30 lim=1500 x1.00
+          reach x1  |g|=     236 lim=  3000 x1.00  
+    reach           rew=  -5.349  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1153
+
+Iter   30:  Σrew=-4.453  grad=207.3  [phase1=1.0s bptt=1.7s elapsed=345s]
+  heads (0/1 clipped)   trunk |g|=26 lim=1500 x1.00
+          reach x1  |g|=     206 lim=  3000 x1.00  
+    reach           rew=  -4.453  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1335
+
+Iter   35:  Σrew=-5.541  grad=247.9  [phase1=0.9s bptt=1.7s elapsed=360s]
+  heads (0/1 clipped)   trunk |g|=25 lim=1500 x1.00
+          reach x1  |g|=     247 lim=  3000 x1.00  
+    reach           rew=  -5.541  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1136
+
+Iter   40:  Σrew=-3.512  grad=296.8  [phase1=0.9s bptt=1.7s elapsed=377s]
+  heads (0/1 clipped)   trunk |g|=34 lim=1500 x1.00
+          reach x1  |g|=     295 lim=  3000 x1.00  
+    reach           rew=  -3.512  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1127
+
+Iter   45:  Σrew=-2.691  grad=343.3  [phase1=0.9s bptt=1.7s elapsed=393s]
+  heads (0/1 clipped)   trunk |g|=42 lim=1500 x1.00
+          reach x1  |g|=     341 lim=  3000 x1.00  
+    reach           rew=  -2.691  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.1044
+
+Iter   50:  Σrew=-2.541  grad=691.1  [phase1=1.0s bptt=1.7s elapsed=409s]
+  heads (0/1 clipped)   trunk |g|=71 lim=1500 x1.00
+          reach x1  |g|=     687 lim=  3000 x1.00  
+    reach           rew=  -2.541  ph=0  success=1/20 (5%) streak=0  | Reach=5%/0.1151
+  ✓ saved reach_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 50
+
+Iter   55:  Σrew=-2.286  grad=140.0  [phase1=0.9s bptt=1.7s elapsed=426s]
+  heads (0/1 clipped)   trunk |g|=31 lim=1500 x1.00
+          reach x1  |g|=     137 lim=  3000 x1.00  
+    reach           rew=  -2.286  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0961
+
+Iter   60:  Σrew=-1.155  grad=568.4  [phase1=1.0s bptt=1.7s elapsed=442s]
+  heads (0/1 clipped)   trunk |g|=63 lim=1500 x1.00
+          reach x1  |g|=     565 lim=  3000 x1.00  
+    reach           rew=  -1.155  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0841
+
+Iter   65:  Σrew=-0.286  grad=927.8  [phase1=1.0s bptt=1.7s elapsed=457s]
+  heads (0/1 clipped)   trunk |g|=118 lim=1500 x1.00
+          reach x1  |g|=     920 lim=  3000 x1.00  
+    reach           rew=  -0.286  ph=0  success=1/20 (5%) streak=0  | Reach=5%/0.0715
+
+Iter   70:  Σrew=-1.241  grad=1035.6  [phase1=2.6s bptt=1.7s elapsed=475s]
+  heads (0/1 clipped)   trunk |g|=123 lim=1500 x1.00
+          reach x1  |g|=    1028 lim=  3000 x1.00  
+    reach           rew=  -1.241  ph=0  success=0/20 (0%) streak=0  | Reach=0%/0.0971
+
+Iter   75:  Σrew=-0.938  grad=869.6  [phase1=0.9s bptt=1.7s elapsed=490s]
+  heads (0/1 clipped)   trunk |g|=133 lim=1500 x1.00
+          reach x1  |g|=     859 lim=  3000 x1.00  
+    reach           rew=  -0.938  ph=0  success=2/20 (10%) streak=0  | Reach=10%/0.0915
+
+Iter   80:  Σrew=-0.243  grad=1488.8  [phase1=0.9s bptt=1.7s elapsed=506s]
+  heads (0/1 clipped)   trunk |g|=220 lim=1500 x1.00
+          reach x1  |g|=    1472 lim=  3000 x1.00  
+    reach           rew=  -0.243  ph=0  success=4/20 (20%) streak=0  | Reach=20%/0.0653
+
+Iter   85:  Σrew=0.493  grad=385.8  [phase1=0.9s bptt=1.7s elapsed=521s]
+  heads (0/1 clipped)   trunk |g|=74 lim=1500 x1.00
+          reach x1  |g|=     379 lim=  3000 x1.00  
+    reach           rew=   0.493  ph=0  success=4/20 (20%) streak=0  | Reach=20%/0.0553
+
+Iter   90:  Σrew=0.910  grad=683.0  [phase1=1.0s bptt=1.7s elapsed=537s]
+  heads (0/1 clipped)   trunk |g|=101 lim=1500 x1.00
+          reach x1  |g|=     676 lim=  3000 x1.00  
+    reach           rew=   0.910  ph=0  success=2/20 (10%) streak=0  | Reach=10%/0.0529
+
+Iter   95:  Σrew=5.317  grad=848.2  [phase1=0.9s bptt=1.7s elapsed=554s]
+  heads (0/1 clipped)   trunk |g|=112 lim=1500 x1.00
+          reach x1  |g|=     841 lim=  3000 x1.00  
+    reach           rew=   5.317  ph=0  success=11/20 (55%) streak=0  | Reach=55%/0.0334
+
+Iter  100:  Σrew=1.630  grad=999.0  [phase1=1.0s bptt=1.7s elapsed=570s]
+  heads (0/1 clipped)   trunk |g|=136 lim=1500 x1.00
+          reach x1  |g|=     990 lim=  3000 x1.00  
+    reach           rew=   1.630  ph=0  success=2/20 (10%) streak=0  | Reach=10%/0.0562
+  ✓ saved reach_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 100
+
+Iter  105:  Σrew=4.442  grad=1319.9  [phase1=1.0s bptt=1.7s elapsed=587s]
+  heads (0/1 clipped)   trunk |g|=214 lim=1500 x1.00
+          reach x1  |g|=    1302 lim=  3000 x1.00  
+    reach           rew=   4.442  ph=0  success=10/20 (50%) streak=0  | Reach=50%/0.0315
+
+Iter  110:  Σrew=5.522  grad=1449.7  [phase1=0.9s bptt=1.7s elapsed=603s]
+  heads (0/1 clipped)   trunk |g|=237 lim=1500 x1.00
+          reach x1  |g|=    1430 lim=  3000 x1.00  
+    reach           rew=   5.522  ph=0  success=11/20 (55%) streak=0  | Reach=55%/0.0280
+
+Iter  115:  Σrew=6.307  grad=1126.9  [phase1=0.9s bptt=1.7s elapsed=618s]
+  heads (0/1 clipped)   trunk |g|=174 lim=1500 x1.00
+          reach x1  |g|=    1113 lim=  3000 x1.00  
+    reach           rew=   6.307  ph=0  success=7/20 (35%) streak=0  | Reach=35%/0.0331
+
+Iter  120:  Σrew=5.312  grad=1319.0  [phase1=0.9s bptt=1.7s elapsed=634s]
+  heads (0/1 clipped)   trunk |g|=200 lim=1500 x1.00
+          reach x1  |g|=    1304 lim=  3000 x1.00  
+    reach           rew=   5.312  ph=0  success=5/20 (25%) streak=0  | Reach=25%/0.0426
+
+Iter  125:  Σrew=4.890  grad=2045.7  [phase1=0.9s bptt=1.7s elapsed=651s]
+  heads (0/1 clipped)   trunk |g|=348 lim=1500 x1.00
+          reach x1  |g|=    2016 lim=  3000 x1.00  
+    reach           rew=   4.890  ph=0  success=13/20 (65%) streak=0  | Reach=65%/0.0286
+
+Iter  130:  Σrew=8.927  grad=1212.7  [phase1=1.0s bptt=1.7s elapsed=667s]
+  heads (0/1 clipped)   trunk |g|=214 lim=1500 x1.00
+          reach x1  |g|=    1194 lim=  3000 x1.00  
+    reach           rew=   8.927  ph=0  success=13/20 (65%) streak=0  | Reach=65%/0.0266
+
+Iter  135:  Σrew=6.453  grad=1772.9  [phase1=0.9s bptt=1.7s elapsed=682s]
+  heads (0/1 clipped)   trunk |g|=271 lim=1500 x1.00
+          reach x1  |g|=    1752 lim=  3000 x1.00  
+    reach           rew=   6.453  ph=0  success=13/20 (65%) streak=0  | Reach=65%/0.0250
+
+Iter  140:  Σrew=9.461  grad=1659.1  [phase1=0.9s bptt=1.7s elapsed=698s]
+  heads (0/1 clipped)   trunk |g|=352 lim=1500 x1.00
+          reach x1  |g|=    1621 lim=  3000 x1.00  
+    reach           rew=   9.461  ph=0  success=18/20 (90%) streak=1  | Reach=90%/0.0215
+
+Iter  145:  Σrew=6.563  grad=1594.3  [phase1=0.9s bptt=1.7s elapsed=715s]
+  heads (0/1 clipped)   trunk |g|=306 lim=1500 x1.00
+          reach x1  |g|=    1565 lim=  3000 x1.00  
+    reach           rew=   6.563  ph=0  success=13/20 (65%) streak=0  | Reach=65%/0.0290
+
+Iter  150:  Σrew=10.244  grad=1804.1  [phase1=1.0s bptt=1.7s elapsed=731s]
+  heads (0/1 clipped)   trunk |g|=318 lim=1500 x1.00
+          reach x1  |g|=    1776 lim=  3000 x1.00  
+    reach           rew=  10.244  ph=0  success=8/20 (40%) streak=0  | Reach=40%/0.0336
+  ✓ saved reach_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 150
+
+Iter  155:  Σrew=13.123  grad=1317.2  [phase1=1.0s bptt=1.7s elapsed=748s]
+  heads (0/1 clipped)   trunk |g|=263 lim=1500 x1.00
+          reach x1  |g|=    1291 lim=  3000 x1.00  
+    reach           rew=  13.123  ph=0  success=15/20 (75%) streak=0  | Reach=75%/0.0255
+
+Iter  160:  Σrew=12.012  grad=1500.5  [phase1=1.0s bptt=1.7s elapsed=764s]
+  heads (0/1 clipped)   trunk |g|=301 lim=1500 x1.00
+          reach x1  |g|=    1470 lim=  3000 x1.00  
+    reach           rew=  12.012  ph=0  success=19/20 (95%) streak=1  | Reach=95%/0.0212
+
+Iter  165:  Σrew=12.408  grad=1861.0  [phase1=0.9s bptt=1.7s elapsed=779s]
+  heads (0/1 clipped)   trunk |g|=372 lim=1500 x1.00
+          reach x1  |g|=    1823 lim=  3000 x1.00  
+    reach           rew=  12.408  ph=0  success=18/20 (90%) streak=2  | Reach=90%/0.0170
+
+Iter  170:  Σrew=13.459  grad=1535.4  [phase1=0.9s bptt=1.7s elapsed=795s]
+  heads (0/1 clipped)   trunk |g|=290 lim=1500 x1.00
+          reach x1  |g|=    1508 lim=  3000 x1.00  
+    reach           rew=  13.459  ph=0  success=17/20 (85%) streak=3  | Reach=85%/0.0167
+
+Iter  175:  Σrew=13.125  grad=1668.8  [phase1=1.0s bptt=1.7s elapsed=812s]
+  heads (0/1 clipped)   trunk |g|=324 lim=1500 x1.00
+          reach x1  |g|=    1637 lim=  3000 x1.00  
+  ✓ reach           rew=  13.125  ph=0  success=19/20 (95%) streak=4  | Reach=95%/0.0209
+
+✓ All 1 tasks solved (4 consecutive ≥80%) at iter 175.
+
+Training stopped: all tasks solved after 175 iters, 814.1s this run
+  ✓ saved reach_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 175 (final)

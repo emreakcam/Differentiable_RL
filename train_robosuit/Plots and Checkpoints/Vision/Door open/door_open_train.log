@@ -1,0 +1,286 @@
+
+######################################################################
+# run started 2026-09-17 17:40:05
+# train_primitives_vison.py --tasks door_open --out-prefix door_open
+######################################################################
+======================================================================
+JOINT VISION-PRIMITIVE TRAINING — robosuite
+  Tasks: door_open
+  Batch: {'door_open': 20}
+  Proprio dim: 31 (shared trunk)
+  Viewer: on
+  Saving to door_open_*  every 50 iters
+======================================================================
+
+[1] DINOv3 backbone (shared)...
+  DINOv3: 64x64 → 4x4 patches, dim=768
+
+[2] Shared primitive policy...
+
+  Primitive Policy:
+    Projection: 768 → 128 (1 camera) → spatial softmax → 256
+    Trunk: 287 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 239,038   Heads: 388,400   Total trainable: 627,438
+
+[3] Building task 'door_open' (articulated env) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_door.xml
+  ee_site: 3
+  hand_body: 13
+  handle_site: 8
+  joint_qpos_idx: 9
+  nq=10, nu=9, nsite=9
+  Steps: 110, Chunks: 22, Chunk size: 5
+  Feature slots: 23, frame_dt: 0.0400s
+
+[2] Creating MJWarp GPU renderer...
+Warp 1.16.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/emre/.cache/warp/1.16.0
+Module mujoco.mjx.third_party.mujoco_warp._src.render_util 97c6606 load on device 'cuda:0' took 2.44 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.io 89aaeca load on device 'cuda:0' took 3.37 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.bvh f2c5137 load on device 'cuda:0' took 0.87 ms  (cached)
+  Camera: robot0_eye_in_hand → cam_id: 5
+  Render context: nworld=20, 64x64
+Module mujoco.mjx.warp.ffi 7a22eb4 load on device 'cuda:0' took 0.59 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.smooth 47158eb load on device 'cuda:0' took 4.02 ms  (cached)
+Module _nxn_broadphase__locals__kernel_3e896ca5 3e896ca load on device 'cuda:0' took 0.48 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 ef3754c load on device 'cuda:0' took 1.61 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 231e976 load on device 'cuda:0' took 2.00 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_7427b724 7427b72 load on device 'cuda:0' took 2.84 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.constraint 36c8060 load on device 'cuda:0' took 0.35 ms  (cached)
+Module _friction_dof__locals__kernel_a6ed3529 a6ed352 load on device 'cuda:0' took 0.51 ms  (cached)
+Module _limit_slide_hinge__locals__kernel_56cb53b3 56cb53b load on device 'cuda:0' took 0.71 ms  (cached)
+Module _efc_contact_init__locals__kernel_0bd15084 0bd1508 load on device 'cuda:0' took 0.58 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_f15eda8d 1ff2125 load on device 'cuda:0' took 0.53 ms  (cached)
+Module _efc_contact_update__locals__kernel_8c34abe6 8c34abe load on device 'cuda:0' took 0.64 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward 81c85c8 load on device 'cuda:0' took 1.26 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.passive efc109c load on device 'cuda:0' took 2.13 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward fc5c4e4 load on device 'cuda:0' took 1.07 ms  (cached)
+Module _qfrc_smooth__locals__kernel_b98573a2 b98573a load on device 'cuda:0' took 0.40 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.support ca784c5 load on device 'cuda:0' took 0.52 ms  (cached)
+Module _tile_cholesky_factorize_solve_block__locals__kernel_8d2c83d3 bb4c15e load on device 'cuda:0' took 27.04 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.solver 4a1f2fb load on device 'cuda:0' took 1.57 ms  (cached)
+Module _solve_init_jaref_kernel__locals__kernel_2818534b 2818534 load on device 'cuda:0' took 1.90 ms  (cached)
+Module mul_m_kernel__locals___mul_m_dc7994af dc7994a load on device 'cuda:0' took 0.46 ms  (cached)
+Module _update_constraint_efc__locals__kernel_34351367 3435136 load on device 'cuda:0' took 0.50 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_626172ab 626172a load on device 'cuda:0' took 0.40 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_d22ec30a d22ec30 load on device 'cuda:0' took 0.32 ms  (cached)
+Module _update_gradient_grad__locals__kernel_30531d0a 30531d0 load on device 'cuda:0' took 0.31 ms  (cached)
+Module _update_gradient_JTDAJ_dense_tiled__locals__kernel_688e8ced ac20d88 load on device 'cuda:0' took 0.75 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_31aec00c a48e6c9 load on device 'cuda:0' took 28.28 ms  (cached)
+Module _linesearch_iterative_kernel__locals__kernel_fd8c9e1b c7b3998 load on device 'cuda:0' took 0.77 ms  (cached)
+Module _update_constraint_efc__locals__kernel_8791d97d 8791d97 load on device 'cuda:0' took 0.73 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_e7e36618 e7e3661 load on device 'cuda:0' took 0.43 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_e3354673 e335467 load on device 'cuda:0' took 0.31 ms  (cached)
+Module _update_gradient_grad__locals__kernel_f92b7b33 f92b7b3 load on device 'cuda:0' took 0.45 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_3d2c3cb7 3d6531e load on device 'cuda:0' took 28.83 ms  (cached)
+Module _solve_zero_search_dot__locals__kernel_a3b7406e a3b7406 load on device 'cuda:0' took 0.66 ms  (cached)
+Module _solve_search_update__locals__kernel_f542f3c2 f542f3c load on device 'cuda:0' took 0.87 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.sensor de892d8 load on device 'cuda:0' took 2.15 ms  (cached)
+    segments [35, 10, 65] → primitives ['reach', 'grasp', 'swing']
+
+  Task minibatching: off (one update per iteration).
+
+  Active primitives: reach, grasp, swing
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+Module render__locals___render_megakernel_0c616e8d cf68ab5 load on device 'cuda:0' took 0.88 ms  (cached)
+  [warmup 2 iters, 4400 samples]  std min=1.508e-04 (dim 25) max=2.283e-01
+  ! dim 25 std=1.508e-04 → normalising amplifies it 6633x; expect a gradient spike. A variance floor in helpers/obs.py would be the actual fix.
+
+Iter    2:  Σrew=-32.060  grad=489.5  [phase1=1.4s bptt=2.5s elapsed=250s]
+  heads (0/3 clipped)   trunk |g|=73 lim=1500 x1.00
+          reach x1  |g|=     484 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew= -32.060  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5782  Grasp=0%/0.5652  Swing=0%/0.6428
+
+Iter    5:  Σrew=-20.547  grad=276.3  [phase1=1.2s bptt=2.5s elapsed=305s]
+  heads (0/3 clipped)   trunk |g|=42 lim=1500 x1.00
+          reach x1  |g|=     273 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew= -20.547  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3988  Grasp=0%/0.3849  Swing=0%/0.6549
+
+Iter   10:  Σrew=-13.054  grad=210.7  [phase1=1.2s bptt=2.5s elapsed=326s]
+  heads (0/3 clipped)   trunk |g|=28 lim=1500 x1.00
+          reach x1  |g|=     209 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew= -13.054  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.2818  Grasp=0%/0.2549  Swing=0%/0.6513
+
+Iter   15:  Σrew=-8.302  grad=148.3  [phase1=1.2s bptt=2.5s elapsed=348s]
+  heads (0/3 clipped)   trunk |g|=20 lim=1500 x1.00
+          reach x1  |g|=     147 lim=  3000 x1.00         grasp x1  |g|=       1 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  -8.302  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1811  Grasp=0%/0.1509  Swing=0%/0.6487
+
+Iter   20:  Σrew=-2.348  grad=878.1  [phase1=1.2s bptt=2.5s elapsed=369s]
+  heads (0/3 clipped)   trunk |g|=111 lim=1500 x1.00
+          reach x1  |g|=     870 lim=  3000 x1.00         grasp x1  |g|=      49 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  -2.348  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.0669  Grasp=0%/0.1034  Swing=0%/0.6169
+
+Iter   25:  Σrew=0.303  grad=663.8  [phase1=1.2s bptt=2.5s elapsed=391s]
+  heads (0/3 clipped)   trunk |g|=78 lim=1500 x1.00
+          reach x1  |g|=     658 lim=  3000 x1.00         grasp x1  |g|=      32 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   0.303  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1134  Grasp=0%/0.1359  Swing=0%/0.5955
+
+Iter   30:  Σrew=1.273  grad=472.6  [phase1=1.2s bptt=2.4s elapsed=414s]
+  heads (0/3 clipped)   trunk |g|=62 lim=1500 x1.00
+          reach x1  |g|=     468 lim=  3000 x1.00         grasp x1  |g|=       7 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   1.273  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.0880  Grasp=0%/0.1519  Swing=0%/0.5945
+
+Iter   35:  Σrew=5.679  grad=561.1  [phase1=1.2s bptt=2.4s elapsed=435s]
+  heads (0/3 clipped)   trunk |g|=81 lim=1500 x1.00
+          reach x1  |g|=     546 lim=  3000 x1.00         grasp x1  |g|=     101 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   5.679  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=35%/0.0438  Grasp=25%/0.0528  Swing=0%/0.6709
+
+Iter   40:  Σrew=1.462  grad=749.7  [phase1=1.2s bptt=2.4s elapsed=457s]
+  heads (0/3 clipped)   trunk |g|=94 lim=1500 x1.00
+          reach x1  |g|=     743 lim=  3000 x1.00         grasp x1  |g|=      35 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   1.462  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.0944  Grasp=10%/0.0939  Swing=0%/0.6522
+
+Iter   45:  Σrew=5.603  grad=705.8  [phase1=1.3s bptt=2.4s elapsed=478s]
+  heads (0/3 clipped)   trunk |g|=113 lim=1500 x1.00
+          reach x1  |g|=     692 lim=  3000 x1.00         grasp x1  |g|=      79 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   5.603  ph=0  success=2/20 (10%) (partial) streak=0  | Reach=15%/0.0746  Grasp=0%/0.1270  Swing=10%/0.5511
+
+Iter   50:  Σrew=7.908  grad=1718.7  [phase1=3.0s bptt=2.5s elapsed=502s]
+  heads (0/3 clipped)   trunk |g|=255 lim=1500 x1.00
+          reach x1  |g|=    1698 lim=  3000 x1.00         grasp x1  |g|=      79 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   7.908  ph=0  success=1/20 (5%) (partial) streak=0  | Reach=0%/0.0829  Grasp=10%/0.1136  Swing=5%/0.5179
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 50
+
+Iter   55:  Σrew=7.771  grad=1209.9  [phase1=1.2s bptt=2.5s elapsed=525s]
+  heads (0/3 clipped)   trunk |g|=200 lim=1500 x1.00
+          reach x1  |g|=    1184 lim=  3000 x1.00         grasp x1  |g|=     148 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=   7.771  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0376  Grasp=35%/0.0478  Swing=0%/0.6406
+
+Iter   60:  Σrew=14.942  grad=1286.9  [phase1=1.2s bptt=2.5s elapsed=547s]
+  heads (0/3 clipped)   trunk |g|=203 lim=1500 x1.00
+          reach x1  |g|=    1260 lim=  3000 x1.00         grasp x1  |g|=     166 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  14.942  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=40%/0.0432  Grasp=25%/0.0600  Swing=0%/0.5900
+
+Iter   65:  Σrew=11.835  grad=631.3  [phase1=1.2s bptt=2.5s elapsed=568s]
+  heads (0/3 clipped)   trunk |g|=108 lim=1500 x1.00
+          reach x1  |g|=     620 lim=  3000 x1.00         grasp x1  |g|=      56 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  11.835  ph=0  success=1/20 (5%) (partial) streak=0  | Reach=30%/0.0450  Grasp=15%/0.0746  Swing=5%/0.5830
+
+Iter   70:  Σrew=15.931  grad=963.4  [phase1=1.2s bptt=2.5s elapsed=590s]
+  heads (0/3 clipped)   trunk |g|=174 lim=1500 x1.00
+          reach x1  |g|=     933 lim=  3000 x1.00         grasp x1  |g|=     166 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  15.931  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=50%/0.0378  Grasp=10%/0.0588  Swing=0%/0.6901
+
+Iter   75:  Σrew=24.682  grad=1007.6  [phase1=1.3s bptt=2.5s elapsed=613s]
+  heads (0/3 clipped)   trunk |g|=266 lim=1500 x1.00
+          reach x1  |g|=     965 lim=  3000 x1.00         grasp x1  |g|=     111 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  24.682  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=40%/0.0369  Grasp=50%/0.0421  Swing=0%/0.6132
+
+Iter   80:  Σrew=15.736  grad=1336.5  [phase1=1.2s bptt=2.5s elapsed=635s]
+  heads (0/3 clipped)   trunk |g|=202 lim=1500 x1.00
+          reach x1  |g|=    1314 lim=  3000 x1.00         grasp x1  |g|=     139 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  15.736  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0331  Grasp=65%/0.0229  Swing=0%/0.6215
+
+Iter   85:  Σrew=23.773  grad=873.6  [phase1=1.3s bptt=2.5s elapsed=656s]
+  heads (0/3 clipped)   trunk |g|=167 lim=1500 x1.00
+          reach x1  |g|=     829 lim=  3000 x1.00         grasp x1  |g|=     219 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  23.773  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0275  Grasp=60%/0.0312  Swing=0%/0.5978
+
+Iter   90:  Σrew=19.841  grad=918.3  [phase1=1.2s bptt=2.5s elapsed=678s]
+  heads (0/3 clipped)   trunk |g|=184 lim=1500 x1.00
+          reach x1  |g|=     886 lim=  3000 x1.00         grasp x1  |g|=     155 lim=  1000 x1.00  
+          swing x1  |g|=       0 lim=  2000 x1.00  
+    door_open       rew=  19.841  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=60%/0.0261  Grasp=30%/0.0352  Swing=0%/0.6652
+    ──→ door_open: phase 1, active=110
+
+⚠ iter 94: non-finite grads — update skipped (1 in a row, 1 total). Weights and ObsRMS left untouched.
+
+Iter   95:  Σrew=43.241  grad=2314.0  [phase1=4.7s bptt=5.8s elapsed=726s]
+  heads (1/3 clipped)   trunk |g|=358 lim=1500 x1.00
+          swing x1  |g|=    2032 lim=  2000 x0.98         reach x1  |g|=    1030 lim=  3000 x1.00  
+          grasp x1  |g|=     186 lim=  1000 x1.00  
+    door_open       rew=  43.241  ph=1  success=2/20 (10%) streak=0  | Reach=80%/0.0246  Grasp=70%/0.0391  Swing=10%/0.4087
+
+Iter  100:  Σrew=70.425  grad=7438.6  [phase1=2.8s bptt=5.8s elapsed=776s]
+  heads (1/3 clipped)   trunk |g|=1674 lim=1500 x0.90
+          swing x1  |g|=    7176 lim=  2000 x0.28         reach x1  |g|=    1006 lim=  3000 x1.00  
+          grasp x1  |g|=     134 lim=  1000 x1.00  
+    door_open       rew=  70.425  ph=1  success=1/20 (5%) streak=0  | Reach=80%/0.0241  Grasp=85%/0.0192  Swing=5%/0.3941
+    ──→ door_open: phase 2, active=110
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 100
+
+Iter  105:  Σrew=72.272  grad=2883.9  [phase1=2.9s bptt=5.8s elapsed=828s]
+  heads (1/3 clipped)   trunk |g|=398 lim=1500 x1.00
+          swing x1  |g|=    2632 lim=  2000 x0.76         reach x1  |g|=    1103 lim=  3000 x1.00  
+          grasp x1  |g|=     121 lim=  1000 x1.00  
+    door_open       rew=  72.272  ph=2  success=4/20 (20%) streak=0  | Reach=100%/0.0146  Grasp=85%/0.0237  Swing=20%/0.2073
+
+Iter  110:  Σrew=102.232  grad=915.3  [phase1=2.8s bptt=5.8s elapsed=878s]
+  heads (0/3 clipped)   trunk |g|=244 lim=1500 x1.00
+          swing x1  |g|=     697 lim=  2000 x1.00         reach x1  |g|=     525 lim=  3000 x1.00  
+          grasp x1  |g|=     132 lim=  1000 x1.00  
+    door_open       rew= 102.232  ph=2  success=1/20 (5%) streak=0  | Reach=80%/0.0259  Grasp=85%/0.0228  Swing=5%/0.2681
+
+Iter  115:  Σrew=119.420  grad=3690.7  [phase1=2.8s bptt=5.8s elapsed=929s]
+  heads (1/3 clipped)   trunk |g|=599 lim=1500 x1.00
+          reach x1  |g|=    2931 lim=  3000 x1.00         swing x1  |g|=    2158 lim=  2000 x0.93  
+          grasp x1  |g|=     122 lim=  1000 x1.00  
+    door_open       rew= 119.420  ph=2  success=16/20 (80%) streak=1  | Reach=75%/0.0271  Grasp=80%/0.0229  Swing=80%/0.1323
+
+Iter  120:  Σrew=133.248  grad=4186.6  [phase1=2.7s bptt=5.8s elapsed=980s]
+  heads (1/3 clipped)   trunk |g|=574 lim=1500 x1.00
+          reach x1  |g|=    3624 lim=  3000 x0.83         swing x1  |g|=    1982 lim=  2000 x1.00  
+          grasp x1  |g|=     368 lim=  1000 x1.00  
+    door_open       rew= 133.248  ph=2  success=19/20 (95%) streak=2  | Reach=75%/0.0268  Grasp=50%/0.0347  Swing=95%/0.0225
+
+Iter  125:  Σrew=140.487  grad=1409.9  [phase1=2.8s bptt=5.8s elapsed=1031s]
+  heads (0/3 clipped)   trunk |g|=253 lim=1500 x1.00
+          reach x1  |g|=     981 lim=  3000 x1.00         swing x1  |g|=     933 lim=  2000 x1.00  
+          grasp x1  |g|=     299 lim=  1000 x1.00  
+    door_open       rew= 140.487  ph=2  success=20/20 (100%) streak=3  | Reach=100%/0.0154  Grasp=100%/0.0145  Swing=100%/0.0047
+
+Iter  130:  Σrew=132.410  grad=2580.4  [phase1=2.7s bptt=5.8s elapsed=1081s]
+  heads (0/3 clipped)   trunk |g|=337 lim=1500 x1.00
+          reach x1  |g|=    1814 lim=  3000 x1.00         swing x1  |g|=    1798 lim=  2000 x1.00  
+          grasp x1  |g|=     143 lim=  1000 x1.00  
+  ✓ door_open       rew= 132.410  ph=2  success=19/20 (95%) streak=4  | Reach=95%/0.0183  Grasp=95%/0.0149  Swing=95%/0.0236
+
+✓ All 1 tasks solved (4 consecutive ≥80%) at iter 130.
+
+Training stopped: all tasks solved after 130 iters, 1087.8s this run  (1 non-finite iterations skipped)
+  ✓ saved door_open_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 130 (final)

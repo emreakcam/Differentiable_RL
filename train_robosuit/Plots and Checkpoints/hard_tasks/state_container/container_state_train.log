@@ -1,0 +1,1499 @@
+
+######################################################################
+# run started 2026-09-25 01:22:30
+# train_primitives_state.py --tasks container --out-prefix container_state
+######################################################################
+======================================================================
+JOINT STATE-PRIMITIVE TRAINING — robosuite (no vision)
+  Tasks: container
+  Batch: {'container': 20}
+  Obs dim: 43 (shared trunk) — 25 proprio + 6x3 object slots
+  Viewer: on
+  Saving to container_state_*  every 50 iters
+======================================================================
+
+[1] Shared state policy...
+
+  State Policy:
+    Observation: 43 (no projection, no spatial softmax)
+    Trunk: 43 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 77,142   Heads: 388,400   Total trainable: 465,542
+
+[2] Building task 'container' (container env, state obs) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_container.xml
+  ee_site: 3
+  hand_body: 13
+  container: 8
+  ball: 27
+  prism: 28
+  cube: 26
+  slot0 (body ball): 27
+  slot1 (body prism): 28
+  slot2 (body cube): 26
+  slot3 (site container_inside): 8
+  nq=30, nu=9, nsite=9
+  Steps: 270, Chunks: 54, Chunk size: 5
+  Feature slots: 55, frame_dt: 0.0400s
+  obs dim: 43 = 25 proprio + 4/6 slots x 3
+    segments [25, 20, 10, 25, 10, 25, 20, 10, 25, 10, 25, 20, 10, 25, 10] → primitives ['reach', 'descend', 'grasp', 'move', 'release', 'reach', 'descend', 'grasp', 'move', 'release', 'reach', 'descend', 'grasp', 'move', 'release']
+    slots: body:ball, body:prism, body:cube, site:container_inside
+
+  Active primitives: reach, descend, grasp, move, release
+  Head LR: 2.0e-04
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+  [warmup 2 iters, 10800 samples]  std min=1.000e-02 max=3.571e-01
+  variance floor (0.0001) binding on 13/43 dims: [6, 27, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+
+Iter    2:  Σrew=-45.530  grad=320.1  [reset=0.0s bptt=3.4s elapsed=68s]
+  heads (0/5 clipped)   trunk |g|=30 lim=1500 x1.00
+          reach x3  |g|=     284 lim=  3000 x1.00       descend x3  |g|=     146 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew= -45.530  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=0%/0.4318  B-Desc=0%/0.6182  B-Grasp=0%/0.6182  B-Move=0%/0.2602  B-Rel=100%/0.2146  P-Reach=0%/0.6836  P-Desc=0%/0.7549  P-Grasp=0%/0.7549  P-Move=0%/0.2697  P-Rel=100%/0.2203  C-Reach=0%/0.6622  C-Desc=0%/0.7358  C-Grasp=0%/0.7358  C-Move=0%/0.2727  C-Rel=100%/0.2237
+
+Iter    5:  Σrew=-29.602  grad=169.4  [reset=0.0s bptt=3.4s elapsed=100s]
+  heads (0/5 clipped)   trunk |g|=18 lim=1500 x1.00
+          reach x3  |g|=     156 lim=  3000 x1.00       descend x3  |g|=      63 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew= -29.602  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=0%/0.3640  B-Desc=0%/0.4631  B-Grasp=0%/0.4631  B-Move=0%/0.2652  B-Rel=100%/0.2205  P-Reach=0%/0.6520  P-Desc=0%/0.6825  P-Grasp=0%/0.6825  P-Move=0%/0.2772  P-Rel=100%/0.2296  C-Reach=0%/0.5691  C-Desc=0%/0.6038  C-Grasp=0%/0.6038  C-Move=0%/0.2715  C-Rel=100%/0.2223
+
+Iter   10:  Σrew=-24.871  grad=136.1  [reset=0.0s bptt=3.4s elapsed=131s]
+  heads (0/5 clipped)   trunk |g|=16 lim=1500 x1.00
+          reach x3  |g|=     119 lim=  3000 x1.00       descend x3  |g|=      64 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew= -24.871  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=0%/0.3752  B-Desc=0%/0.3917  B-Grasp=0%/0.3917  B-Move=0%/0.2637  B-Rel=100%/0.2187  P-Reach=0%/0.5828  P-Desc=0%/0.5992  P-Grasp=0%/0.5992  P-Move=0%/0.2710  P-Rel=100%/0.2221  C-Reach=0%/0.4835  C-Desc=0%/0.5033  C-Grasp=0%/0.5033  C-Move=0%/0.2722  C-Rel=100%/0.2231
+
+Iter   15:  Σrew=-17.854  grad=126.3  [reset=0.0s bptt=3.4s elapsed=162s]
+  heads (0/5 clipped)   trunk |g|=11 lim=1500 x1.00
+        descend x3  |g|=      92 lim=  1500 x1.00         reach x3  |g|=      86 lim=  3000 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew= -17.854  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=0%/0.2561  B-Desc=0%/0.2429  B-Grasp=0%/0.2429  B-Move=0%/0.2641  B-Rel=100%/0.2191  P-Reach=0%/0.4521  P-Desc=0%/0.4784  P-Grasp=0%/0.4784  P-Move=0%/0.2731  P-Rel=100%/0.2246  C-Reach=0%/0.4859  C-Desc=0%/0.5102  C-Grasp=0%/0.5102  C-Move=0%/0.2743  C-Rel=100%/0.2255
+
+Iter   20:  Σrew=-14.606  grad=205.2  [reset=0.0s bptt=3.4s elapsed=193s]
+  heads (0/5 clipped)   trunk |g|=19 lim=1500 x1.00
+          reach x3  |g|=     160 lim=  3000 x1.00       descend x3  |g|=     127 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew= -14.606  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=5%/0.1227  B-Desc=0%/0.2863  B-Grasp=0%/0.2863  B-Move=0%/0.2663  B-Rel=100%/0.2218  P-Reach=0%/0.2247  P-Desc=0%/0.2912  P-Grasp=0%/0.2912  P-Move=0%/0.2710  P-Rel=100%/0.2221  C-Reach=0%/0.3863  C-Desc=0%/0.4280  C-Grasp=0%/0.4280  C-Move=0%/0.2672  C-Rel=100%/0.2170
+
+Iter   25:  Σrew=-10.440  grad=89.2  [reset=0.0s bptt=3.4s elapsed=224s]
+  heads (0/5 clipped)   trunk |g|=10 lim=1500 x1.00
+        descend x3  |g|=      65 lim=  1500 x1.00         reach x3  |g|=      60 lim=  3000 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew= -10.440  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=5%/0.1304  B-Desc=0%/0.1469  B-Grasp=0%/0.1469  B-Move=0%/0.2646  B-Rel=100%/0.2194  P-Reach=0%/0.2711  P-Desc=0%/0.2946  P-Grasp=0%/0.2946  P-Move=0%/0.2745  P-Rel=100%/0.2263  C-Reach=0%/0.4256  C-Desc=0%/0.4395  C-Grasp=0%/0.4395  C-Move=0%/0.2700  C-Rel=100%/0.2204
+
+Iter   30:  Σrew=-4.936  grad=109.6  [reset=0.0s bptt=3.4s elapsed=255s]
+  heads (0/5 clipped)   trunk |g|=10 lim=1500 x1.00
+        descend x3  |g|=      82 lim=  1500 x1.00         reach x3  |g|=      73 lim=  3000 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  -4.936  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=5%/0.1012  B-Desc=30%/0.0866  B-Grasp=5%/0.0866  B-Move=0%/0.2582  B-Rel=100%/0.2110  P-Reach=0%/0.2897  P-Desc=0%/0.2702  P-Grasp=0%/0.2702  P-Move=0%/0.2743  P-Rel=100%/0.2258  C-Reach=0%/0.3947  C-Desc=0%/0.3806  C-Grasp=0%/0.3806  C-Move=0%/0.2686  C-Rel=100%/0.2186
+
+Iter   35:  Σrew=-1.545  grad=100.6  [reset=0.0s bptt=3.4s elapsed=288s]
+  heads (0/5 clipped)   trunk |g|=11 lim=1500 x1.00
+          reach x3  |g|=      84 lim=  3000 x1.00       descend x3  |g|=      54 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  -1.545  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=15%/0.0761  B-Desc=45%/0.0512  B-Grasp=40%/0.0512  B-Move=0%/0.2671  B-Rel=100%/0.2210  P-Reach=0%/0.3361  P-Desc=0%/0.3218  P-Grasp=0%/0.3218  P-Move=0%/0.2781  P-Rel=100%/0.2306  C-Reach=0%/0.4465  C-Desc=0%/0.4359  C-Grasp=0%/0.4359  C-Move=0%/0.2725  C-Rel=100%/0.2233
+
+Iter   40:  Σrew=-1.402  grad=159.2  [reset=0.0s bptt=3.4s elapsed=320s]
+  heads (0/5 clipped)   trunk |g|=19 lim=1500 x1.00
+        descend x3  |g|=     121 lim=  1500 x1.00         reach x3  |g|=     102 lim=  3000 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  -1.402  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=25%/0.0749  B-Desc=55%/0.0464  B-Grasp=45%/0.0464  B-Move=0%/0.2538  B-Rel=100%/0.2054  P-Reach=0%/0.3403  P-Desc=0%/0.3230  P-Grasp=0%/0.3230  P-Move=0%/0.2700  P-Rel=100%/0.2208  C-Reach=0%/0.4329  C-Desc=0%/0.4195  C-Grasp=0%/0.4195  C-Move=0%/0.2700  C-Rel=100%/0.2205
+
+Iter   45:  Σrew=-4.216  grad=147.8  [reset=0.0s bptt=3.3s elapsed=352s]
+  heads (0/5 clipped)   trunk |g|=16 lim=1500 x1.00
+          reach x3  |g|=     116 lim=  3000 x1.00       descend x3  |g|=      90 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  -4.216  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=20%/0.0847  B-Desc=10%/0.0940  B-Grasp=0%/0.0940  B-Move=0%/0.2673  B-Rel=100%/0.2222  P-Reach=0%/0.3429  P-Desc=0%/0.3234  P-Grasp=0%/0.3234  P-Move=0%/0.2730  P-Rel=100%/0.2244  C-Reach=0%/0.4053  C-Desc=0%/0.3893  C-Grasp=0%/0.3893  C-Move=0%/0.2674  C-Rel=100%/0.2171
+
+Iter   50:  Σrew=-1.251  grad=177.4  [reset=0.0s bptt=3.4s elapsed=384s]
+  heads (0/5 clipped)   trunk |g|=21 lim=1500 x1.00
+        descend x3  |g|=     136 lim=  1500 x1.00         reach x3  |g|=     112 lim=  3000 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  -1.251  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=20%/0.0746  B-Desc=50%/0.0530  B-Grasp=35%/0.0530  B-Move=0%/0.2764  B-Rel=100%/0.2322  P-Reach=0%/0.3284  P-Desc=0%/0.3136  P-Grasp=0%/0.3136  P-Move=0%/0.2727  P-Rel=100%/0.2240  C-Reach=0%/0.4330  C-Desc=0%/0.4220  C-Grasp=0%/0.4220  C-Move=0%/0.2656  C-Rel=100%/0.2149
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 50
+
+Iter   55:  Σrew=3.367  grad=391.4  [reset=0.0s bptt=3.4s elapsed=417s]
+  heads (0/5 clipped)   trunk |g|=36 lim=1500 x1.00
+          reach x3  |g|=     341 lim=  3000 x1.00       descend x3  |g|=     188 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=   3.367  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=40%/0.0576  B-Desc=70%/0.0377  B-Grasp=50%/0.0377  B-Move=0%/0.2899  B-Rel=100%/0.2493  P-Reach=0%/0.3609  P-Desc=0%/0.3473  P-Grasp=0%/0.3473  P-Move=0%/0.2692  P-Rel=100%/0.2199  C-Reach=0%/0.4921  C-Desc=0%/0.4823  C-Grasp=0%/0.4823  C-Move=0%/0.2732  C-Rel=100%/0.2244
+
+Iter   60:  Σrew=1.793  grad=327.5  [reset=0.0s bptt=3.4s elapsed=449s]
+  heads (0/5 clipped)   trunk |g|=28 lim=1500 x1.00
+        descend x3  |g|=     274 lim=  1500 x1.00         reach x3  |g|=     177 lim=  3000 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=   1.793  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=30%/0.0576  B-Desc=60%/0.0461  B-Grasp=35%/0.0461  B-Move=0%/0.2890  B-Rel=100%/0.2478  P-Reach=0%/0.3877  P-Desc=0%/0.3747  P-Grasp=0%/0.3747  P-Move=0%/0.2732  P-Rel=100%/0.2247  C-Reach=0%/0.5058  C-Desc=0%/0.4960  C-Grasp=0%/0.4960  C-Move=0%/0.2724  C-Rel=100%/0.2234
+
+Iter   65:  Σrew=4.532  grad=498.5  [reset=0.0s bptt=3.4s elapsed=482s]
+  heads (0/5 clipped)   trunk |g|=47 lim=1500 x1.00
+          reach x3  |g|=     484 lim=  3000 x1.00       descend x3  |g|=     111 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=   4.532  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=60%/0.0478  B-Desc=85%/0.0308  B-Grasp=70%/0.0308  B-Move=0%/0.2803  B-Rel=100%/0.2378  P-Reach=0%/0.3417  P-Desc=0%/0.3268  P-Grasp=0%/0.3268  P-Move=0%/0.2698  P-Rel=100%/0.2205  C-Reach=0%/0.4737  C-Desc=0%/0.4633  C-Grasp=0%/0.4633  C-Move=0%/0.2714  C-Rel=100%/0.2222
+
+Iter   70:  Σrew=5.554  grad=353.8  [reset=0.0s bptt=3.4s elapsed=514s]
+  heads (0/5 clipped)   trunk |g|=40 lim=1500 x1.00
+          reach x3  |g|=     302 lim=  3000 x1.00       descend x3  |g|=     179 lim=  1500 x1.00  
+          grasp x3  |g|=       0 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=   5.554  ph=0  success=0/20 (0%) (partial) streak=0  | B-Reach=60%/0.0423  B-Desc=75%/0.0357  B-Grasp=60%/0.0357  B-Move=0%/0.2751  B-Rel=100%/0.2317  P-Reach=0%/0.3523  P-Desc=0%/0.3372  P-Grasp=0%/0.3372  P-Move=0%/0.2766  P-Rel=100%/0.2289  C-Reach=0%/0.4594  C-Desc=0%/0.4480  C-Grasp=0%/0.4480  C-Move=0%/0.2725  C-Rel=100%/0.2234
+    ──→ container: phase 1, active=55
+
+Iter   75:  Σrew=11.687  grad=155.5  [reset=0.0s bptt=4.1s elapsed=549s]
+  heads (0/5 clipped)   trunk |g|=20 lim=1500 x1.00
+        descend x3  |g|=     112 lim=  1500 x1.00         reach x3  |g|=      97 lim=  3000 x1.00  
+          grasp x3  |g|=      43 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  11.687  ph=1  success=0/20 (0%) (partial) streak=0  | B-Reach=45%/0.0583  B-Desc=65%/0.0409  B-Grasp=5%/0.0751  B-Move=0%/0.2844  B-Rel=100%/0.2430  P-Reach=0%/0.3844  P-Desc=0%/0.3733  P-Grasp=0%/0.3733  P-Move=0%/0.2727  P-Rel=100%/0.2240  C-Reach=0%/0.4777  C-Desc=0%/0.4689  C-Grasp=0%/0.4689  C-Move=0%/0.2726  C-Rel=100%/0.2236
+
+Iter   80:  Σrew=12.084  grad=545.0  [reset=0.0s bptt=4.1s elapsed=585s]
+  heads (0/5 clipped)   trunk |g|=58 lim=1500 x1.00
+          reach x3  |g|=     401 lim=  3000 x1.00       descend x3  |g|=     357 lim=  1500 x1.00  
+          grasp x3  |g|=      75 lim=  1000 x1.00          move x3  |g|=       0 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  12.084  ph=1  success=0/20 (0%) (partial) streak=0  | B-Reach=25%/0.0661  B-Desc=100%/0.0244  B-Grasp=35%/0.0463  B-Move=0%/0.2672  B-Rel=100%/0.2246  P-Reach=0%/0.3104  P-Desc=0%/0.3027  P-Grasp=0%/0.3027  P-Move=0%/0.2720  P-Rel=100%/0.2232  C-Reach=0%/0.4455  C-Desc=0%/0.4403  C-Grasp=0%/0.4403  C-Move=0%/0.2668  C-Rel=100%/0.2165
+    ──→ container: phase 2, active=80
+
+Iter   85:  Σrew=7.835  grad=495.1  [reset=0.0s bptt=5.8s elapsed=629s]
+  heads (0/5 clipped)   trunk |g|=54 lim=1500 x1.00
+          reach x3  |g|=     447 lim=  3000 x1.00       descend x3  |g|=     199 lim=  1500 x1.00  
+          grasp x3  |g|=      50 lim=  1000 x1.00          move x3  |g|=      15 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=   7.835  ph=2  success=0/20 (0%) (partial) streak=0  | B-Reach=60%/0.0459  B-Desc=40%/0.0505  B-Grasp=10%/0.0523  B-Move=0%/0.2930  B-Rel=100%/0.2526  P-Reach=0%/0.2085  P-Desc=0%/0.2563  P-Grasp=0%/0.2563  P-Move=0%/0.2775  P-Rel=100%/0.2299  C-Reach=0%/0.3372  C-Desc=0%/0.3682  C-Grasp=0%/0.3682  C-Move=0%/0.2728  C-Rel=100%/0.2239
+
+Iter   90:  Σrew=14.676  grad=612.2  [reset=0.0s bptt=5.8s elapsed=674s]
+  heads (0/5 clipped)   trunk |g|=75 lim=1500 x1.00
+          reach x3  |g|=     465 lim=  3000 x1.00       descend x3  |g|=     337 lim=  1500 x1.00  
+          grasp x3  |g|=     196 lim=  1000 x1.00          move x3  |g|=      29 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  14.676  ph=2  success=0/20 (0%) (partial) streak=0  | B-Reach=50%/0.0478  B-Desc=100%/0.0189  B-Grasp=50%/0.0409  B-Move=0%/0.3367  B-Rel=100%/0.2951  P-Reach=0%/0.2138  P-Desc=0%/0.3038  P-Grasp=0%/0.3038  P-Move=0%/0.2730  P-Rel=100%/0.2244  C-Reach=0%/0.3166  C-Desc=0%/0.3833  C-Grasp=0%/0.3833  C-Move=0%/0.2713  C-Rel=100%/0.2221
+
+Iter   95:  Σrew=18.428  grad=703.2  [reset=0.0s bptt=5.8s elapsed=718s]
+  heads (0/5 clipped)   trunk |g|=72 lim=1500 x1.00
+          reach x3  |g|=     502 lim=  3000 x1.00       descend x3  |g|=     484 lim=  1500 x1.00  
+          grasp x3  |g|=      42 lim=  1000 x1.00          move x3  |g|=      40 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  18.428  ph=2  success=0/20 (0%) (partial) streak=0  | B-Reach=80%/0.0373  B-Desc=75%/0.0298  B-Grasp=35%/0.0406  B-Move=0%/0.3192  B-Rel=100%/0.2759  P-Reach=0%/0.3011  P-Desc=0%/0.3726  P-Grasp=0%/0.3726  P-Move=0%/0.2744  P-Rel=100%/0.2262  C-Reach=0%/0.2183  C-Desc=0%/0.3099  C-Grasp=0%/0.3099  C-Move=0%/0.2662  C-Rel=100%/0.2158
+
+Iter  100:  Σrew=25.921  grad=586.8  [reset=0.0s bptt=5.8s elapsed=763s]
+  heads (0/5 clipped)   trunk |g|=64 lim=1500 x1.00
+        descend x3  |g|=     409 lim=  1500 x1.00         reach x3  |g|=     396 lim=  3000 x1.00  
+          grasp x3  |g|=      98 lim=  1000 x1.00          move x3  |g|=      81 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  25.921  ph=2  success=2.33/20 (12%) (partial) streak=0  | B-Reach=95%/0.0293  B-Desc=100%/0.0188  B-Grasp=65%/0.0285  B-Move=0%/0.2548  B-Rel=100%/0.2073  P-Reach=0%/0.3107  P-Desc=0%/0.3717  P-Grasp=0%/0.3717  P-Move=0%/0.2770  P-Rel=100%/0.2293  C-Reach=0%/0.1942  C-Desc=0%/0.2821  C-Grasp=0%/0.2821  C-Move=0%/0.2659  C-Rel=100%/0.2153
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 100
+
+Iter  105:  Σrew=22.127  grad=302.1  [reset=0.0s bptt=5.8s elapsed=809s]
+  heads (0/5 clipped)   trunk |g|=40 lim=1500 x1.00
+        descend x3  |g|=     209 lim=  1500 x1.00          move x3  |g|=     164 lim=  1000 x1.00  
+          reach x3  |g|=     132 lim=  3000 x1.00         grasp x3  |g|=      42 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  22.127  ph=2  success=1.33/20 (7%) (partial) streak=0  | B-Reach=80%/0.0352  B-Desc=75%/0.0318  B-Grasp=40%/0.0455  B-Move=0%/0.3010  B-Rel=100%/0.2534  P-Reach=0%/0.3187  P-Desc=0%/0.3796  P-Grasp=0%/0.3796  P-Move=0%/0.2739  P-Rel=100%/0.2255  C-Reach=0%/0.2354  C-Desc=0%/0.3131  C-Grasp=0%/0.3131  C-Move=0%/0.2671  C-Rel=100%/0.2169
+
+Iter  110:  Σrew=33.577  grad=721.5  [reset=0.0s bptt=5.8s elapsed=853s]
+  heads (0/5 clipped)   trunk |g|=82 lim=1500 x1.00
+          reach x3  |g|=     614 lim=  3000 x1.00       descend x3  |g|=     324 lim=  1500 x1.00  
+           move x3  |g|=     174 lim=  1000 x1.00         grasp x3  |g|=      36 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  33.577  ph=2  success=1.33/20 (7%) (partial) streak=0  | B-Reach=95%/0.0304  B-Desc=85%/0.0266  B-Grasp=50%/0.0529  B-Move=0%/0.2984  B-Rel=100%/0.2550  P-Reach=0%/0.3848  P-Desc=0%/0.4465  P-Grasp=0%/0.4465  P-Move=0%/0.2755  P-Rel=100%/0.2276  C-Reach=0%/0.2430  C-Desc=0%/0.3319  C-Grasp=0%/0.3319  C-Move=0%/0.2685  C-Rel=100%/0.2186
+
+Iter  115:  Σrew=20.874  grad=635.3  [reset=0.0s bptt=5.8s elapsed=898s]
+  heads (0/5 clipped)   trunk |g|=72 lim=1500 x1.00
+          reach x3  |g|=     507 lim=  3000 x1.00       descend x3  |g|=     356 lim=  1500 x1.00  
+          grasp x3  |g|=     115 lim=  1000 x1.00          move x3  |g|=      36 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  20.874  ph=2  success=0/20 (0%) (partial) streak=0  | B-Reach=75%/0.0418  B-Desc=55%/0.0487  B-Grasp=10%/0.1027  B-Move=0%/0.4518  B-Rel=100%/0.3563  P-Reach=0%/0.4431  P-Desc=0%/0.4966  P-Grasp=0%/0.4966  P-Move=0%/0.2699  P-Rel=100%/0.2206  C-Reach=0%/0.2385  C-Desc=0%/0.3271  C-Grasp=0%/0.3271  C-Move=0%/0.2703  C-Rel=100%/0.2208
+
+Iter  120:  Σrew=16.957  grad=667.9  [reset=0.0s bptt=5.8s elapsed=942s]
+  heads (0/5 clipped)   trunk |g|=79 lim=1500 x1.00
+          reach x3  |g|=     549 lim=  3000 x1.00       descend x3  |g|=     367 lim=  1500 x1.00  
+          grasp x3  |g|=      62 lim=  1000 x1.00          move x3  |g|=      14 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  16.957  ph=2  success=0/20 (0%) (partial) streak=0  | B-Reach=95%/0.0281  B-Desc=90%/0.0235  B-Grasp=55%/0.0357  B-Move=0%/0.3537  B-Rel=100%/0.3135  P-Reach=0%/0.4753  P-Desc=0%/0.5245  P-Grasp=0%/0.5245  P-Move=0%/0.2765  P-Rel=100%/0.2287  C-Reach=0%/0.2546  C-Desc=0%/0.3377  C-Grasp=0%/0.3377  C-Move=0%/0.2688  C-Rel=100%/0.2190
+
+Iter  125:  Σrew=23.134  grad=367.7  [reset=0.0s bptt=5.8s elapsed=987s]
+  heads (0/5 clipped)   trunk |g|=46 lim=1500 x1.00
+        descend x3  |g|=     293 lim=  1500 x1.00         reach x3  |g|=     202 lim=  3000 x1.00  
+           move x3  |g|=      63 lim=  1000 x1.00         grasp x3  |g|=      47 lim=  1000 x1.00  
+        release x3  |g|=       0 lim=   500 x1.00  
+    container       rew=  23.134  ph=2  success=0/20 (0%) (partial) streak=0  | B-Reach=90%/0.0301  B-Desc=95%/0.0262  B-Grasp=70%/0.0307  B-Move=0%/0.3537  B-Rel=100%/0.3144  P-Reach=0%/0.4586  P-Desc=0%/0.5156  P-Grasp=0%/0.5156  P-Move=0%/0.2699  P-Rel=100%/0.2207  C-Reach=0%/0.2622  C-Desc=0%/0.3521  C-Grasp=0%/0.3521  C-Move=0%/0.2741  C-Rel=100%/0.2253
+    ──→ container: phase 3, active=90
+
+Iter  130:  Σrew=22.948  grad=513.8  [reset=0.0s bptt=6.5s elapsed=1035s]
+  heads (0/5 clipped)   trunk |g|=55 lim=1500 x1.00
+          reach x3  |g|=     408 lim=  3000 x1.00       descend x3  |g|=     265 lim=  1500 x1.00  
+          grasp x3  |g|=     140 lim=  1000 x1.00          move x3  |g|=      71 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  22.948  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=85%/0.0320  B-Desc=70%/0.0387  B-Grasp=30%/0.0897  B-Move=5%/0.4326  B-Rel=100%/0.4394  P-Reach=0%/0.3743  P-Desc=0%/0.4245  P-Grasp=0%/0.4245  P-Move=0%/0.2702  P-Rel=100%/0.2210  C-Reach=0%/0.2521  C-Desc=0%/0.3224  C-Grasp=0%/0.3224  C-Move=0%/0.2677  C-Rel=100%/0.2176
+
+Iter  135:  Σrew=27.858  grad=395.1  [reset=0.0s bptt=6.5s elapsed=1083s]
+  heads (0/5 clipped)   trunk |g|=49 lim=1500 x1.00
+          reach x3  |g|=     293 lim=  3000 x1.00       descend x3  |g|=     248 lim=  1500 x1.00  
+           move x3  |g|=      58 lim=  1000 x1.00         grasp x3  |g|=      55 lim=  1000 x1.00  
+        release x3  |g|=      11 lim=   500 x1.00  
+    container       rew=  27.858  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=95%/0.0291  B-Desc=85%/0.0272  B-Grasp=40%/0.0596  B-Move=0%/0.6439  B-Rel=100%/0.5554  P-Reach=0%/0.4448  P-Desc=0%/0.4808  P-Grasp=0%/0.4808  P-Move=0%/0.2736  P-Rel=100%/0.2252  C-Reach=0%/0.2583  C-Desc=0%/0.3164  C-Grasp=0%/0.3164  C-Move=0%/0.2710  C-Rel=100%/0.2217
+
+Iter  140:  Σrew=27.755  grad=890.8  [reset=0.0s bptt=6.5s elapsed=1131s]
+  heads (0/5 clipped)   trunk |g|=89 lim=1500 x1.00
+          reach x3  |g|=     759 lim=  3000 x1.00       descend x3  |g|=     453 lim=  1500 x1.00  
+           move x3  |g|=      56 lim=  1000 x1.00         grasp x3  |g|=      39 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  27.755  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0243  B-Desc=95%/0.0252  B-Grasp=65%/0.0352  B-Move=0%/0.5319  B-Rel=100%/0.4971  P-Reach=0%/0.4748  P-Desc=0%/0.5055  P-Grasp=0%/0.5055  P-Move=0%/0.2748  P-Rel=100%/0.2268  C-Reach=0%/0.2760  C-Desc=0%/0.3261  C-Grasp=0%/0.3261  C-Move=0%/0.2753  C-Rel=100%/0.2269
+
+Iter  145:  Σrew=32.336  grad=571.1  [reset=0.0s bptt=6.5s elapsed=1179s]
+  heads (0/5 clipped)   trunk |g|=67 lim=1500 x1.00
+          reach x3  |g|=     504 lim=  3000 x1.00       descend x3  |g|=     220 lim=  1500 x1.00  
+          grasp x3  |g|=     125 lim=  1000 x1.00          move x3  |g|=      60 lim=  1000 x1.00  
+        release x3  |g|=      23 lim=   500 x1.00  
+    container       rew=  32.336  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0264  B-Desc=90%/0.0290  B-Grasp=85%/0.0293  B-Move=0%/0.4393  B-Rel=100%/0.4441  P-Reach=0%/0.4434  P-Desc=0%/0.4783  P-Grasp=0%/0.4783  P-Move=0%/0.2812  P-Rel=100%/0.2343  C-Reach=0%/0.2497  C-Desc=0%/0.3079  C-Grasp=0%/0.3079  C-Move=0%/0.2662  C-Rel=100%/0.2158
+
+Iter  150:  Σrew=28.496  grad=1084.1  [reset=0.0s bptt=6.5s elapsed=1227s]
+  heads (0/5 clipped)   trunk |g|=134 lim=1500 x1.00
+          reach x3  |g|=    1044 lim=  3000 x1.00       descend x3  |g|=     244 lim=  1500 x1.00  
+          grasp x3  |g|=      66 lim=  1000 x1.00          move x3  |g|=      43 lim=  1000 x1.00  
+        release x3  |g|=      34 lim=   500 x1.00  
+    container       rew=  28.496  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0220  B-Desc=100%/0.0190  B-Grasp=80%/0.0334  B-Move=5%/0.3565  B-Rel=100%/0.3371  P-Reach=0%/0.4272  P-Desc=0%/0.4734  P-Grasp=0%/0.4734  P-Move=0%/0.2796  P-Rel=100%/0.2325  C-Reach=0%/0.2730  C-Desc=0%/0.3407  C-Grasp=0%/0.3407  C-Move=0%/0.2709  C-Rel=100%/0.2214
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 150
+
+Iter  155:  Σrew=30.432  grad=894.2  [reset=0.0s bptt=6.5s elapsed=1277s]
+  heads (0/5 clipped)   trunk |g|=110 lim=1500 x1.00
+          reach x3  |g|=     712 lim=  3000 x1.00       descend x3  |g|=     385 lim=  1500 x1.00  
+          grasp x3  |g|=     361 lim=  1000 x1.00          move x3  |g|=      37 lim=  1000 x1.00  
+        release x3  |g|=      33 lim=   500 x1.00  
+    container       rew=  30.432  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=95%/0.0252  B-Desc=90%/0.0256  B-Grasp=70%/0.0513  B-Move=10%/0.4306  B-Rel=100%/0.3558  P-Reach=0%/0.4297  P-Desc=0%/0.4849  P-Grasp=0%/0.4849  P-Move=0%/0.2748  P-Rel=100%/0.2267  C-Reach=0%/0.2795  C-Desc=0%/0.3583  C-Grasp=0%/0.3583  C-Move=0%/0.2728  C-Rel=100%/0.2239
+
+Iter  160:  Σrew=30.196  grad=380.4  [reset=0.0s bptt=6.5s elapsed=1325s]
+  heads (0/5 clipped)   trunk |g|=57 lim=1500 x1.00
+        descend x3  |g|=     289 lim=  1500 x1.00         reach x3  |g|=     200 lim=  3000 x1.00  
+          grasp x3  |g|=     129 lim=  1000 x1.00          move x3  |g|=      31 lim=  1000 x1.00  
+        release x3  |g|=      19 lim=   500 x1.00  
+    container       rew=  30.196  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=95%/0.0251  B-Desc=100%/0.0183  B-Grasp=70%/0.0458  B-Move=0%/0.3404  B-Rel=100%/0.3055  P-Reach=0%/0.4404  P-Desc=0%/0.5004  P-Grasp=0%/0.5004  P-Move=0%/0.2725  P-Rel=100%/0.2238  C-Reach=0%/0.2932  C-Desc=0%/0.3774  C-Grasp=0%/0.3774  C-Move=0%/0.2695  C-Rel=100%/0.2198
+
+Iter  165:  Σrew=15.679  grad=1190.9  [reset=0.0s bptt=6.5s elapsed=1373s]
+  heads (0/5 clipped)   trunk |g|=133 lim=1500 x1.00
+          reach x3  |g|=     950 lim=  3000 x1.00       descend x3  |g|=     702 lim=  1500 x1.00  
+          grasp x3  |g|=      60 lim=  1000 x1.00          move x3  |g|=      30 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  15.679  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0226  B-Desc=90%/0.0239  B-Grasp=55%/0.0595  B-Move=0%/0.3700  B-Rel=100%/0.3501  P-Reach=0%/0.5250  P-Desc=0%/0.5747  P-Grasp=0%/0.5747  P-Move=0%/0.2730  P-Rel=100%/0.2244  C-Reach=0%/0.2976  C-Desc=0%/0.3784  C-Grasp=0%/0.3784  C-Move=0%/0.2706  C-Rel=100%/0.2212
+
+Iter  170:  Σrew=26.227  grad=790.0  [reset=0.0s bptt=6.5s elapsed=1422s]
+  heads (0/5 clipped)   trunk |g|=83 lim=1500 x1.00
+          reach x3  |g|=     748 lim=  3000 x1.00         grasp x3  |g|=     194 lim=  1000 x1.00  
+        descend x3  |g|=     137 lim=  1500 x1.00          move x3  |g|=      39 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  26.227  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=95%/0.0303  B-Desc=100%/0.0235  B-Grasp=70%/0.0410  B-Move=5%/0.2718  B-Rel=100%/0.2539  P-Reach=0%/0.5776  P-Desc=0%/0.6202  P-Grasp=0%/0.6202  P-Move=0%/0.2712  P-Rel=100%/0.2223  C-Reach=0%/0.3301  C-Desc=0%/0.4003  C-Grasp=0%/0.4003  C-Move=0%/0.2716  C-Rel=100%/0.2224
+
+Iter  175:  Σrew=10.479  grad=1570.5  [reset=0.0s bptt=6.5s elapsed=1470s]
+  heads (0/5 clipped)   trunk |g|=181 lim=1500 x1.00
+          reach x3  |g|=    1351 lim=  3000 x1.00       descend x3  |g|=     780 lim=  1500 x1.00  
+          grasp x3  |g|=      17 lim=  1000 x1.00       release x3  |g|=       4 lim=   500 x1.00  
+           move x3  |g|=       2 lim=  1000 x1.00  
+    container       rew=  10.479  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0191  B-Desc=95%/0.0260  B-Grasp=10%/0.1562  B-Move=0%/0.5485  B-Rel=100%/0.5168  P-Reach=0%/0.6962  P-Desc=0%/0.7242  P-Grasp=0%/0.7242  P-Move=0%/0.2697  P-Rel=100%/0.2204  C-Reach=0%/0.4281  C-Desc=0%/0.4724  C-Grasp=0%/0.4724  C-Move=0%/0.2736  C-Rel=100%/0.2248
+
+Iter  180:  Σrew=33.049  grad=1516.1  [reset=0.0s bptt=6.5s elapsed=1518s]
+  heads (0/5 clipped)   trunk |g|=171 lim=1500 x1.00
+          reach x3  |g|=    1409 lim=  3000 x1.00       descend x3  |g|=     522 lim=  1500 x1.00  
+           move x3  |g|=      79 lim=  1000 x1.00         grasp x3  |g|=      70 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  33.049  ph=3  success=1.67/20 (8%) (partial) streak=0  | B-Reach=100%/0.0229  B-Desc=100%/0.0191  B-Grasp=50%/0.0690  B-Move=5%/0.3034  B-Rel=100%/0.3097  P-Reach=0%/0.7233  P-Desc=0%/0.7466  P-Grasp=0%/0.7466  P-Move=0%/0.2775  P-Rel=100%/0.2299  C-Reach=0%/0.4483  C-Desc=0%/0.4853  C-Grasp=0%/0.4853  C-Move=0%/0.2663  C-Rel=100%/0.2158
+
+Iter  185:  Σrew=33.078  grad=1422.0  [reset=0.0s bptt=6.5s elapsed=1566s]
+  heads (0/5 clipped)   trunk |g|=162 lim=1500 x1.00
+          reach x3  |g|=    1321 lim=  3000 x1.00       descend x3  |g|=     453 lim=  1500 x1.00  
+          grasp x3  |g|=     196 lim=  1000 x1.00          move x3  |g|=      81 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  33.078  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0231  B-Desc=90%/0.0231  B-Grasp=85%/0.0283  B-Move=0%/0.3094  B-Rel=100%/0.2655  P-Reach=0%/0.7479  P-Desc=0%/0.7718  P-Grasp=0%/0.7718  P-Move=0%/0.2762  P-Rel=100%/0.2283  C-Reach=0%/0.4739  C-Desc=0%/0.5108  C-Grasp=0%/0.5108  C-Move=0%/0.2687  C-Rel=100%/0.2188
+
+Iter  190:  Σrew=23.442  grad=889.2  [reset=0.0s bptt=6.5s elapsed=1614s]
+  heads (0/5 clipped)   trunk |g|=104 lim=1500 x1.00
+          reach x3  |g|=     840 lim=  3000 x1.00       descend x3  |g|=     248 lim=  1500 x1.00  
+          grasp x3  |g|=      98 lim=  1000 x1.00          move x3  |g|=      58 lim=  1000 x1.00  
+        release x3  |g|=      19 lim=   500 x1.00  
+    container       rew=  23.442  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0255  B-Desc=75%/0.0306  B-Grasp=25%/0.1472  B-Move=0%/0.3830  B-Rel=100%/0.3701  P-Reach=0%/0.6994  P-Desc=0%/0.7319  P-Grasp=0%/0.7319  P-Move=0%/0.2738  P-Rel=100%/0.2255  C-Reach=0%/0.4286  C-Desc=0%/0.4798  C-Grasp=0%/0.4798  C-Move=0%/0.2691  C-Rel=100%/0.2193
+
+Iter  195:  Σrew=37.091  grad=1531.9  [reset=0.0s bptt=6.5s elapsed=1662s]
+  heads (0/5 clipped)   trunk |g|=191 lim=1500 x1.00
+          reach x3  |g|=    1293 lim=  3000 x1.00       descend x3  |g|=     784 lim=  1500 x1.00  
+          grasp x3  |g|=     113 lim=  1000 x1.00          move x3  |g|=     101 lim=  1000 x1.00  
+        release x3  |g|=      16 lim=   500 x1.00  
+    container       rew=  37.091  ph=3  success=1.67/20 (8%) (partial) streak=0  | B-Reach=100%/0.0179  B-Desc=100%/0.0151  B-Grasp=60%/0.0738  B-Move=5%/0.3427  B-Rel=100%/0.3315  P-Reach=0%/0.6490  P-Desc=0%/0.6842  P-Grasp=0%/0.6842  P-Move=0%/0.2688  P-Rel=100%/0.2193  C-Reach=0%/0.3798  C-Desc=0%/0.4374  C-Grasp=0%/0.4374  C-Move=0%/0.2668  C-Rel=100%/0.2165
+
+Iter  200:  Σrew=32.917  grad=1001.8  [reset=0.0s bptt=6.5s elapsed=1710s]
+  heads (0/5 clipped)   trunk |g|=126 lim=1500 x1.00
+          reach x3  |g|=     968 lim=  3000 x1.00       descend x3  |g|=     182 lim=  1500 x1.00  
+          grasp x3  |g|=     103 lim=  1000 x1.00          move x3  |g|=      83 lim=  1000 x1.00  
+        release x3  |g|=      13 lim=   500 x1.00  
+    container       rew=  32.917  ph=3  success=2.33/20 (12%) (partial) streak=0  | B-Reach=100%/0.0190  B-Desc=90%/0.0180  B-Grasp=75%/0.0465  B-Move=0%/0.3523  B-Rel=100%/0.3374  P-Reach=0%/0.5946  P-Desc=0%/0.6328  P-Grasp=0%/0.6328  P-Move=0%/0.2727  P-Rel=100%/0.2240  C-Reach=0%/0.3490  C-Desc=0%/0.4106  C-Grasp=0%/0.4106  C-Move=0%/0.2668  C-Rel=100%/0.2165
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 200
+
+Iter  205:  Σrew=37.073  grad=894.2  [reset=0.0s bptt=6.5s elapsed=1760s]
+  heads (0/5 clipped)   trunk |g|=123 lim=1500 x1.00
+          reach x3  |g|=     853 lim=  3000 x1.00       descend x3  |g|=     169 lim=  1500 x1.00  
+          grasp x3  |g|=     142 lim=  1000 x1.00          move x3  |g|=      89 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  37.073  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0223  B-Desc=100%/0.0128  B-Grasp=95%/0.0172  B-Move=0%/0.2364  B-Rel=100%/0.2235  P-Reach=0%/0.5737  P-Desc=0%/0.6130  P-Grasp=0%/0.6130  P-Move=0%/0.2746  P-Rel=100%/0.2263  C-Reach=0%/0.3202  C-Desc=0%/0.3862  C-Grasp=0%/0.3862  C-Move=0%/0.2700  C-Rel=100%/0.2205
+
+Iter  210:  Σrew=22.764  grad=1158.0  [reset=0.0s bptt=6.5s elapsed=1808s]
+  heads (0/5 clipped)   trunk |g|=165 lim=1500 x1.00
+          reach x3  |g|=    1120 lim=  3000 x1.00       descend x3  |g|=     227 lim=  1500 x1.00  
+          grasp x3  |g|=      80 lim=  1000 x1.00          move x3  |g|=      42 lim=  1000 x1.00  
+        release x3  |g|=      20 lim=   500 x1.00  
+    container       rew=  22.764  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=95%/0.0227  B-Desc=95%/0.0219  B-Grasp=75%/0.0524  B-Move=0%/0.2962  B-Rel=100%/0.2348  P-Reach=0%/0.5412  P-Desc=0%/0.5848  P-Grasp=0%/0.5848  P-Move=0%/0.2735  P-Rel=100%/0.2251  C-Reach=0%/0.3007  C-Desc=0%/0.3737  C-Grasp=0%/0.3737  C-Move=0%/0.2703  C-Rel=100%/0.2209
+
+Iter  215:  Σrew=28.855  grad=1182.2  [reset=0.0s bptt=6.5s elapsed=1856s]
+  heads (0/5 clipped)   trunk |g|=157 lim=1500 x1.00
+          reach x3  |g|=    1065 lim=  3000 x1.00       descend x3  |g|=     413 lim=  1500 x1.00  
+          grasp x3  |g|=     229 lim=  1000 x1.00          move x3  |g|=     126 lim=  1000 x1.00  
+        release x3  |g|=      19 lim=   500 x1.00  
+    container       rew=  28.855  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0141  B-Desc=100%/0.0144  B-Grasp=85%/0.0350  B-Move=0%/0.3294  B-Rel=100%/0.3009  P-Reach=0%/0.5440  P-Desc=0%/0.5836  P-Grasp=0%/0.5836  P-Move=0%/0.2746  P-Rel=100%/0.2264  C-Reach=0%/0.3035  C-Desc=0%/0.3696  C-Grasp=0%/0.3696  C-Move=0%/0.2675  C-Rel=100%/0.2174
+
+Iter  220:  Σrew=17.288  grad=1397.6  [reset=0.0s bptt=6.5s elapsed=1905s]
+  heads (0/5 clipped)   trunk |g|=196 lim=1500 x1.00
+          reach x3  |g|=    1205 lim=  3000 x1.00       descend x3  |g|=     680 lim=  1500 x1.00  
+          grasp x3  |g|=      22 lim=  1000 x1.00          move x3  |g|=      19 lim=  1000 x1.00  
+        release x3  |g|=      14 lim=   500 x1.00  
+    container       rew=  17.288  ph=3  success=1.67/20 (8%) (partial) streak=0  | B-Reach=100%/0.0182  B-Desc=90%/0.0244  B-Grasp=55%/0.0704  B-Move=0%/0.3045  B-Rel=100%/0.2915  P-Reach=0%/0.5630  P-Desc=0%/0.6074  P-Grasp=0%/0.6074  P-Move=0%/0.2733  P-Rel=100%/0.2249  C-Reach=0%/0.3266  C-Desc=0%/0.3983  C-Grasp=0%/0.3983  C-Move=0%/0.2712  C-Rel=100%/0.2219
+
+Iter  225:  Σrew=21.846  grad=1159.6  [reset=0.0s bptt=6.5s elapsed=1953s]
+  heads (0/5 clipped)   trunk |g|=157 lim=1500 x1.00
+          reach x3  |g|=    1024 lim=  3000 x1.00       descend x3  |g|=     512 lim=  1500 x1.00  
+           move x3  |g|=      83 lim=  1000 x1.00         grasp x3  |g|=      52 lim=  1000 x1.00  
+        release x3  |g|=       6 lim=   500 x1.00  
+    container       rew=  21.846  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0243  B-Desc=90%/0.0273  B-Grasp=45%/0.1037  B-Move=0%/0.3459  B-Rel=100%/0.3177  P-Reach=0%/0.5685  P-Desc=0%/0.6128  P-Grasp=0%/0.6128  P-Move=0%/0.2778  P-Rel=100%/0.2302  C-Reach=0%/0.3309  C-Desc=0%/0.4023  C-Grasp=0%/0.4023  C-Move=0%/0.2656  C-Rel=100%/0.2151
+
+Iter  230:  Σrew=33.387  grad=720.1  [reset=0.0s bptt=6.5s elapsed=2001s]
+  heads (0/5 clipped)   trunk |g|=106 lim=1500 x1.00
+          reach x3  |g|=     561 lim=  3000 x1.00       descend x3  |g|=     432 lim=  1500 x1.00  
+          grasp x3  |g|=      74 lim=  1000 x1.00          move x3  |g|=      32 lim=  1000 x1.00  
+        release x3  |g|=      11 lim=   500 x1.00  
+    container       rew=  33.387  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0231  B-Desc=90%/0.0200  B-Grasp=70%/0.0739  B-Move=0%/0.3093  B-Rel=100%/0.3044  P-Reach=0%/0.5056  P-Desc=0%/0.5575  P-Grasp=0%/0.5575  P-Move=0%/0.2747  P-Rel=100%/0.2265  C-Reach=0%/0.3058  C-Desc=0%/0.3854  C-Grasp=0%/0.3854  C-Move=0%/0.2739  C-Rel=100%/0.2250
+
+Iter  235:  Σrew=33.911  grad=700.2  [reset=0.0s bptt=6.5s elapsed=2049s]
+  heads (0/5 clipped)   trunk |g|=105 lim=1500 x1.00
+          reach x3  |g|=     610 lim=  3000 x1.00       descend x3  |g|=     278 lim=  1500 x1.00  
+          grasp x3  |g|=     124 lim=  1000 x1.00          move x3  |g|=     122 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  33.911  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0225  B-Desc=100%/0.0215  B-Grasp=60%/0.0928  B-Move=0%/0.2739  B-Rel=100%/0.2616  P-Reach=0%/0.5027  P-Desc=0%/0.5590  P-Grasp=0%/0.5590  P-Move=0%/0.2725  P-Rel=100%/0.2239  C-Reach=0%/0.3116  C-Desc=0%/0.3961  C-Grasp=0%/0.3961  C-Move=0%/0.2682  C-Rel=100%/0.2183
+
+Iter  240:  Σrew=25.350  grad=1461.6  [reset=0.0s bptt=6.5s elapsed=2097s]
+  heads (0/5 clipped)   trunk |g|=203 lim=1500 x1.00
+          reach x3  |g|=    1214 lim=  3000 x1.00       descend x3  |g|=     746 lim=  1500 x1.00  
+          grasp x3  |g|=     242 lim=  1000 x1.00          move x3  |g|=      65 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  25.350  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0193  B-Desc=95%/0.0212  B-Grasp=85%/0.0246  B-Move=0%/0.5225  B-Rel=100%/0.4050  P-Reach=0%/0.4819  P-Desc=0%/0.5417  P-Grasp=0%/0.5417  P-Move=0%/0.2752  P-Rel=100%/0.2272  C-Reach=0%/0.3127  C-Desc=0%/0.3988  C-Grasp=0%/0.3988  C-Move=0%/0.2662  C-Rel=100%/0.2157
+
+Iter  245:  Σrew=26.175  grad=1130.7  [reset=0.0s bptt=6.5s elapsed=2145s]
+  heads (0/5 clipped)   trunk |g|=152 lim=1500 x1.00
+          reach x3  |g|=    1059 lim=  3000 x1.00       descend x3  |g|=     356 lim=  1500 x1.00  
+          grasp x3  |g|=      64 lim=  1000 x1.00          move x3  |g|=      42 lim=  1000 x1.00  
+        release x3  |g|=      17 lim=   500 x1.00  
+    container       rew=  26.175  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0209  B-Desc=80%/0.0288  B-Grasp=40%/0.1457  B-Move=0%/0.3849  B-Rel=100%/0.3143  P-Reach=0%/0.5008  P-Desc=0%/0.5578  P-Grasp=0%/0.5578  P-Move=0%/0.2767  P-Rel=100%/0.2289  C-Reach=0%/0.3103  C-Desc=0%/0.3955  C-Grasp=0%/0.3955  C-Move=0%/0.2685  C-Rel=100%/0.2185
+
+Iter  250:  Σrew=34.373  grad=647.9  [reset=0.0s bptt=6.5s elapsed=2193s]
+  heads (0/5 clipped)   trunk |g|=77 lim=1500 x1.00
+          reach x3  |g|=     555 lim=  3000 x1.00       descend x3  |g|=     258 lim=  1500 x1.00  
+           move x3  |g|=     192 lim=  1000 x1.00         grasp x3  |g|=      40 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  34.373  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0215  B-Desc=90%/0.0222  B-Grasp=85%/0.0332  B-Move=0%/0.3269  B-Rel=100%/0.2444  P-Reach=0%/0.4894  P-Desc=0%/0.5412  P-Grasp=0%/0.5412  P-Move=0%/0.2714  P-Rel=100%/0.2225  C-Reach=0%/0.2889  C-Desc=0%/0.3699  C-Grasp=0%/0.3699  C-Move=0%/0.2686  C-Rel=100%/0.2187
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 250
+
+Iter  255:  Σrew=29.341  grad=1198.2  [reset=0.0s bptt=6.5s elapsed=2243s]
+  heads (0/5 clipped)   trunk |g|=171 lim=1500 x1.00
+          reach x3  |g|=    1094 lim=  3000 x1.00       descend x3  |g|=     437 lim=  1500 x1.00  
+           move x3  |g|=     123 lim=  1000 x1.00         grasp x3  |g|=      65 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  29.341  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0169  B-Desc=100%/0.0168  B-Grasp=70%/0.0697  B-Move=0%/0.2723  B-Rel=100%/0.2756  P-Reach=0%/0.5780  P-Desc=0%/0.6186  P-Grasp=0%/0.6186  P-Move=0%/0.2799  P-Rel=100%/0.2329  C-Reach=0%/0.3267  C-Desc=0%/0.3945  C-Grasp=0%/0.3945  C-Move=0%/0.2707  C-Rel=100%/0.2213
+
+Iter  260:  Σrew=15.252  grad=1157.6  [reset=0.0s bptt=6.5s elapsed=2291s]
+  heads (0/5 clipped)   trunk |g|=156 lim=1500 x1.00
+          reach x3  |g|=     857 lim=  3000 x1.00       descend x3  |g|=     762 lim=  1500 x1.00  
+           move x3  |g|=      17 lim=  1000 x1.00         grasp x3  |g|=      15 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  15.252  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0185  B-Desc=70%/0.0398  B-Grasp=5%/0.2182  B-Move=0%/0.4575  B-Rel=100%/0.3971  P-Reach=0%/0.6426  P-Desc=0%/0.6770  P-Grasp=0%/0.6770  P-Move=0%/0.2723  P-Rel=100%/0.2237  C-Reach=0%/0.3952  C-Desc=0%/0.4492  C-Grasp=0%/0.4492  C-Move=0%/0.2709  C-Rel=100%/0.2216
+
+Iter  265:  Σrew=36.939  grad=593.4  [reset=0.0s bptt=6.5s elapsed=2339s]
+  heads (0/5 clipped)   trunk |g|=80 lim=1500 x1.00
+          reach x3  |g|=     510 lim=  3000 x1.00       descend x3  |g|=     270 lim=  1500 x1.00  
+           move x3  |g|=     104 lim=  1000 x1.00         grasp x3  |g|=      45 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  36.939  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0200  B-Desc=95%/0.0181  B-Grasp=50%/0.1238  B-Move=0%/0.3395  B-Rel=100%/0.3930  P-Reach=0%/0.6660  P-Desc=0%/0.6988  P-Grasp=0%/0.6988  P-Move=0%/0.2697  P-Rel=100%/0.2204  C-Reach=0%/0.4071  C-Desc=0%/0.4592  C-Grasp=0%/0.4592  C-Move=0%/0.2751  C-Rel=100%/0.2266
+
+Iter  270:  Σrew=36.284  grad=1321.8  [reset=0.0s bptt=6.5s elapsed=2387s]
+  heads (0/5 clipped)   trunk |g|=182 lim=1500 x1.00
+          reach x3  |g|=    1059 lim=  3000 x1.00       descend x3  |g|=     762 lim=  1500 x1.00  
+           move x3  |g|=      93 lim=  1000 x1.00         grasp x3  |g|=      61 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  36.284  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0184  B-Desc=95%/0.0200  B-Grasp=100%/0.0103  B-Move=0%/0.4469  B-Rel=100%/0.4957  P-Reach=0%/0.6345  P-Desc=0%/0.6678  P-Grasp=0%/0.6678  P-Move=0%/0.2755  P-Rel=100%/0.2275  C-Reach=0%/0.3690  C-Desc=0%/0.4241  C-Grasp=0%/0.4241  C-Move=0%/0.2705  C-Rel=100%/0.2212
+
+Iter  275:  Σrew=41.579  grad=728.6  [reset=0.0s bptt=6.5s elapsed=2436s]
+  heads (0/5 clipped)   trunk |g|=133 lim=1500 x1.00
+          reach x3  |g|=     670 lim=  3000 x1.00       descend x3  |g|=     194 lim=  1500 x1.00  
+          grasp x3  |g|=     163 lim=  1000 x1.00          move x3  |g|=      33 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  41.579  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0165  B-Desc=100%/0.0136  B-Grasp=90%/0.0302  B-Move=0%/0.2618  B-Rel=100%/0.3166  P-Reach=0%/0.6091  P-Desc=0%/0.6432  P-Grasp=0%/0.6432  P-Move=0%/0.2762  P-Rel=100%/0.2284  C-Reach=0%/0.3505  C-Desc=0%/0.4072  C-Grasp=0%/0.4072  C-Move=0%/0.2702  C-Rel=100%/0.2207
+
+Iter  280:  Σrew=41.526  grad=1125.0  [reset=0.0s bptt=6.5s elapsed=2484s]
+  heads (0/5 clipped)   trunk |g|=171 lim=1500 x1.00
+          reach x3  |g|=    1031 lim=  3000 x1.00       descend x3  |g|=     373 lim=  1500 x1.00  
+           move x3  |g|=     187 lim=  1000 x1.00         grasp x3  |g|=      14 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  41.526  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0172  B-Desc=100%/0.0134  B-Grasp=95%/0.0205  B-Move=0%/0.2809  B-Rel=100%/0.2741  P-Reach=0%/0.5752  P-Desc=0%/0.6109  P-Grasp=0%/0.6109  P-Move=0%/0.2743  P-Rel=100%/0.2260  C-Reach=0%/0.3270  C-Desc=0%/0.3866  C-Grasp=0%/0.3866  C-Move=0%/0.2664  C-Rel=100%/0.2160
+
+Iter  285:  Σrew=43.232  grad=1151.4  [reset=0.0s bptt=6.5s elapsed=2532s]
+  heads (0/5 clipped)   trunk |g|=181 lim=1500 x1.00
+          reach x3  |g|=     961 lim=  3000 x1.00       descend x3  |g|=     596 lim=  1500 x1.00  
+           move x3  |g|=     115 lim=  1000 x1.00         grasp x3  |g|=      35 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  43.232  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0140  B-Desc=100%/0.0114  B-Grasp=95%/0.0205  B-Move=0%/0.2893  B-Rel=100%/0.3061  P-Reach=0%/0.5436  P-Desc=0%/0.5803  P-Grasp=0%/0.5803  P-Move=0%/0.2775  P-Rel=100%/0.2299  C-Reach=0%/0.3021  C-Desc=0%/0.3641  C-Grasp=0%/0.3641  C-Move=0%/0.2736  C-Rel=100%/0.2249
+
+Iter  290:  Σrew=37.573  grad=843.9  [reset=0.0s bptt=6.5s elapsed=2580s]
+  heads (0/5 clipped)   trunk |g|=142 lim=1500 x1.00
+          reach x3  |g|=     779 lim=  3000 x1.00       descend x3  |g|=     273 lim=  1500 x1.00  
+           move x3  |g|=      80 lim=  1000 x1.00         grasp x3  |g|=      61 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  37.573  ph=3  success=1.67/20 (8%) (partial) streak=0  | B-Reach=100%/0.0168  B-Desc=100%/0.0173  B-Grasp=60%/0.0797  B-Move=0%/0.2458  B-Rel=100%/0.2084  P-Reach=0%/0.4847  P-Desc=0%/0.5226  P-Grasp=0%/0.5226  P-Move=0%/0.2732  P-Rel=100%/0.2246  C-Reach=0%/0.2806  C-Desc=0%/0.3422  C-Grasp=0%/0.3422  C-Move=0%/0.2694  C-Rel=100%/0.2196
+
+Iter  295:  Σrew=38.301  grad=1513.7  [reset=0.0s bptt=6.5s elapsed=2628s]
+  heads (0/5 clipped)   trunk |g|=239 lim=1500 x1.00
+          reach x3  |g|=    1295 lim=  3000 x1.00       descend x3  |g|=     716 lim=  1500 x1.00  
+          grasp x3  |g|=     190 lim=  1000 x1.00          move x3  |g|=      94 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  38.301  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=100%/0.0143  B-Desc=100%/0.0128  B-Grasp=80%/0.0389  B-Move=0%/0.2423  B-Rel=100%/0.2129  P-Reach=0%/0.4689  P-Desc=0%/0.5038  P-Grasp=0%/0.5038  P-Move=0%/0.2701  P-Rel=100%/0.2209  C-Reach=0%/0.2758  C-Desc=0%/0.3317  C-Grasp=0%/0.3317  C-Move=0%/0.2717  C-Rel=100%/0.2225
+
+Iter  300:  Σrew=43.612  grad=1229.3  [reset=0.0s bptt=6.5s elapsed=2676s]
+  heads (0/5 clipped)   trunk |g|=217 lim=1500 x1.00
+          reach x3  |g|=    1192 lim=  3000 x1.00       descend x3  |g|=     200 lim=  1500 x1.00  
+          grasp x3  |g|=      59 lim=  1000 x1.00          move x3  |g|=      26 lim=  1000 x1.00  
+        release x3  |g|=      17 lim=   500 x1.00  
+    container       rew=  43.612  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=100%/0.0131  B-Desc=100%/0.0129  B-Grasp=95%/0.0179  B-Move=5%/0.2602  B-Rel=100%/0.2090  P-Reach=0%/0.4837  P-Desc=0%/0.5174  P-Grasp=0%/0.5174  P-Move=0%/0.2726  P-Rel=100%/0.2239  C-Reach=0%/0.2687  C-Desc=0%/0.3256  C-Grasp=0%/0.3256  C-Move=0%/0.2634  C-Rel=100%/0.2124
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 300
+
+Iter  305:  Σrew=36.733  grad=1520.7  [reset=0.0s bptt=6.5s elapsed=2726s]
+  heads (0/5 clipped)   trunk |g|=233 lim=1500 x1.00
+          reach x3  |g|=    1261 lim=  3000 x1.00       descend x3  |g|=     640 lim=  1500 x1.00  
+           move x3  |g|=     497 lim=  1000 x1.00         grasp x3  |g|=     102 lim=  1000 x1.00  
+        release x3  |g|=      19 lim=   500 x1.00  
+    container       rew=  36.733  ph=3  success=1.67/20 (8%) (partial) streak=0  | B-Reach=100%/0.0154  B-Desc=95%/0.0142  B-Grasp=75%/0.0522  B-Move=0%/0.3204  B-Rel=100%/0.2784  P-Reach=0%/0.5537  P-Desc=0%/0.5841  P-Grasp=0%/0.5841  P-Move=0%/0.2757  P-Rel=100%/0.2277  C-Reach=0%/0.3008  C-Desc=0%/0.3537  C-Grasp=0%/0.3537  C-Move=0%/0.2703  C-Rel=100%/0.2207
+
+Iter  310:  Σrew=36.561  grad=1416.9  [reset=0.0s bptt=6.5s elapsed=2774s]
+  heads (0/5 clipped)   trunk |g|=200 lim=1500 x1.00
+          reach x3  |g|=    1243 lim=  3000 x1.00       descend x3  |g|=     640 lim=  1500 x1.00  
+           move x3  |g|=     102 lim=  1000 x1.00         grasp x3  |g|=      51 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  36.561  ph=3  success=3/20 (15%) (partial) streak=0  | B-Reach=100%/0.0164  B-Desc=100%/0.0110  B-Grasp=80%/0.0332  B-Move=5%/0.2509  B-Rel=100%/0.2268  P-Reach=0%/0.5835  P-Desc=0%/0.6122  P-Grasp=0%/0.6122  P-Move=0%/0.2771  P-Rel=100%/0.2293  C-Reach=0%/0.3264  C-Desc=0%/0.3754  C-Grasp=0%/0.3754  C-Move=0%/0.2672  C-Rel=100%/0.2171
+
+Iter  315:  Σrew=40.278  grad=957.1  [reset=0.0s bptt=6.5s elapsed=2822s]
+  heads (0/5 clipped)   trunk |g|=159 lim=1500 x1.00
+          reach x3  |g|=     820 lim=  3000 x1.00       descend x3  |g|=     460 lim=  1500 x1.00  
+           move x3  |g|=      82 lim=  1000 x1.00         grasp x3  |g|=      17 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  40.278  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0149  B-Desc=100%/0.0186  B-Grasp=50%/0.1011  B-Move=0%/0.2556  B-Rel=100%/0.2185  P-Reach=0%/0.6043  P-Desc=0%/0.6343  P-Grasp=0%/0.6343  P-Move=0%/0.2689  P-Rel=100%/0.2194  C-Reach=0%/0.3538  C-Desc=0%/0.4031  C-Grasp=0%/0.4031  C-Move=0%/0.2639  C-Rel=100%/0.2129
+
+Iter  320:  Σrew=32.535  grad=1094.4  [reset=0.0s bptt=6.5s elapsed=2870s]
+  heads (0/5 clipped)   trunk |g|=222 lim=1500 x1.00
+          reach x3  |g|=     851 lim=  3000 x1.00       descend x3  |g|=     633 lim=  1500 x1.00  
+           move x3  |g|=     151 lim=  1000 x1.00         grasp x3  |g|=      34 lim=  1000 x1.00  
+        release x3  |g|=      19 lim=   500 x1.00  
+    container       rew=  32.535  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0133  B-Desc=100%/0.0150  B-Grasp=45%/0.1025  B-Move=0%/0.2942  B-Rel=100%/0.2742  P-Reach=0%/0.6141  P-Desc=0%/0.6443  P-Grasp=0%/0.6443  P-Move=0%/0.2779  P-Rel=100%/0.2305  C-Reach=0%/0.3509  C-Desc=0%/0.4018  C-Grasp=0%/0.4018  C-Move=0%/0.2716  C-Rel=100%/0.2223
+
+Iter  325:  Σrew=47.602  grad=667.8  [reset=0.0s bptt=6.5s elapsed=2918s]
+  heads (0/5 clipped)   trunk |g|=128 lim=1500 x1.00
+          reach x3  |g|=     585 lim=  3000 x1.00       descend x3  |g|=     286 lim=  1500 x1.00  
+          grasp x3  |g|=      53 lim=  1000 x1.00          move x3  |g|=      46 lim=  1000 x1.00  
+        release x3  |g|=       9 lim=   500 x1.00  
+    container       rew=  47.602  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0141  B-Desc=100%/0.0149  B-Grasp=55%/0.0779  B-Move=0%/0.3367  B-Rel=100%/0.2774  P-Reach=0%/0.6033  P-Desc=0%/0.6320  P-Grasp=0%/0.6320  P-Move=0%/0.2709  P-Rel=100%/0.2219  C-Reach=0%/0.3568  C-Desc=0%/0.4039  C-Grasp=0%/0.4039  C-Move=0%/0.2677  C-Rel=100%/0.2176
+
+Iter  330:  Σrew=37.420  grad=997.6  [reset=0.0s bptt=6.5s elapsed=2967s]
+  heads (0/5 clipped)   trunk |g|=183 lim=1500 x1.00
+          reach x3  |g|=     960 lim=  3000 x1.00       descend x3  |g|=     179 lim=  1500 x1.00  
+           move x3  |g|=      73 lim=  1000 x1.00         grasp x3  |g|=      57 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  37.420  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0140  B-Desc=100%/0.0161  B-Grasp=25%/0.1149  B-Move=0%/0.4201  B-Rel=100%/0.3630  P-Reach=0%/0.5707  P-Desc=0%/0.6014  P-Grasp=0%/0.6014  P-Move=0%/0.2732  P-Rel=100%/0.2246  C-Reach=0%/0.3258  C-Desc=0%/0.3771  C-Grasp=0%/0.3771  C-Move=0%/0.2699  C-Rel=100%/0.2203
+
+Iter  335:  Σrew=48.946  grad=1049.4  [reset=0.0s bptt=6.5s elapsed=3015s]
+  heads (0/5 clipped)   trunk |g|=197 lim=1500 x1.00
+          reach x3  |g|=     977 lim=  3000 x1.00       descend x3  |g|=     321 lim=  1500 x1.00  
+          grasp x3  |g|=      48 lim=  1000 x1.00          move x3  |g|=      47 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  48.946  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0146  B-Desc=100%/0.0196  B-Grasp=55%/0.0806  B-Move=0%/0.2944  B-Rel=100%/0.2935  P-Reach=0%/0.6004  P-Desc=0%/0.6254  P-Grasp=0%/0.6254  P-Move=0%/0.2734  P-Rel=100%/0.2249  C-Reach=0%/0.3437  C-Desc=0%/0.3858  C-Grasp=0%/0.3858  C-Move=0%/0.2796  C-Rel=100%/0.2321
+
+Iter  340:  Σrew=50.742  grad=1288.4  [reset=0.0s bptt=6.5s elapsed=3063s]
+  heads (0/5 clipped)   trunk |g|=220 lim=1500 x1.00
+          reach x3  |g|=    1195 lim=  3000 x1.00       descend x3  |g|=     405 lim=  1500 x1.00  
+           move x3  |g|=     124 lim=  1000 x1.00         grasp x3  |g|=      64 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  50.742  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0127  B-Desc=100%/0.0114  B-Grasp=75%/0.0370  B-Move=0%/0.4047  B-Rel=100%/0.3267  P-Reach=0%/0.5993  P-Desc=0%/0.6286  P-Grasp=0%/0.6286  P-Move=0%/0.2746  P-Rel=100%/0.2264  C-Reach=0%/0.3539  C-Desc=0%/0.4018  C-Grasp=0%/0.4018  C-Move=0%/0.2724  C-Rel=100%/0.2234
+
+Iter  345:  Σrew=30.318  grad=883.3  [reset=0.0s bptt=6.5s elapsed=3111s]
+  heads (0/5 clipped)   trunk |g|=161 lim=1500 x1.00
+          reach x3  |g|=     697 lim=  3000 x1.00       descend x3  |g|=     510 lim=  1500 x1.00  
+           move x3  |g|=      77 lim=  1000 x1.00         grasp x3  |g|=      52 lim=  1000 x1.00  
+        release x3  |g|=      20 lim=   500 x1.00  
+    container       rew=  30.318  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0137  B-Desc=100%/0.0210  B-Grasp=30%/0.0805  B-Move=0%/0.4512  B-Rel=100%/0.4538  P-Reach=0%/0.6357  P-Desc=0%/0.6654  P-Grasp=0%/0.6654  P-Move=0%/0.2755  P-Rel=100%/0.2274  C-Reach=0%/0.3916  C-Desc=0%/0.4387  C-Grasp=0%/0.4387  C-Move=0%/0.2683  C-Rel=100%/0.2182
+
+Iter  350:  Σrew=38.876  grad=732.2  [reset=0.0s bptt=6.5s elapsed=3159s]
+  heads (0/5 clipped)   trunk |g|=139 lim=1500 x1.00
+        descend x3  |g|=     553 lim=  1500 x1.00         reach x3  |g|=     376 lim=  3000 x1.00  
+          grasp x3  |g|=     236 lim=  1000 x1.00          move x3  |g|=     118 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  38.876  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0110  B-Desc=100%/0.0185  B-Grasp=25%/0.0724  B-Move=0%/0.3823  B-Rel=100%/0.3924  P-Reach=0%/0.6195  P-Desc=0%/0.6508  P-Grasp=0%/0.6508  P-Move=0%/0.2735  P-Rel=100%/0.2251  C-Reach=0%/0.3780  C-Desc=0%/0.4275  C-Grasp=0%/0.4275  C-Move=0%/0.2685  C-Rel=100%/0.2186
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 350
+
+Iter  355:  Σrew=46.522  grad=1333.1  [reset=0.0s bptt=6.5s elapsed=3209s]
+  heads (0/5 clipped)   trunk |g|=268 lim=1500 x1.00
+          reach x3  |g|=    1111 lim=  3000 x1.00       descend x3  |g|=     530 lim=  1500 x1.00  
+           move x3  |g|=     359 lim=  1000 x1.00         grasp x3  |g|=     247 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  46.522  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0153  B-Desc=100%/0.0160  B-Grasp=50%/0.0511  B-Move=0%/0.5126  B-Rel=100%/0.3907  P-Reach=0%/0.5999  P-Desc=0%/0.6310  P-Grasp=0%/0.6310  P-Move=0%/0.2717  P-Rel=100%/0.2228  C-Reach=0%/0.3664  C-Desc=0%/0.4160  C-Grasp=0%/0.4160  C-Move=0%/0.2685  C-Rel=100%/0.2185
+
+Iter  360:  Σrew=43.784  grad=883.1  [reset=0.0s bptt=6.5s elapsed=3257s]
+  heads (0/5 clipped)   trunk |g|=149 lim=1500 x1.00
+          reach x3  |g|=     711 lim=  3000 x1.00          move x3  |g|=     340 lim=  1000 x1.00  
+        descend x3  |g|=     333 lim=  1500 x1.00         grasp x3  |g|=     162 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  43.784  ph=3  success=0.67/20 (3%) (partial) streak=0  | B-Reach=100%/0.0123  B-Desc=100%/0.0113  B-Grasp=100%/0.0166  B-Move=0%/0.3579  B-Rel=100%/0.3717  P-Reach=0%/0.5673  P-Desc=0%/0.5939  P-Grasp=0%/0.5939  P-Move=0%/0.2727  P-Rel=100%/0.2241  C-Reach=0%/0.3334  C-Desc=0%/0.3772  C-Grasp=0%/0.3772  C-Move=0%/0.2694  C-Rel=100%/0.2197
+
+Iter  365:  Σrew=49.315  grad=1001.5  [reset=0.0s bptt=6.5s elapsed=3305s]
+  heads (0/5 clipped)   trunk |g|=173 lim=1500 x1.00
+          reach x3  |g|=     930 lim=  3000 x1.00       descend x3  |g|=     300 lim=  1500 x1.00  
+          grasp x3  |g|=     129 lim=  1000 x1.00          move x3  |g|=      25 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  49.315  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0115  B-Desc=100%/0.0158  B-Grasp=55%/0.0415  B-Move=0%/0.3773  B-Rel=100%/0.4143  P-Reach=0%/0.6047  P-Desc=0%/0.6351  P-Grasp=0%/0.6351  P-Move=0%/0.2692  P-Rel=100%/0.2199  C-Reach=0%/0.3753  C-Desc=0%/0.4227  C-Grasp=0%/0.4227  C-Move=0%/0.2654  C-Rel=100%/0.2147
+
+Iter  370:  Σrew=34.493  grad=1781.9  [reset=0.0s bptt=6.5s elapsed=3353s]
+  heads (0/5 clipped)   trunk |g|=313 lim=1500 x1.00
+          reach x3  |g|=    1509 lim=  3000 x1.00       descend x3  |g|=     883 lim=  1500 x1.00  
+          grasp x3  |g|=     147 lim=  1000 x1.00          move x3  |g|=      17 lim=  1000 x1.00  
+        release x3  |g|=      10 lim=   500 x1.00  
+    container       rew=  34.493  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0134  B-Desc=100%/0.0117  B-Grasp=100%/0.0191  B-Move=0%/0.2591  B-Rel=100%/0.3151  P-Reach=0%/0.7236  P-Desc=0%/0.7502  P-Grasp=0%/0.7502  P-Move=0%/0.2709  P-Rel=100%/0.2218  C-Reach=0%/0.4653  C-Desc=0%/0.5059  C-Grasp=0%/0.5059  C-Move=0%/0.2711  C-Rel=100%/0.2218
+
+Iter  375:  Σrew=38.589  grad=1469.1  [reset=0.0s bptt=6.5s elapsed=3401s]
+  heads (0/5 clipped)   trunk |g|=220 lim=1500 x1.00
+          reach x3  |g|=    1383 lim=  3000 x1.00       descend x3  |g|=     285 lim=  1500 x1.00  
+           move x3  |g|=     267 lim=  1000 x1.00         grasp x3  |g|=     208 lim=  1000 x1.00  
+        release x3  |g|=      25 lim=   500 x1.00  
+    container       rew=  38.589  ph=3  success=0/20 (0%) (partial) streak=0  | B-Reach=100%/0.0139  B-Desc=100%/0.0186  B-Grasp=60%/0.0347  B-Move=0%/0.3369  B-Rel=100%/0.3565  P-Reach=0%/0.7159  P-Desc=0%/0.7399  P-Grasp=0%/0.7399  P-Move=0%/0.2713  P-Rel=100%/0.2224  C-Reach=0%/0.4572  C-Desc=0%/0.4942  C-Grasp=0%/0.4942  C-Move=0%/0.2724  C-Rel=100%/0.2234
+
+Iter  380:  Σrew=33.286  grad=1709.2  [reset=0.0s bptt=6.5s elapsed=3449s]
+  heads (0/5 clipped)   trunk |g|=325 lim=1500 x1.00
+          reach x3  |g|=    1330 lim=  3000 x1.00       descend x3  |g|=     961 lim=  1500 x1.00  
+          grasp x3  |g|=     336 lim=  1000 x1.00          move x3  |g|=      99 lim=  1000 x1.00  
+        release x3  |g|=      33 lim=   500 x1.00  
+    container       rew=  33.286  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0096  B-Desc=100%/0.0101  B-Grasp=100%/0.0210  B-Move=0%/0.3428  B-Rel=100%/0.4410  P-Reach=0%/0.7454  P-Desc=0%/0.7647  P-Grasp=0%/0.7647  P-Move=0%/0.2763  P-Rel=100%/0.2285  C-Reach=0%/0.4876  C-Desc=0%/0.5167  C-Grasp=0%/0.5167  C-Move=0%/0.2721  C-Rel=100%/0.2230
+
+Iter  385:  Σrew=33.454  grad=1460.4  [reset=0.0s bptt=6.5s elapsed=3497s]
+  heads (0/5 clipped)   trunk |g|=283 lim=1500 x1.00
+          reach x3  |g|=    1108 lim=  3000 x1.00       descend x3  |g|=     843 lim=  1500 x1.00  
+          grasp x3  |g|=     329 lim=  1000 x1.00       release x3  |g|=      70 lim=   500 x1.00  
+           move x3  |g|=      23 lim=  1000 x1.00  
+    container       rew=  33.454  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0138  B-Desc=100%/0.0230  B-Grasp=75%/0.0267  B-Move=0%/0.2705  B-Rel=100%/0.2568  P-Reach=0%/0.6700  P-Desc=0%/0.6894  P-Grasp=0%/0.6894  P-Move=0%/0.2684  P-Rel=100%/0.2189  C-Reach=0%/0.4159  C-Desc=0%/0.4466  C-Grasp=0%/0.4466  C-Move=0%/0.2707  C-Rel=100%/0.2213
+
+Iter  390:  Σrew=50.197  grad=1536.0  [reset=0.0s bptt=6.5s elapsed=3545s]
+  heads (0/5 clipped)   trunk |g|=250 lim=1500 x1.00
+          reach x3  |g|=    1375 lim=  3000 x1.00       descend x3  |g|=     489 lim=  1500 x1.00  
+          grasp x3  |g|=     400 lim=  1000 x1.00          move x3  |g|=      80 lim=  1000 x1.00  
+        release x3  |g|=      16 lim=   500 x1.00  
+    container       rew=  50.197  ph=3  success=0.33/20 (2%) (partial) streak=0  | B-Reach=100%/0.0140  B-Desc=100%/0.0180  B-Grasp=50%/0.0556  B-Move=0%/0.3084  B-Rel=100%/0.3195  P-Reach=0%/0.6276  P-Desc=0%/0.6485  P-Grasp=0%/0.6485  P-Move=0%/0.2774  P-Rel=100%/0.2298  C-Reach=0%/0.3630  C-Desc=0%/0.3985  C-Grasp=0%/0.3985  C-Move=0%/0.2765  C-Rel=100%/0.2283
+
+Iter  395:  Σrew=33.497  grad=1714.0  [reset=0.0s bptt=6.5s elapsed=3594s]
+  heads (0/5 clipped)   trunk |g|=345 lim=1500 x1.00
+          reach x3  |g|=    1182 lim=  3000 x1.00          move x3  |g|=     795 lim=  1000 x1.00  
+        descend x3  |g|=     704 lim=  1500 x1.00         grasp x3  |g|=     541 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  33.497  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0108  B-Desc=95%/0.0242  B-Grasp=90%/0.0247  B-Move=0%/0.2533  B-Rel=100%/0.2339  P-Reach=0%/0.6027  P-Desc=0%/0.6253  P-Grasp=0%/0.6253  P-Move=0%/0.2722  P-Rel=100%/0.2235  C-Reach=0%/0.3470  C-Desc=0%/0.3854  C-Grasp=0%/0.3854  C-Move=0%/0.2681  C-Rel=100%/0.2181
+
+Iter  400:  Σrew=42.569  grad=1114.3  [reset=0.0s bptt=6.5s elapsed=3642s]
+  heads (0/5 clipped)   trunk |g|=231 lim=1500 x1.00
+          reach x3  |g|=     887 lim=  3000 x1.00       descend x3  |g|=     571 lim=  1500 x1.00  
+          grasp x3  |g|=     256 lim=  1000 x1.00          move x3  |g|=     102 lim=  1000 x1.00  
+        release x3  |g|=      10 lim=   500 x1.00  
+    container       rew=  42.569  ph=3  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0104  B-Desc=100%/0.0105  B-Grasp=90%/0.0241  B-Move=0%/0.3378  B-Rel=100%/0.3972  P-Reach=0%/0.4766  P-Desc=0%/0.5088  P-Grasp=0%/0.5088  P-Move=0%/0.2784  P-Rel=100%/0.2311  C-Reach=0%/0.2745  C-Desc=0%/0.3269  C-Grasp=0%/0.3269  C-Move=0%/0.2712  C-Rel=100%/0.2218
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 400
+
+Iter  405:  Σrew=48.245  grad=1191.5  [reset=0.0s bptt=6.5s elapsed=3691s]
+  heads (0/5 clipped)   trunk |g|=213 lim=1500 x1.00
+          reach x3  |g|=    1057 lim=  3000 x1.00       descend x3  |g|=     454 lim=  1500 x1.00  
+          grasp x3  |g|=     199 lim=  1000 x1.00          move x3  |g|=     110 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  48.245  ph=3  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0113  B-Desc=100%/0.0122  B-Grasp=100%/0.0150  B-Move=0%/0.2764  B-Rel=100%/0.3005  P-Reach=0%/0.4490  P-Desc=0%/0.4878  P-Grasp=0%/0.4878  P-Move=0%/0.2710  P-Rel=100%/0.2220  C-Reach=0%/0.2653  C-Desc=0%/0.3267  C-Grasp=0%/0.3267  C-Move=0%/0.2654  C-Rel=100%/0.2147
+
+Iter  410:  Σrew=55.583  grad=1313.0  [reset=0.0s bptt=6.5s elapsed=3740s]
+  heads (0/5 clipped)   trunk |g|=240 lim=1500 x1.00
+          reach x3  |g|=     993 lim=  3000 x1.00       descend x3  |g|=     776 lim=  1500 x1.00  
+           move x3  |g|=     272 lim=  1000 x1.00         grasp x3  |g|=      71 lim=  1000 x1.00  
+        release x3  |g|=      13 lim=   500 x1.00  
+    container       rew=  55.583  ph=3  success=3.67/20 (18%) (partial) streak=0  | B-Reach=100%/0.0093  B-Desc=100%/0.0081  B-Grasp=100%/0.0103  B-Move=0%/0.2046  B-Rel=100%/0.1714  P-Reach=0%/0.4237  P-Desc=0%/0.4756  P-Grasp=0%/0.4756  P-Move=0%/0.2729  P-Rel=100%/0.2243  C-Reach=0%/0.2785  C-Desc=0%/0.3527  C-Grasp=0%/0.3527  C-Move=0%/0.2703  C-Rel=100%/0.2207
+
+Iter  415:  Σrew=60.355  grad=950.0  [reset=0.0s bptt=6.5s elapsed=3788s]
+  heads (0/5 clipped)   trunk |g|=181 lim=1500 x1.00
+          reach x3  |g|=     875 lim=  3000 x1.00       descend x3  |g|=     215 lim=  1500 x1.00  
+          grasp x3  |g|=     213 lim=  1000 x1.00          move x3  |g|=     106 lim=  1000 x1.00  
+        release x3  |g|=      20 lim=   500 x1.00  
+    container       rew=  60.355  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=100%/0.0102  B-Desc=100%/0.0082  B-Grasp=100%/0.0157  B-Move=0%/0.2921  B-Rel=100%/0.3251  P-Reach=0%/0.4354  P-Desc=0%/0.4797  P-Grasp=0%/0.4797  P-Move=0%/0.2799  P-Rel=100%/0.2328  C-Reach=0%/0.2706  C-Desc=0%/0.3375  C-Grasp=0%/0.3375  C-Move=0%/0.2750  C-Rel=100%/0.2265
+
+Iter  420:  Σrew=56.382  grad=948.6  [reset=0.0s bptt=6.5s elapsed=3836s]
+  heads (0/5 clipped)   trunk |g|=204 lim=1500 x1.00
+          reach x3  |g|=     750 lim=  3000 x1.00       descend x3  |g|=     396 lim=  1500 x1.00  
+           move x3  |g|=     335 lim=  1000 x1.00         grasp x3  |g|=     161 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  56.382  ph=3  success=3.33/20 (17%) (partial) streak=0  | B-Reach=100%/0.0105  B-Desc=100%/0.0105  B-Grasp=100%/0.0113  B-Move=0%/0.2100  B-Rel=100%/0.1753  P-Reach=0%/0.4086  P-Desc=0%/0.4507  P-Grasp=0%/0.4507  P-Move=0%/0.2763  P-Rel=100%/0.2285  C-Reach=0%/0.2725  C-Desc=0%/0.3328  C-Grasp=0%/0.3328  C-Move=0%/0.2739  C-Rel=100%/0.2253
+
+Iter  425:  Σrew=58.514  grad=831.8  [reset=0.0s bptt=6.5s elapsed=3884s]
+  heads (0/5 clipped)   trunk |g|=162 lim=1500 x1.00
+          reach x3  |g|=     680 lim=  3000 x1.00       descend x3  |g|=     396 lim=  1500 x1.00  
+          grasp x3  |g|=     201 lim=  1000 x1.00          move x3  |g|=      83 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  58.514  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=100%/0.0082  B-Desc=100%/0.0118  B-Grasp=95%/0.0205  B-Move=5%/0.2285  B-Rel=100%/0.1884  P-Reach=0%/0.4049  P-Desc=0%/0.4423  P-Grasp=0%/0.4423  P-Move=0%/0.2690  P-Rel=100%/0.2196  C-Reach=0%/0.2716  C-Desc=0%/0.3248  C-Grasp=0%/0.3248  C-Move=0%/0.2661  C-Rel=100%/0.2155
+
+Iter  430:  Σrew=61.474  grad=548.7  [reset=0.0s bptt=6.5s elapsed=3932s]
+  heads (0/5 clipped)   trunk |g|=120 lim=1500 x1.00
+          reach x3  |g|=     452 lim=  3000 x1.00       descend x3  |g|=     212 lim=  1500 x1.00  
+          grasp x3  |g|=     175 lim=  1000 x1.00          move x3  |g|=      84 lim=  1000 x1.00  
+        release x3  |g|=       6 lim=   500 x1.00  
+    container       rew=  61.474  ph=3  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0097  B-Desc=100%/0.0127  B-Grasp=90%/0.0175  B-Move=0%/0.2300  B-Rel=100%/0.2027  P-Reach=0%/0.4448  P-Desc=0%/0.4706  P-Grasp=0%/0.4706  P-Move=0%/0.2705  P-Rel=100%/0.2214  C-Reach=0%/0.2848  C-Desc=0%/0.3236  C-Grasp=0%/0.3236  C-Move=0%/0.2640  C-Rel=100%/0.2130
+
+Iter  435:  Σrew=54.436  grad=1633.3  [reset=0.0s bptt=6.5s elapsed=3980s]
+  heads (0/5 clipped)   trunk |g|=292 lim=1500 x1.00
+          reach x3  |g|=    1452 lim=  3000 x1.00       descend x3  |g|=     628 lim=  1500 x1.00  
+          grasp x3  |g|=     232 lim=  1000 x1.00          move x3  |g|=     164 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  54.436  ph=3  success=3/20 (15%) (partial) streak=0  | B-Reach=100%/0.0099  B-Desc=100%/0.0111  B-Grasp=100%/0.0127  B-Move=0%/0.2136  B-Rel=100%/0.1915  P-Reach=0%/0.5280  P-Desc=0%/0.5451  P-Grasp=0%/0.5451  P-Move=0%/0.2760  P-Rel=100%/0.2281  C-Reach=0%/0.3044  C-Desc=0%/0.3336  C-Grasp=0%/0.3336  C-Move=0%/0.2717  C-Rel=100%/0.2226
+
+Iter  440:  Σrew=64.788  grad=1300.9  [reset=0.0s bptt=6.5s elapsed=4028s]
+  heads (0/5 clipped)   trunk |g|=240 lim=1500 x1.00
+          reach x3  |g|=    1028 lim=  3000 x1.00       descend x3  |g|=     746 lim=  1500 x1.00  
+          grasp x3  |g|=     143 lim=  1000 x1.00          move x3  |g|=      34 lim=  1000 x1.00  
+        release x3  |g|=       8 lim=   500 x1.00  
+    container       rew=  64.788  ph=3  success=4/20 (20%) (partial) streak=0  | B-Reach=100%/0.0089  B-Desc=100%/0.0112  B-Grasp=100%/0.0151  B-Move=0%/0.1940  B-Rel=100%/0.1297  P-Reach=0%/0.5389  P-Desc=0%/0.5552  P-Grasp=0%/0.5552  P-Move=0%/0.2739  P-Rel=100%/0.2256  C-Reach=0%/0.3179  C-Desc=0%/0.3450  C-Grasp=0%/0.3450  C-Move=0%/0.2670  C-Rel=100%/0.2168
+
+Iter  445:  Σrew=69.244  grad=1193.2  [reset=0.0s bptt=6.5s elapsed=4076s]
+  heads (0/5 clipped)   trunk |g|=244 lim=1500 x1.00
+          reach x3  |g|=    1095 lim=  3000 x1.00         grasp x3  |g|=     274 lim=  1000 x1.00  
+        descend x3  |g|=     245 lim=  1500 x1.00          move x3  |g|=     173 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  69.244  ph=3  success=3.33/20 (17%) (partial) streak=0  | B-Reach=100%/0.0108  B-Desc=100%/0.0110  B-Grasp=100%/0.0115  B-Move=5%/0.2248  B-Rel=100%/0.2406  P-Reach=0%/0.4997  P-Desc=0%/0.5192  P-Grasp=0%/0.5192  P-Move=0%/0.2761  P-Rel=100%/0.2283  C-Reach=0%/0.2852  C-Desc=0%/0.3187  C-Grasp=0%/0.3187  C-Move=0%/0.2686  C-Rel=100%/0.2186
+
+Iter  450:  Σrew=65.899  grad=1438.0  [reset=0.0s bptt=6.5s elapsed=4124s]
+  heads (0/5 clipped)   trunk |g|=307 lim=1500 x1.00
+          reach x3  |g|=    1291 lim=  3000 x1.00       descend x3  |g|=     520 lim=  1500 x1.00  
+          grasp x3  |g|=     169 lim=  1000 x1.00          move x3  |g|=      88 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  65.899  ph=3  success=4.67/20 (23%) (partial) streak=0  | B-Reach=100%/0.0080  B-Desc=100%/0.0078  B-Grasp=100%/0.0077  B-Move=5%/0.1598  B-Rel=100%/0.1672  P-Reach=0%/0.4574  P-Desc=0%/0.4828  P-Grasp=0%/0.4828  P-Move=0%/0.2765  P-Rel=100%/0.2288  C-Reach=0%/0.2578  C-Desc=0%/0.3011  C-Grasp=0%/0.3011  C-Move=0%/0.2705  C-Rel=100%/0.2211
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 450
+
+Iter  455:  Σrew=64.691  grad=999.8  [reset=0.0s bptt=6.5s elapsed=4174s]
+  heads (0/5 clipped)   trunk |g|=209 lim=1500 x1.00
+          reach x3  |g|=     869 lim=  3000 x1.00       descend x3  |g|=     420 lim=  1500 x1.00  
+          grasp x3  |g|=     142 lim=  1000 x1.00          move x3  |g|=      61 lim=  1000 x1.00  
+        release x3  |g|=       8 lim=   500 x1.00  
+    container       rew=  64.691  ph=3  success=2.67/20 (13%) (partial) streak=0  | B-Reach=100%/0.0090  B-Desc=100%/0.0081  B-Grasp=100%/0.0081  B-Move=5%/0.1623  B-Rel=100%/0.1907  P-Reach=0%/0.4554  P-Desc=0%/0.4832  P-Grasp=0%/0.4832  P-Move=0%/0.2700  P-Rel=100%/0.2209  C-Reach=0%/0.2464  C-Desc=0%/0.2951  C-Grasp=0%/0.2951  C-Move=0%/0.2687  C-Rel=100%/0.2189
+
+Iter  460:  Σrew=55.184  grad=1563.5  [reset=0.0s bptt=6.5s elapsed=4222s]
+  heads (0/5 clipped)   trunk |g|=316 lim=1500 x1.00
+        descend x3  |g|=    1096 lim=  1500 x1.00         reach x3  |g|=    1002 lim=  3000 x1.00  
+          grasp x3  |g|=     368 lim=  1000 x1.00          move x3  |g|=      54 lim=  1000 x1.00  
+        release x3  |g|=       9 lim=   500 x1.00  
+    container       rew=  55.184  ph=3  success=3.33/20 (17%) (partial) streak=0  | B-Reach=100%/0.0078  B-Desc=100%/0.0100  B-Grasp=100%/0.0151  B-Move=0%/0.2003  B-Rel=100%/0.1513  P-Reach=0%/0.4684  P-Desc=0%/0.4964  P-Grasp=0%/0.4964  P-Move=0%/0.2731  P-Rel=100%/0.2247  C-Reach=0%/0.2637  C-Desc=0%/0.3111  C-Grasp=0%/0.3111  C-Move=0%/0.2730  C-Rel=100%/0.2241
+
+Iter  465:  Σrew=69.983  grad=976.7  [reset=0.0s bptt=6.5s elapsed=4270s]
+  heads (0/5 clipped)   trunk |g|=204 lim=1500 x1.00
+        descend x3  |g|=     656 lim=  1500 x1.00         reach x3  |g|=     627 lim=  3000 x1.00  
+          grasp x3  |g|=     282 lim=  1000 x1.00          move x3  |g|=     103 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  69.983  ph=3  success=3.33/20 (17%) (partial) streak=0  | B-Reach=100%/0.0091  B-Desc=100%/0.0077  B-Grasp=100%/0.0081  B-Move=0%/0.2024  B-Rel=100%/0.1837  P-Reach=0%/0.4533  P-Desc=0%/0.4840  P-Grasp=0%/0.4840  P-Move=0%/0.2728  P-Rel=100%/0.2242  C-Reach=0%/0.2785  C-Desc=0%/0.3266  C-Grasp=0%/0.3266  C-Move=0%/0.2693  C-Rel=100%/0.2196
+
+Iter  470:  Σrew=69.276  grad=852.2  [reset=0.0s bptt=6.5s elapsed=4318s]
+  heads (0/5 clipped)   trunk |g|=192 lim=1500 x1.00
+        descend x3  |g|=     574 lim=  1500 x1.00         reach x3  |g|=     495 lim=  3000 x1.00  
+          grasp x3  |g|=     285 lim=  1000 x1.00          move x3  |g|=     183 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  69.276  ph=3  success=3/20 (15%) (partial) streak=0  | B-Reach=100%/0.0088  B-Desc=100%/0.0083  B-Grasp=100%/0.0132  B-Move=0%/0.2027  B-Rel=100%/0.2280  P-Reach=0%/0.4400  P-Desc=0%/0.4724  P-Grasp=0%/0.4724  P-Move=0%/0.2713  P-Rel=100%/0.2224  C-Reach=0%/0.2806  C-Desc=0%/0.3293  C-Grasp=0%/0.3293  C-Move=0%/0.2684  C-Rel=100%/0.2184
+
+Iter  475:  Σrew=72.059  grad=1489.8  [reset=0.0s bptt=6.5s elapsed=4367s]
+  heads (0/5 clipped)   trunk |g|=283 lim=1500 x1.00
+          reach x3  |g|=    1215 lim=  3000 x1.00       descend x3  |g|=     784 lim=  1500 x1.00  
+          grasp x3  |g|=     201 lim=  1000 x1.00          move x3  |g|=      90 lim=  1000 x1.00  
+        release x3  |g|=       9 lim=   500 x1.00  
+    container       rew=  72.059  ph=3  success=4/20 (20%) (partial) streak=0  | B-Reach=100%/0.0082  B-Desc=100%/0.0062  B-Grasp=100%/0.0063  B-Move=5%/0.1593  B-Rel=100%/0.1544  P-Reach=0%/0.4142  P-Desc=0%/0.4525  P-Grasp=0%/0.4525  P-Move=0%/0.2735  P-Rel=100%/0.2250  C-Reach=0%/0.3055  C-Desc=0%/0.3562  C-Grasp=0%/0.3562  C-Move=0%/0.2722  C-Rel=100%/0.2231
+
+Iter  480:  Σrew=68.271  grad=1428.8  [reset=0.0s bptt=6.5s elapsed=4415s]
+  heads (0/5 clipped)   trunk |g|=275 lim=1500 x1.00
+          reach x3  |g|=    1285 lim=  3000 x1.00       descend x3  |g|=     515 lim=  1500 x1.00  
+          grasp x3  |g|=     193 lim=  1000 x1.00          move x3  |g|=     103 lim=  1000 x1.00  
+        release x3  |g|=       8 lim=   500 x1.00  
+    container       rew=  68.271  ph=3  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0073  B-Desc=100%/0.0076  B-Grasp=100%/0.0074  B-Move=10%/0.1662  B-Rel=100%/0.1646  P-Reach=0%/0.4250  P-Desc=0%/0.4604  P-Grasp=0%/0.4604  P-Move=0%/0.2756  P-Rel=100%/0.2276  C-Reach=0%/0.2813  C-Desc=0%/0.3329  C-Grasp=0%/0.3329  C-Move=0%/0.2661  C-Rel=100%/0.2156
+
+Iter  485:  Σrew=72.547  grad=1374.8  [reset=0.0s bptt=6.5s elapsed=4463s]
+  heads (0/5 clipped)   trunk |g|=288 lim=1500 x1.00
+          reach x3  |g|=    1168 lim=  3000 x1.00       descend x3  |g|=     614 lim=  1500 x1.00  
+          grasp x3  |g|=     250 lim=  1000 x1.00          move x3  |g|=      66 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  72.547  ph=3  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0071  B-Desc=100%/0.0066  B-Grasp=100%/0.0072  B-Move=5%/0.2000  B-Rel=100%/0.2036  P-Reach=0%/0.4447  P-Desc=0%/0.4757  P-Grasp=0%/0.4757  P-Move=0%/0.2783  P-Rel=100%/0.2309  C-Reach=0%/0.2571  C-Desc=0%/0.3079  C-Grasp=0%/0.3079  C-Move=0%/0.2722  C-Rel=100%/0.2231
+
+Iter  490:  Σrew=76.491  grad=640.5  [reset=0.0s bptt=6.5s elapsed=4511s]
+  heads (0/5 clipped)   trunk |g|=146 lim=1500 x1.00
+        descend x3  |g|=     449 lim=  1500 x1.00         reach x3  |g|=     308 lim=  3000 x1.00  
+          grasp x3  |g|=     277 lim=  1000 x1.00          move x3  |g|=     127 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  76.491  ph=3  success=2/20 (10%) (partial) streak=0  | B-Reach=100%/0.0082  B-Desc=100%/0.0059  B-Grasp=100%/0.0086  B-Move=10%/0.2045  B-Rel=100%/0.3068  P-Reach=0%/0.4371  P-Desc=0%/0.4661  P-Grasp=0%/0.4661  P-Move=0%/0.2744  P-Rel=100%/0.2262  C-Reach=0%/0.2515  C-Desc=0%/0.2995  C-Grasp=0%/0.2995  C-Move=0%/0.2667  C-Rel=100%/0.2164
+
+Iter  495:  Σrew=79.261  grad=883.7  [reset=0.0s bptt=6.5s elapsed=4559s]
+  heads (0/5 clipped)   trunk |g|=177 lim=1500 x1.00
+          reach x3  |g|=     796 lim=  3000 x1.00       descend x3  |g|=     243 lim=  1500 x1.00  
+           move x3  |g|=     176 lim=  1000 x1.00         grasp x3  |g|=     163 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  79.261  ph=3  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0072  B-Desc=100%/0.0063  B-Grasp=100%/0.0050  B-Move=30%/0.1365  B-Rel=100%/0.1388  P-Reach=0%/0.4057  P-Desc=0%/0.4352  P-Grasp=0%/0.4352  P-Move=0%/0.2671  P-Rel=100%/0.2173  C-Reach=0%/0.2587  C-Desc=0%/0.3032  C-Grasp=0%/0.3032  C-Move=0%/0.2676  C-Rel=100%/0.2175
+
+Iter  500:  Σrew=59.506  grad=1411.5  [reset=0.0s bptt=6.5s elapsed=4607s]
+  heads (0/5 clipped)   trunk |g|=320 lim=1500 x1.00
+          reach x3  |g|=     982 lim=  3000 x1.00       descend x3  |g|=     900 lim=  1500 x1.00  
+          grasp x3  |g|=     335 lim=  1000 x1.00          move x3  |g|=      41 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  59.506  ph=3  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0073  B-Grasp=100%/0.0067  B-Move=0%/0.2020  B-Rel=100%/0.1732  P-Reach=0%/0.4093  P-Desc=0%/0.4413  P-Grasp=0%/0.4413  P-Move=0%/0.2765  P-Rel=100%/0.2287  C-Reach=0%/0.2641  C-Desc=0%/0.3119  C-Grasp=0%/0.3119  C-Move=0%/0.2715  C-Rel=100%/0.2222
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 500
+
+Iter  505:  Σrew=66.504  grad=765.8  [reset=0.0s bptt=6.5s elapsed=4657s]
+  heads (0/5 clipped)   trunk |g|=169 lim=1500 x1.00
+        descend x3  |g|=     517 lim=  1500 x1.00         reach x3  |g|=     384 lim=  3000 x1.00  
+          grasp x3  |g|=     336 lim=  1000 x1.00          move x3  |g|=     174 lim=  1000 x1.00  
+        release x3  |g|=       9 lim=   500 x1.00  
+    container       rew=  66.504  ph=3  success=3/20 (15%) (partial) streak=0  | B-Reach=100%/0.0091  B-Desc=100%/0.0053  B-Grasp=100%/0.0050  B-Move=10%/0.1535  B-Rel=100%/0.1867  P-Reach=0%/0.4168  P-Desc=0%/0.4457  P-Grasp=0%/0.4457  P-Move=0%/0.2708  P-Rel=100%/0.2217  C-Reach=0%/0.2809  C-Desc=0%/0.3224  C-Grasp=0%/0.3224  C-Move=0%/0.2701  C-Rel=100%/0.2205
+
+Iter  510:  Σrew=72.945  grad=1488.5  [reset=0.0s bptt=6.5s elapsed=4705s]
+  heads (0/5 clipped)   trunk |g|=320 lim=1500 x1.00
+          reach x3  |g|=    1270 lim=  3000 x1.00       descend x3  |g|=     589 lim=  1500 x1.00  
+          grasp x3  |g|=     302 lim=  1000 x1.00          move x3  |g|=     249 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  72.945  ph=3  success=4/20 (20%) (partial) streak=0  | B-Reach=100%/0.0102  B-Desc=100%/0.0071  B-Grasp=100%/0.0114  B-Move=5%/0.1884  B-Rel=100%/0.1910  P-Reach=0%/0.4282  P-Desc=0%/0.4575  P-Grasp=0%/0.4575  P-Move=0%/0.2737  P-Rel=100%/0.2253  C-Reach=0%/0.3034  C-Desc=0%/0.3435  C-Grasp=0%/0.3435  C-Move=0%/0.2748  C-Rel=100%/0.2262
+
+Iter  515:  Σrew=73.229  grad=1314.7  [reset=0.0s bptt=6.5s elapsed=4753s]
+  heads (0/5 clipped)   trunk |g|=288 lim=1500 x1.00
+          reach x3  |g|=    1238 lim=  3000 x1.00       descend x3  |g|=     276 lim=  1500 x1.00  
+          grasp x3  |g|=     153 lim=  1000 x1.00          move x3  |g|=     119 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  73.229  ph=3  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0075  B-Desc=100%/0.0060  B-Grasp=100%/0.0061  B-Move=10%/0.1497  B-Rel=100%/0.1079  P-Reach=0%/0.4237  P-Desc=0%/0.4489  P-Grasp=0%/0.4489  P-Move=0%/0.2696  P-Rel=100%/0.2203  C-Reach=0%/0.2947  C-Desc=0%/0.3302  C-Grasp=0%/0.3302  C-Move=0%/0.2666  C-Rel=100%/0.2162
+
+Iter  520:  Σrew=67.008  grad=1417.3  [reset=0.0s bptt=6.5s elapsed=4801s]
+  heads (0/5 clipped)   trunk |g|=324 lim=1500 x1.00
+          reach x3  |g|=    1104 lim=  3000 x1.00       descend x3  |g|=     776 lim=  1500 x1.00  
+          grasp x3  |g|=     257 lim=  1000 x1.00          move x3  |g|=     125 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  67.008  ph=3  success=6.33/20 (32%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0050  B-Grasp=100%/0.0076  B-Move=0%/0.1691  B-Rel=100%/0.1041  P-Reach=0%/0.3954  P-Desc=0%/0.4262  P-Grasp=0%/0.4262  P-Move=0%/0.2727  P-Rel=100%/0.2242  C-Reach=0%/0.2641  C-Desc=0%/0.3086  C-Grasp=0%/0.3086  C-Move=0%/0.2657  C-Rel=100%/0.2152
+
+Iter  525:  Σrew=73.435  grad=940.0  [reset=0.0s bptt=6.5s elapsed=4849s]
+  heads (0/5 clipped)   trunk |g|=200 lim=1500 x1.00
+          reach x3  |g|=     806 lim=  3000 x1.00       descend x3  |g|=     391 lim=  1500 x1.00  
+           move x3  |g|=     160 lim=  1000 x1.00         grasp x3  |g|=     121 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  73.435  ph=3  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0086  B-Desc=100%/0.0063  B-Grasp=95%/0.0100  B-Move=10%/0.1729  B-Rel=100%/0.1194  P-Reach=0%/0.3900  P-Desc=0%/0.4248  P-Grasp=0%/0.4248  P-Move=0%/0.2697  P-Rel=100%/0.2205  C-Reach=0%/0.2573  C-Desc=0%/0.3080  C-Grasp=0%/0.3080  C-Move=0%/0.2682  C-Rel=100%/0.2182
+
+Iter  530:  Σrew=67.194  grad=1382.0  [reset=0.0s bptt=6.5s elapsed=4897s]
+  heads (0/5 clipped)   trunk |g|=308 lim=1500 x1.00
+          reach x3  |g|=    1176 lim=  3000 x1.00       descend x3  |g|=     587 lim=  1500 x1.00  
+          grasp x3  |g|=     267 lim=  1000 x1.00          move x3  |g|=     132 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  67.194  ph=3  success=3.67/20 (18%) (partial) streak=0  | B-Reach=100%/0.0091  B-Desc=100%/0.0083  B-Grasp=100%/0.0085  B-Move=0%/0.1687  B-Rel=100%/0.1748  P-Reach=0%/0.4102  P-Desc=0%/0.4420  P-Grasp=0%/0.4420  P-Move=0%/0.2737  P-Rel=100%/0.2254  C-Reach=0%/0.2576  C-Desc=0%/0.3059  C-Grasp=0%/0.3059  C-Move=0%/0.2684  C-Rel=100%/0.2185
+
+Iter  535:  Σrew=81.074  grad=761.2  [reset=0.0s bptt=6.5s elapsed=4945s]
+  heads (0/5 clipped)   trunk |g|=145 lim=1500 x1.00
+          reach x3  |g|=     715 lim=  3000 x1.00       descend x3  |g|=     200 lim=  1500 x1.00  
+           move x3  |g|=      69 lim=  1000 x1.00         grasp x3  |g|=      56 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  81.074  ph=3  success=4.67/20 (23%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0058  B-Grasp=100%/0.0058  B-Move=15%/0.1315  B-Rel=100%/0.1364  P-Reach=0%/0.4045  P-Desc=0%/0.4355  P-Grasp=0%/0.4355  P-Move=0%/0.2727  P-Rel=100%/0.2241  C-Reach=0%/0.2455  C-Desc=0%/0.2946  C-Grasp=0%/0.2946  C-Move=0%/0.2727  C-Rel=100%/0.2237
+
+Iter  540:  Σrew=77.745  grad=1363.3  [reset=0.0s bptt=6.5s elapsed=4993s]
+  heads (0/5 clipped)   trunk |g|=295 lim=1500 x1.00
+          reach x3  |g|=    1128 lim=  3000 x1.00       descend x3  |g|=     669 lim=  1500 x1.00  
+           move x3  |g|=     206 lim=  1000 x1.00         grasp x3  |g|=      89 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  77.745  ph=3  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0079  B-Desc=100%/0.0061  B-Grasp=100%/0.0065  B-Move=40%/0.1470  B-Rel=100%/0.1330  P-Reach=0%/0.4218  P-Desc=0%/0.4498  P-Grasp=0%/0.4498  P-Move=0%/0.2781  P-Rel=100%/0.2306  C-Reach=0%/0.2279  C-Desc=0%/0.2769  C-Grasp=0%/0.2769  C-Move=0%/0.2682  C-Rel=100%/0.2182
+
+Iter  545:  Σrew=81.998  grad=919.8  [reset=0.0s bptt=6.5s elapsed=5041s]
+  heads (0/5 clipped)   trunk |g|=214 lim=1500 x1.00
+        descend x3  |g|=     773 lim=  1500 x1.00         reach x3  |g|=     415 lim=  3000 x1.00  
+          grasp x3  |g|=     126 lim=  1000 x1.00          move x3  |g|=     125 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  81.998  ph=3  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0068  B-Desc=100%/0.0058  B-Grasp=100%/0.0064  B-Move=50%/0.1037  B-Rel=100%/0.0750  P-Reach=0%/0.4099  P-Desc=0%/0.4355  P-Grasp=0%/0.4355  P-Move=0%/0.2756  P-Rel=100%/0.2276  C-Reach=0%/0.2076  C-Desc=0%/0.2550  C-Grasp=0%/0.2550  C-Move=0%/0.2743  C-Rel=100%/0.2258
+
+Iter  550:  Σrew=82.301  grad=2956.7  [reset=0.0s bptt=6.5s elapsed=5089s]
+  heads (1/5 clipped)   trunk |g|=599 lim=1500 x1.00
+           move x3  |g|=    2822 lim=  1000 x0.35         reach x3  |g|=     465 lim=  3000 x1.00  
+        descend x3  |g|=     451 lim=  1500 x1.00         grasp x3  |g|=      46 lim=  1000 x1.00  
+        release x3  |g|=       6 lim=   500 x1.00  
+    container       rew=  82.301  ph=3  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0074  B-Desc=100%/0.0072  B-Grasp=100%/0.0078  B-Move=25%/0.1508  B-Rel=100%/0.1097  P-Reach=0%/0.4186  P-Desc=0%/0.4456  P-Grasp=0%/0.4456  P-Move=0%/0.2747  P-Rel=100%/0.2265  C-Reach=0%/0.2169  C-Desc=0%/0.2658  C-Grasp=0%/0.2658  C-Move=0%/0.2754  C-Rel=100%/0.2270
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 550
+
+Iter  555:  Σrew=88.464  grad=1157.3  [reset=0.0s bptt=6.5s elapsed=5139s]
+  heads (0/5 clipped)   trunk |g|=185 lim=1500 x1.00
+          reach x3  |g|=    1047 lim=  3000 x1.00          move x3  |g|=     366 lim=  1000 x1.00  
+        descend x3  |g|=     273 lim=  1500 x1.00         grasp x3  |g|=      34 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  88.464  ph=3  success=6.67/20 (33%) (partial) streak=0  | B-Reach=100%/0.0060  B-Desc=100%/0.0055  B-Grasp=100%/0.0056  B-Move=40%/0.1179  B-Rel=100%/0.0812  P-Reach=0%/0.4429  P-Desc=0%/0.4664  P-Grasp=0%/0.4664  P-Move=0%/0.2765  P-Rel=100%/0.2288  C-Reach=0%/0.2295  C-Desc=0%/0.2725  C-Grasp=0%/0.2725  C-Move=0%/0.2722  C-Rel=100%/0.2231
+
+Iter  560:  Σrew=77.234  grad=1586.6  [reset=0.0s bptt=6.5s elapsed=5187s]
+  heads (0/5 clipped)   trunk |g|=301 lim=1500 x1.00
+          reach x3  |g|=    1351 lim=  3000 x1.00       descend x3  |g|=     715 lim=  1500 x1.00  
+           move x3  |g|=     283 lim=  1000 x1.00         grasp x3  |g|=      96 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  77.234  ph=3  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0065  B-Desc=100%/0.0074  B-Grasp=100%/0.0094  B-Move=5%/0.1694  B-Rel=100%/0.1061  P-Reach=0%/0.4038  P-Desc=0%/0.4309  P-Grasp=0%/0.4309  P-Move=0%/0.2726  P-Rel=100%/0.2239  C-Reach=0%/0.2506  C-Desc=0%/0.2925  C-Grasp=0%/0.2925  C-Move=0%/0.2747  C-Rel=100%/0.2261
+
+Iter  565:  Σrew=68.564  grad=1624.1  [reset=0.0s bptt=6.5s elapsed=5235s]
+  heads (0/5 clipped)   trunk |g|=346 lim=1500 x1.00
+        descend x3  |g|=    1135 lim=  1500 x1.00         reach x3  |g|=    1074 lim=  3000 x1.00  
+          grasp x3  |g|=     213 lim=  1000 x1.00          move x3  |g|=     180 lim=  1000 x1.00  
+        release x3  |g|=       1 lim=   500 x1.00  
+    container       rew=  68.564  ph=3  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0068  B-Desc=100%/0.0098  B-Grasp=100%/0.0100  B-Move=55%/0.1194  B-Rel=100%/0.1525  P-Reach=0%/0.4231  P-Desc=0%/0.4464  P-Grasp=0%/0.4464  P-Move=0%/0.2754  P-Rel=100%/0.2273  C-Reach=0%/0.2579  C-Desc=0%/0.2948  C-Grasp=0%/0.2948  C-Move=0%/0.2744  C-Rel=100%/0.2257
+
+Iter  570:  Σrew=82.047  grad=671.1  [reset=0.0s bptt=6.5s elapsed=5284s]
+  heads (0/5 clipped)   trunk |g|=151 lim=1500 x1.00
+          reach x3  |g|=     474 lim=  3000 x1.00          move x3  |g|=     326 lim=  1000 x1.00  
+        descend x3  |g|=     300 lim=  1500 x1.00         grasp x3  |g|=      84 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  82.047  ph=3  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0068  B-Desc=100%/0.0055  B-Grasp=100%/0.0068  B-Move=60%/0.0985  B-Rel=100%/0.0927  P-Reach=0%/0.4088  P-Desc=0%/0.4323  P-Grasp=0%/0.4323  P-Move=0%/0.2754  P-Rel=100%/0.2274  C-Reach=0%/0.2575  C-Desc=0%/0.2935  C-Grasp=0%/0.2935  C-Move=0%/0.2742  C-Rel=100%/0.2256
+    ──→ container: phase 4, active=115
+
+Iter  575:  Σrew=73.262  grad=1428.9  [reset=0.0s bptt=8.2s elapsed=5340s]
+  heads (0/5 clipped)   trunk |g|=315 lim=1500 x1.00
+        descend x3  |g|=    1066 lim=  1500 x1.00         reach x3  |g|=     763 lim=  3000 x1.00  
+           move x3  |g|=     462 lim=  1000 x1.00         grasp x3  |g|=     102 lim=  1000 x1.00  
+        release x3  |g|=       6 lim=   500 x1.00  
+    container       rew=  73.262  ph=4  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0059  B-Grasp=100%/0.0056  B-Move=65%/0.0844  B-Rel=100%/0.0837  P-Reach=0%/0.3518  P-Desc=0%/0.3350  P-Grasp=0%/0.3350  P-Move=0%/0.2715  P-Rel=100%/0.2223  C-Reach=0%/0.2120  C-Desc=0%/0.1819  C-Grasp=0%/0.1819  C-Move=0%/0.2614  C-Rel=100%/0.2097
+
+Iter  580:  Σrew=70.840  grad=1321.0  [reset=0.0s bptt=8.2s elapsed=5397s]
+  heads (0/5 clipped)   trunk |g|=205 lim=1500 x1.00
+          reach x3  |g|=     939 lim=  3000 x1.00          move x3  |g|=     841 lim=  1000 x1.00  
+        descend x3  |g|=     328 lim=  1500 x1.00         grasp x3  |g|=      77 lim=  1000 x1.00  
+        release x3  |g|=       2 lim=   500 x1.00  
+    container       rew=  70.840  ph=4  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0089  B-Desc=100%/0.0052  B-Grasp=100%/0.0061  B-Move=35%/0.1176  B-Rel=100%/0.0985  P-Reach=0%/0.2753  P-Desc=0%/0.2652  P-Grasp=0%/0.2652  P-Move=0%/0.2725  P-Rel=100%/0.2238  C-Reach=0%/0.2120  C-Desc=0%/0.2018  C-Grasp=0%/0.2018  C-Move=0%/0.2661  C-Rel=100%/0.2156
+    ──→ container: phase 5, active=135
+
+Iter  585:  Σrew=66.889  grad=1489.6  [reset=0.0s bptt=9.6s elapsed=5461s]
+  heads (0/5 clipped)   trunk |g|=308 lim=1500 x1.00
+          reach x3  |g|=     962 lim=  3000 x1.00       descend x3  |g|=     903 lim=  1500 x1.00  
+           move x3  |g|=     582 lim=  1000 x1.00         grasp x3  |g|=     210 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  66.889  ph=5  success=4.67/20 (23%) (partial) streak=0  | B-Reach=100%/0.0078  B-Desc=100%/0.0074  B-Grasp=100%/0.0133  B-Move=10%/0.1775  B-Rel=100%/0.1204  P-Reach=0%/0.2271  P-Desc=0%/0.2263  P-Grasp=0%/0.2263  P-Move=0%/0.2729  P-Rel=100%/0.2243  C-Reach=0%/0.2543  C-Desc=0%/0.2577  C-Grasp=0%/0.2577  C-Move=0%/0.2727  C-Rel=100%/0.2237
+
+Iter  590:  Σrew=76.829  grad=1938.6  [reset=0.0s bptt=9.6s elapsed=5525s]
+  heads (1/5 clipped)   trunk |g|=246 lim=1500 x1.00
+           move x3  |g|=    1623 lim=  1000 x0.62         reach x3  |g|=     986 lim=  3000 x1.00  
+        descend x3  |g|=     297 lim=  1500 x1.00         grasp x3  |g|=      53 lim=  1000 x1.00  
+        release x3  |g|=       5 lim=   500 x1.00  
+    container       rew=  76.829  ph=5  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0079  B-Desc=100%/0.0062  B-Grasp=100%/0.0074  B-Move=40%/0.1266  B-Rel=100%/0.1100  P-Reach=0%/0.1738  P-Desc=0%/0.2020  P-Grasp=0%/0.2020  P-Move=0%/0.2732  P-Rel=100%/0.2246  C-Reach=0%/0.2675  C-Desc=0%/0.2659  C-Grasp=0%/0.2659  C-Move=0%/0.2694  C-Rel=100%/0.2196
+
+Iter  595:  Σrew=79.163  grad=1146.5  [reset=0.0s bptt=9.6s elapsed=5589s]
+  heads (0/5 clipped)   trunk |g|=201 lim=1500 x1.00
+           move x3  |g|=     836 lim=  1000 x1.00         reach x3  |g|=     631 lim=  3000 x1.00  
+        descend x3  |g|=     356 lim=  1500 x1.00         grasp x3  |g|=     223 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  79.163  ph=5  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0083  B-Desc=100%/0.0091  B-Grasp=95%/0.0125  B-Move=20%/0.1399  B-Rel=100%/0.0995  P-Reach=10%/0.1029  P-Desc=10%/0.1178  P-Grasp=10%/0.1178  P-Move=0%/0.2789  P-Rel=100%/0.2316  C-Reach=0%/0.2784  C-Desc=0%/0.2701  C-Grasp=0%/0.2701  C-Move=0%/0.2730  C-Rel=100%/0.2240
+
+Iter  600:  Σrew=72.119  grad=1316.9  [reset=0.0s bptt=9.6s elapsed=5654s]
+  heads (0/5 clipped)   trunk |g|=307 lim=1500 x1.00
+        descend x3  |g|=     926 lim=  1500 x1.00         reach x3  |g|=     754 lim=  3000 x1.00  
+           move x3  |g|=     402 lim=  1000 x1.00         grasp x3  |g|=     228 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  72.119  ph=5  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0081  B-Desc=100%/0.0075  B-Grasp=100%/0.0094  B-Move=20%/0.1415  B-Rel=100%/0.0818  P-Reach=10%/0.1070  P-Desc=15%/0.0777  P-Grasp=10%/0.0777  P-Move=0%/0.2739  P-Rel=100%/0.2256  C-Reach=0%/0.3015  C-Desc=0%/0.2879  C-Grasp=0%/0.2879  C-Move=0%/0.2724  C-Rel=100%/0.2234
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 600
+
+Iter  605:  Σrew=89.332  grad=1295.6  [reset=0.0s bptt=9.6s elapsed=5719s]
+  heads (0/5 clipped)   trunk |g|=262 lim=1500 x1.00
+          reach x3  |g|=     990 lim=  3000 x1.00       descend x3  |g|=     686 lim=  1500 x1.00  
+           move x3  |g|=     397 lim=  1000 x1.00         grasp x3  |g|=      35 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  89.332  ph=5  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0101  B-Desc=100%/0.0086  B-Grasp=100%/0.0126  B-Move=25%/0.1529  B-Rel=100%/0.1088  P-Reach=5%/0.1285  P-Desc=15%/0.1131  P-Grasp=10%/0.1131  P-Move=0%/0.2777  P-Rel=100%/0.2298  C-Reach=0%/0.3322  C-Desc=0%/0.3124  C-Grasp=0%/0.3124  C-Move=0%/0.2705  C-Rel=100%/0.2210
+
+Iter  610:  Σrew=94.296  grad=1654.5  [reset=0.0s bptt=9.6s elapsed=5784s]
+  heads (0/5 clipped)   trunk |g|=323 lim=1500 x1.00
+          reach x3  |g|=    1229 lim=  3000 x1.00          move x3  |g|=     884 lim=  1000 x1.00  
+        descend x3  |g|=     583 lim=  1500 x1.00         grasp x3  |g|=      38 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  94.296  ph=5  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0095  B-Desc=100%/0.0061  B-Grasp=100%/0.0083  B-Move=30%/0.1279  B-Rel=100%/0.0853  P-Reach=5%/0.1047  P-Desc=30%/0.0818  P-Grasp=30%/0.0818  P-Move=0%/0.2681  P-Rel=100%/0.2183  C-Reach=0%/0.3384  C-Desc=0%/0.3193  C-Grasp=0%/0.3193  C-Move=0%/0.2726  C-Rel=100%/0.2235
+
+Iter  615:  Σrew=89.108  grad=1566.7  [reset=0.0s bptt=9.6s elapsed=5848s]
+  heads (0/5 clipped)   trunk |g|=306 lim=1500 x1.00
+          reach x3  |g|=    1137 lim=  3000 x1.00          move x3  |g|=     787 lim=  1000 x1.00  
+        descend x3  |g|=     668 lim=  1500 x1.00         grasp x3  |g|=      56 lim=  1000 x1.00  
+        release x3  |g|=       8 lim=   500 x1.00  
+    container       rew=  89.108  ph=5  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0085  B-Desc=100%/0.0074  B-Grasp=100%/0.0109  B-Move=30%/0.1483  B-Rel=100%/0.0896  P-Reach=0%/0.1015  P-Desc=0%/0.1236  P-Grasp=0%/0.1236  P-Move=0%/0.2731  P-Rel=100%/0.2245  C-Reach=0%/0.2986  C-Desc=0%/0.2763  C-Grasp=0%/0.2763  C-Move=0%/0.2715  C-Rel=100%/0.2222
+
+Iter  620:  Σrew=79.491  grad=1526.4  [reset=0.0s bptt=9.6s elapsed=5912s]
+  heads (0/5 clipped)   trunk |g|=317 lim=1500 x1.00
+          reach x3  |g|=    1073 lim=  3000 x1.00       descend x3  |g|=     986 lim=  1500 x1.00  
+           move x3  |g|=     322 lim=  1000 x1.00         grasp x3  |g|=      46 lim=  1000 x1.00  
+        release x3  |g|=       9 lim=   500 x1.00  
+    container       rew=  79.491  ph=5  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0081  B-Desc=100%/0.0049  B-Grasp=100%/0.0058  B-Move=40%/0.1244  B-Rel=100%/0.1184  P-Reach=0%/0.0860  P-Desc=50%/0.0631  P-Grasp=40%/0.0631  P-Move=0%/0.2692  P-Rel=100%/0.2194  C-Reach=0%/0.3048  C-Desc=0%/0.2833  C-Grasp=0%/0.2833  C-Move=0%/0.2686  C-Rel=100%/0.2185
+
+Iter  625:  Σrew=83.819  grad=1961.5  [reset=0.0s bptt=9.6s elapsed=5976s]
+  heads (0/5 clipped)   trunk |g|=401 lim=1500 x1.00
+          reach x3  |g|=    1393 lim=  3000 x1.00       descend x3  |g|=    1184 lim=  1500 x1.00  
+           move x3  |g|=     573 lim=  1000 x1.00         grasp x3  |g|=     121 lim=  1000 x1.00  
+        release x3  |g|=       4 lim=   500 x1.00  
+    container       rew=  83.819  ph=5  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0073  B-Desc=100%/0.0066  B-Grasp=100%/0.0068  B-Move=40%/0.1000  B-Rel=100%/0.0722  P-Reach=50%/0.0529  P-Desc=35%/0.0630  P-Grasp=25%/0.0630  P-Move=0%/0.2640  P-Rel=100%/0.2125  C-Reach=0%/0.2885  C-Desc=0%/0.2663  C-Grasp=0%/0.2663  C-Move=0%/0.2686  C-Rel=100%/0.2186
+
+Iter  630:  Σrew=78.058  grad=1396.0  [reset=0.0s bptt=9.6s elapsed=6040s]
+  heads (0/5 clipped)   trunk |g|=296 lim=1500 x1.00
+          reach x3  |g|=     970 lim=  3000 x1.00       descend x3  |g|=     786 lim=  1500 x1.00  
+           move x3  |g|=     544 lim=  1000 x1.00         grasp x3  |g|=      77 lim=  1000 x1.00  
+        release x3  |g|=       7 lim=   500 x1.00  
+    container       rew=  78.058  ph=5  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0062  B-Desc=100%/0.0069  B-Grasp=100%/0.0071  B-Move=55%/0.0836  B-Rel=100%/0.0728  P-Reach=25%/0.0641  P-Desc=25%/0.0684  P-Grasp=25%/0.0684  P-Move=0%/0.2717  P-Rel=100%/0.2220  C-Reach=0%/0.3040  C-Desc=0%/0.2835  C-Grasp=0%/0.2835  C-Move=0%/0.2811  C-Rel=100%/0.2340
+
+Iter  635:  Σrew=77.487  grad=1219.5  [reset=0.0s bptt=9.6s elapsed=6104s]
+  heads (0/5 clipped)   trunk |g|=243 lim=1500 x1.00
+          reach x3  |g|=    1048 lim=  3000 x1.00          move x3  |g|=     407 lim=  1000 x1.00  
+        descend x3  |g|=     393 lim=  1500 x1.00         grasp x3  |g|=      98 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  77.487  ph=5  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0065  B-Grasp=100%/0.0085  B-Move=40%/0.1215  B-Rel=100%/0.0955  P-Reach=20%/0.0798  P-Desc=15%/0.0849  P-Grasp=15%/0.0849  P-Move=0%/0.2691  P-Rel=100%/0.2195  C-Reach=0%/0.2985  C-Desc=0%/0.2792  C-Grasp=0%/0.2792  C-Move=0%/0.2664  C-Rel=100%/0.2160
+
+Iter  640:  Σrew=90.081  grad=964.2  [reset=0.0s bptt=9.6s elapsed=6169s]
+  heads (0/5 clipped)   trunk |g|=256 lim=1500 x1.00
+          reach x3  |g|=     825 lim=  3000 x1.00       descend x3  |g|=     391 lim=  1500 x1.00  
+          grasp x3  |g|=     147 lim=  1000 x1.00          move x3  |g|=      90 lim=  1000 x1.00  
+        release x3  |g|=      41 lim=   500 x1.00  
+    container       rew=  90.081  ph=5  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0087  B-Desc=100%/0.0075  B-Grasp=100%/0.0093  B-Move=25%/0.1368  B-Rel=100%/0.0752  P-Reach=0%/0.0812  P-Desc=40%/0.0577  P-Grasp=25%/0.0577  P-Move=0%/0.2656  P-Rel=100%/0.2153  C-Reach=0%/0.3257  C-Desc=0%/0.3092  C-Grasp=0%/0.3092  C-Move=0%/0.2699  C-Rel=100%/0.2203
+
+Iter  645:  Σrew=71.018  grad=1432.4  [reset=0.0s bptt=9.6s elapsed=6233s]
+  heads (0/5 clipped)   trunk |g|=286 lim=1500 x1.00
+          reach x3  |g|=    1000 lim=  3000 x1.00       descend x3  |g|=     852 lim=  1500 x1.00  
+           move x3  |g|=     493 lim=  1000 x1.00       release x3  |g|=      32 lim=   500 x1.00  
+          grasp x3  |g|=      31 lim=  1000 x1.00  
+    container       rew=  71.018  ph=5  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0088  B-Desc=100%/0.0078  B-Grasp=100%/0.0090  B-Move=40%/0.1311  B-Rel=100%/0.1113  P-Reach=0%/0.1052  P-Desc=65%/0.0623  P-Grasp=55%/0.0623  P-Move=0%/0.2666  P-Rel=100%/0.2165  C-Reach=0%/0.3736  C-Desc=0%/0.3601  C-Grasp=0%/0.3601  C-Move=0%/0.2698  C-Rel=100%/0.2202
+
+Iter  650:  Σrew=87.600  grad=1101.8  [reset=0.0s bptt=9.6s elapsed=6297s]
+  heads (0/5 clipped)   trunk |g|=252 lim=1500 x1.00
+          reach x3  |g|=     749 lim=  3000 x1.00       descend x3  |g|=     718 lim=  1500 x1.00  
+           move x3  |g|=     192 lim=  1000 x1.00         grasp x3  |g|=     184 lim=  1000 x1.00  
+        release x3  |g|=      58 lim=   500 x1.00  
+    container       rew=  87.600  ph=5  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0075  B-Desc=100%/0.0056  B-Grasp=100%/0.0055  B-Move=45%/0.1009  B-Rel=100%/0.0720  P-Reach=30%/0.0639  P-Desc=35%/0.0703  P-Grasp=30%/0.0703  P-Move=0%/0.2674  P-Rel=100%/0.2168  C-Reach=0%/0.3527  C-Desc=0%/0.3381  C-Grasp=0%/0.3381  C-Move=0%/0.2690  C-Rel=100%/0.2192
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 650
+
+Iter  655:  Σrew=87.532  grad=1064.9  [reset=0.0s bptt=9.6s elapsed=6363s]
+  heads (0/5 clipped)   trunk |g|=201 lim=1500 x1.00
+          reach x3  |g|=     878 lim=  3000 x1.00       descend x3  |g|=     503 lim=  1500 x1.00  
+           move x3  |g|=     257 lim=  1000 x1.00       release x3  |g|=      54 lim=   500 x1.00  
+          grasp x3  |g|=      40 lim=  1000 x1.00  
+    container       rew=  87.532  ph=5  success=6.67/20 (33%) (partial) streak=0  | B-Reach=100%/0.0070  B-Desc=100%/0.0060  B-Grasp=100%/0.0066  B-Move=30%/0.1248  B-Rel=100%/0.0751  P-Reach=75%/0.0380  P-Desc=5%/0.0848  P-Grasp=0%/0.0848  P-Move=0%/0.2796  P-Rel=100%/0.2319  C-Reach=0%/0.3109  C-Desc=0%/0.2964  C-Grasp=0%/0.2964  C-Move=0%/0.2743  C-Rel=100%/0.2256
+
+Iter  660:  Σrew=84.212  grad=1112.4  [reset=0.0s bptt=9.6s elapsed=6427s]
+  heads (0/5 clipped)   trunk |g|=188 lim=1500 x1.00
+        descend x3  |g|=     966 lim=  1500 x1.00         reach x3  |g|=     468 lim=  3000 x1.00  
+           move x3  |g|=     201 lim=  1000 x1.00         grasp x3  |g|=      76 lim=  1000 x1.00  
+        release x3  |g|=      63 lim=   500 x1.00  
+    container       rew=  84.212  ph=5  success=6.33/20 (32%) (partial) streak=0  | B-Reach=100%/0.0072  B-Desc=100%/0.0063  B-Grasp=100%/0.0078  B-Move=45%/0.1033  B-Rel=100%/0.0694  P-Reach=55%/0.0502  P-Desc=40%/0.0609  P-Grasp=20%/0.0609  P-Move=0%/0.2686  P-Rel=100%/0.2190  C-Reach=0%/0.3166  C-Desc=0%/0.2973  C-Grasp=0%/0.2973  C-Move=0%/0.2716  C-Rel=100%/0.2224
+    ──→ container: phase 6, active=145
+
+Iter  665:  Σrew=91.037  grad=774.2  [reset=0.0s bptt=10.3s elapsed=6495s]
+  heads (0/5 clipped)   trunk |g|=190 lim=1500 x1.00
+        descend x3  |g|=     476 lim=  1500 x1.00         reach x3  |g|=     468 lim=  3000 x1.00  
+           move x3  |g|=     316 lim=  1000 x1.00         grasp x3  |g|=     124 lim=  1000 x1.00  
+        release x3  |g|=      49 lim=   500 x1.00  
+    container       rew=  91.037  ph=6  success=6.67/20 (33%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0049  B-Grasp=100%/0.0047  B-Move=45%/0.0990  B-Rel=100%/0.0718  P-Reach=55%/0.0499  P-Desc=0%/0.0924  P-Grasp=0%/0.0988  P-Move=0%/0.2777  P-Rel=100%/0.2301  C-Reach=0%/0.3400  C-Desc=0%/0.3271  C-Grasp=0%/0.3271  C-Move=0%/0.2718  C-Rel=100%/0.2226
+
+Iter  670:  Σrew=89.980  grad=1564.1  [reset=0.0s bptt=10.3s elapsed=6563s]
+  heads (0/5 clipped)   trunk |g|=284 lim=1500 x1.00
+          reach x3  |g|=     976 lim=  3000 x1.00       descend x3  |g|=     937 lim=  1500 x1.00  
+           move x3  |g|=     724 lim=  1000 x1.00         grasp x3  |g|=      92 lim=  1000 x1.00  
+        release x3  |g|=      46 lim=   500 x1.00  
+    container       rew=  89.980  ph=6  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0063  B-Desc=100%/0.0070  B-Grasp=100%/0.0061  B-Move=60%/0.0774  B-Rel=100%/0.0493  P-Reach=90%/0.0300  P-Desc=0%/0.0895  P-Grasp=0%/0.0872  P-Move=0%/0.2722  P-Rel=100%/0.2230  C-Reach=0%/0.3241  C-Desc=0%/0.3112  C-Grasp=0%/0.3112  C-Move=0%/0.2661  C-Rel=100%/0.2156
+
+Iter  675:  Σrew=76.000  grad=1320.5  [reset=0.0s bptt=10.3s elapsed=6630s]
+  heads (0/5 clipped)   trunk |g|=280 lim=1500 x1.00
+          reach x3  |g|=    1136 lim=  3000 x1.00       descend x3  |g|=     538 lim=  1500 x1.00  
+           move x3  |g|=     279 lim=  1000 x1.00         grasp x3  |g|=      81 lim=  1000 x1.00  
+        release x3  |g|=      31 lim=   500 x1.00  
+    container       rew=  76.000  ph=6  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0073  B-Desc=100%/0.0071  B-Grasp=100%/0.0082  B-Move=30%/0.1509  B-Rel=100%/0.1117  P-Reach=50%/0.0732  P-Desc=5%/0.1281  P-Grasp=0%/0.1126  P-Move=0%/0.2796  P-Rel=100%/0.2329  C-Reach=0%/0.3216  C-Desc=0%/0.3084  C-Grasp=0%/0.3084  C-Move=0%/0.2696  C-Rel=100%/0.2199
+
+Iter  680:  Σrew=88.567  grad=1236.9  [reset=0.0s bptt=10.3s elapsed=6698s]
+  heads (0/5 clipped)   trunk |g|=251 lim=1500 x1.00
+          reach x3  |g|=     995 lim=  3000 x1.00       descend x3  |g|=     582 lim=  1500 x1.00  
+           move x3  |g|=     359 lim=  1000 x1.00         grasp x3  |g|=      85 lim=  1000 x1.00  
+        release x3  |g|=      45 lim=   500 x1.00  
+    container       rew=  88.567  ph=6  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0086  B-Desc=100%/0.0092  B-Grasp=100%/0.0108  B-Move=25%/0.1578  B-Rel=100%/0.1185  P-Reach=85%/0.0338  P-Desc=20%/0.0940  P-Grasp=35%/0.0700  P-Move=0%/0.2790  P-Rel=100%/0.2314  C-Reach=0%/0.3532  C-Desc=0%/0.3446  C-Grasp=0%/0.3446  C-Move=0%/0.2731  C-Rel=100%/0.2242
+
+Iter  685:  Σrew=74.319  grad=1162.7  [reset=0.0s bptt=10.3s elapsed=6766s]
+  heads (0/5 clipped)   trunk |g|=285 lim=1500 x1.00
+          reach x3  |g|=     903 lim=  3000 x1.00       descend x3  |g|=     588 lim=  1500 x1.00  
+          grasp x3  |g|=     321 lim=  1000 x1.00          move x3  |g|=      72 lim=  1000 x1.00  
+        release x3  |g|=      23 lim=   500 x1.00  
+    container       rew=  74.319  ph=6  success=4.67/20 (23%) (partial) streak=0  | B-Reach=100%/0.0092  B-Desc=100%/0.0112  B-Grasp=100%/0.0125  B-Move=5%/0.2032  B-Rel=100%/0.1593  P-Reach=75%/0.0589  P-Desc=15%/0.0963  P-Grasp=15%/0.0768  P-Move=0%/0.2772  P-Rel=100%/0.2295  C-Reach=0%/0.3427  C-Desc=0%/0.3295  C-Grasp=0%/0.3295  C-Move=0%/0.2689  C-Rel=100%/0.2189
+
+Iter  690:  Σrew=80.528  grad=1504.8  [reset=0.0s bptt=10.3s elapsed=6834s]
+  heads (0/5 clipped)   trunk |g|=295 lim=1500 x1.00
+          reach x3  |g|=    1404 lim=  3000 x1.00       descend x3  |g|=     389 lim=  1500 x1.00  
+          grasp x3  |g|=     191 lim=  1000 x1.00          move x3  |g|=     135 lim=  1000 x1.00  
+        release x3  |g|=      19 lim=   500 x1.00  
+    container       rew=  80.528  ph=6  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0102  B-Desc=100%/0.0105  B-Grasp=100%/0.0114  B-Move=15%/0.1901  B-Rel=100%/0.1602  P-Reach=80%/0.0615  P-Desc=25%/0.0989  P-Grasp=45%/0.0847  P-Move=0%/0.2753  P-Rel=100%/0.2262  C-Reach=0%/0.3761  C-Desc=0%/0.3602  C-Grasp=0%/0.3602  C-Move=0%/0.2718  C-Rel=100%/0.2225
+
+Iter  695:  Σrew=58.036  grad=1515.9  [reset=0.0s bptt=10.3s elapsed=6902s]
+  heads (0/5 clipped)   trunk |g|=299 lim=1500 x1.00
+          reach x3  |g|=    1106 lim=  3000 x1.00       descend x3  |g|=     987 lim=  1500 x1.00  
+           move x3  |g|=      80 lim=  1000 x1.00         grasp x3  |g|=      78 lim=  1000 x1.00  
+        release x3  |g|=      12 lim=   500 x1.00  
+    container       rew=  58.036  ph=6  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0143  B-Desc=100%/0.0175  B-Grasp=75%/0.0284  B-Move=0%/0.2557  B-Rel=100%/0.2277  P-Reach=45%/0.0570  P-Desc=25%/0.1086  P-Grasp=20%/0.1420  P-Move=0%/0.2762  P-Rel=100%/0.2278  C-Reach=0%/0.4140  C-Desc=0%/0.4122  C-Grasp=0%/0.4122  C-Move=0%/0.2677  C-Rel=100%/0.2176
+
+Iter  700:  Σrew=76.065  grad=1475.0  [reset=0.0s bptt=10.3s elapsed=6970s]
+  heads (0/5 clipped)   trunk |g|=327 lim=1500 x1.00
+          reach x3  |g|=    1300 lim=  3000 x1.00       descend x3  |g|=     568 lim=  1500 x1.00  
+           move x3  |g|=     214 lim=  1000 x1.00         grasp x3  |g|=      97 lim=  1000 x1.00  
+        release x3  |g|=      20 lim=   500 x1.00  
+    container       rew=  76.065  ph=6  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0114  B-Desc=100%/0.0090  B-Grasp=100%/0.0082  B-Move=25%/0.1384  B-Rel=100%/0.0833  P-Reach=100%/0.0234  P-Desc=60%/0.0604  P-Grasp=30%/0.0639  P-Move=0%/0.2803  P-Rel=100%/0.2331  C-Reach=0%/0.3346  C-Desc=0%/0.3275  C-Grasp=0%/0.3275  C-Move=0%/0.2707  C-Rel=100%/0.2213
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 700
+
+Iter  705:  Σrew=82.044  grad=1721.2  [reset=0.0s bptt=10.3s elapsed=7039s]
+  heads (0/5 clipped)   trunk |g|=301 lim=1500 x1.00
+          reach x3  |g|=    1616 lim=  3000 x1.00          move x3  |g|=     423 lim=  1000 x1.00  
+        descend x3  |g|=     251 lim=  1500 x1.00         grasp x3  |g|=     129 lim=  1000 x1.00  
+        release x3  |g|=      47 lim=   500 x1.00  
+    container       rew=  82.044  ph=6  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0092  B-Desc=100%/0.0097  B-Grasp=100%/0.0116  B-Move=5%/0.2432  B-Rel=100%/0.2308  P-Reach=55%/0.0932  P-Desc=35%/0.1354  P-Grasp=30%/0.1430  P-Move=0%/0.2811  P-Rel=100%/0.2345  C-Reach=0%/0.4336  C-Desc=0%/0.4229  C-Grasp=0%/0.4229  C-Move=0%/0.2717  C-Rel=100%/0.2225
+
+Iter  710:  Σrew=77.868  grad=1746.0  [reset=0.0s bptt=10.3s elapsed=7107s]
+  heads (0/5 clipped)   trunk |g|=316 lim=1500 x1.00
+          reach x3  |g|=    1662 lim=  3000 x1.00       descend x3  |g|=     394 lim=  1500 x1.00  
+           move x3  |g|=     143 lim=  1000 x1.00         grasp x3  |g|=      94 lim=  1000 x1.00  
+        release x3  |g|=      26 lim=   500 x1.00  
+    container       rew=  77.868  ph=6  success=4.67/20 (23%) (partial) streak=0  | B-Reach=100%/0.0144  B-Desc=100%/0.0114  B-Grasp=95%/0.0141  B-Move=5%/0.1878  B-Rel=100%/0.1301  P-Reach=85%/0.0398  P-Desc=60%/0.0592  P-Grasp=60%/0.0681  P-Move=0%/0.2871  P-Rel=100%/0.2419  C-Reach=0%/0.3864  C-Desc=0%/0.3704  C-Grasp=0%/0.3704  C-Move=0%/0.2688  C-Rel=100%/0.2188
+
+Iter  715:  Σrew=87.713  grad=1934.8  [reset=0.0s bptt=10.3s elapsed=7175s]
+  heads (0/5 clipped)   trunk |g|=326 lim=1500 x1.00
+          reach x3  |g|=    1722 lim=  3000 x1.00       descend x3  |g|=     725 lim=  1500 x1.00  
+           move x3  |g|=     348 lim=  1000 x1.00         grasp x3  |g|=     154 lim=  1000 x1.00  
+        release x3  |g|=      32 lim=   500 x1.00  
+    container       rew=  87.713  ph=6  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0122  B-Desc=100%/0.0099  B-Grasp=95%/0.0133  B-Move=25%/0.1671  B-Rel=100%/0.1172  P-Reach=95%/0.0233  P-Desc=80%/0.0446  P-Grasp=80%/0.0503  P-Move=0%/0.2801  P-Rel=100%/0.2333  C-Reach=0%/0.3724  C-Desc=0%/0.3557  C-Grasp=0%/0.3557  C-Move=0%/0.2681  C-Rel=100%/0.2178
+    ──→ container: phase 7, active=170
+
+Iter  720:  Σrew=64.200  grad=1547.3  [reset=0.0s bptt=12.0s elapsed=7251s]
+  heads (0/5 clipped)   trunk |g|=283 lim=1500 x1.00
+        descend x3  |g|=    1187 lim=  1500 x1.00         reach x3  |g|=     944 lim=  3000 x1.00  
+           move x3  |g|=      87 lim=  1000 x1.00         grasp x3  |g|=      52 lim=  1000 x1.00  
+        release x3  |g|=      48 lim=   500 x1.00  
+    container       rew=  64.200  ph=7  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0146  B-Desc=100%/0.0082  B-Grasp=95%/0.0089  B-Move=15%/0.1839  B-Rel=100%/0.1507  P-Reach=10%/0.0733  P-Desc=40%/0.0693  P-Grasp=10%/0.0781  P-Move=0%/0.2789  P-Rel=100%/0.2312  C-Reach=0%/0.2155  C-Desc=0%/0.2787  C-Grasp=0%/0.2787  C-Move=0%/0.2685  C-Rel=100%/0.2186
+
+Iter  725:  Σrew=75.688  grad=652.4  [reset=0.0s bptt=12.0s elapsed=7328s]
+  heads (0/5 clipped)   trunk |g|=164 lim=1500 x1.00
+          reach x3  |g|=     528 lim=  3000 x1.00         grasp x3  |g|=     239 lim=  1000 x1.00  
+        descend x3  |g|=     215 lim=  1500 x1.00          move x3  |g|=     124 lim=  1000 x1.00  
+        release x3  |g|=      27 lim=   500 x1.00  
+    container       rew=  75.688  ph=7  success=2.67/20 (13%) (partial) streak=0  | B-Reach=100%/0.0091  B-Desc=100%/0.0122  B-Grasp=95%/0.0166  B-Move=5%/0.2344  B-Rel=100%/0.2081  P-Reach=5%/0.0753  P-Desc=40%/0.0720  P-Grasp=35%/0.0645  P-Move=0%/0.2876  P-Rel=100%/0.2381  C-Reach=0%/0.3246  C-Desc=0%/0.3809  C-Grasp=0%/0.3809  C-Move=0%/0.2718  C-Rel=100%/0.2226
+
+Iter  730:  Σrew=86.484  grad=1078.4  [reset=0.0s bptt=12.0s elapsed=7405s]
+  heads (0/5 clipped)   trunk |g|=250 lim=1500 x1.00
+        descend x3  |g|=     728 lim=  1500 x1.00         reach x3  |g|=     659 lim=  3000 x1.00  
+           move x3  |g|=     314 lim=  1000 x1.00         grasp x3  |g|=     194 lim=  1000 x1.00  
+        release x3  |g|=      34 lim=   500 x1.00  
+    container       rew=  86.484  ph=7  success=1/20 (5%) (partial) streak=0  | B-Reach=100%/0.0213  B-Desc=100%/0.0170  B-Grasp=65%/0.0290  B-Move=10%/0.2489  B-Rel=100%/0.2423  P-Reach=65%/0.0396  P-Desc=60%/0.0481  P-Grasp=40%/0.0601  P-Move=0%/0.3199  P-Rel=100%/0.2790  C-Reach=0%/0.4594  C-Desc=0%/0.5301  C-Grasp=0%/0.5301  C-Move=0%/0.2709  C-Rel=100%/0.2216
+
+Iter  735:  Σrew=60.771  grad=6594.0  [reset=0.0s bptt=12.0s elapsed=7481s]
+  heads (1/5 clipped)   trunk |g|=2392 lim=1500 x0.63
+           move x3  |g|=    6057 lim=  1000 x0.17         reach x3  |g|=     806 lim=  3000 x1.00  
+        descend x3  |g|=     612 lim=  1500 x1.00         grasp x3  |g|=     209 lim=  1000 x1.00  
+        release x3  |g|=      16 lim=   500 x1.00  
+    container       rew=  60.771  ph=7  success=1.33/20 (7%) (partial) streak=0  | B-Reach=100%/0.0149  B-Desc=100%/0.0191  B-Grasp=85%/0.0224  B-Move=0%/0.2492  B-Rel=100%/0.2231  P-Reach=30%/0.0643  P-Desc=20%/0.0747  P-Grasp=15%/0.1225  P-Move=0%/0.2788  P-Rel=100%/0.2302  C-Reach=0%/0.4555  C-Desc=0%/0.5207  C-Grasp=0%/0.5207  C-Move=0%/0.2704  C-Rel=100%/0.2209
+
+Iter  740:  Σrew=76.837  grad=1056.5  [reset=0.0s bptt=12.0s elapsed=7558s]
+  heads (0/5 clipped)   trunk |g|=238 lim=1500 x1.00
+          reach x3  |g|=     819 lim=  3000 x1.00       descend x3  |g|=     612 lim=  1500 x1.00  
+          grasp x3  |g|=     110 lim=  1000 x1.00          move x3  |g|=      47 lim=  1000 x1.00  
+        release x3  |g|=      15 lim=   500 x1.00  
+    container       rew=  76.837  ph=7  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0075  B-Desc=100%/0.0072  B-Grasp=100%/0.0106  B-Move=10%/0.2124  B-Rel=100%/0.1961  P-Reach=75%/0.0588  P-Desc=50%/0.0675  P-Grasp=35%/0.0868  P-Move=0%/0.2990  P-Rel=100%/0.2537  C-Reach=0%/0.3554  C-Desc=0%/0.4381  C-Grasp=0%/0.4381  C-Move=0%/0.2714  C-Rel=100%/0.2221
+
+Iter  745:  Σrew=80.235  grad=905.2  [reset=0.0s bptt=12.0s elapsed=7635s]
+  heads (0/5 clipped)   trunk |g|=233 lim=1500 x1.00
+          reach x3  |g|=     718 lim=  3000 x1.00       descend x3  |g|=     482 lim=  1500 x1.00  
+           move x3  |g|=     101 lim=  1000 x1.00         grasp x3  |g|=      84 lim=  1000 x1.00  
+        release x3  |g|=       8 lim=   500 x1.00  
+    container       rew=  80.235  ph=7  success=2.33/20 (12%) (partial) streak=0  | B-Reach=100%/0.0119  B-Desc=100%/0.0079  B-Grasp=95%/0.0100  B-Move=15%/0.2297  B-Rel=100%/0.2234  P-Reach=65%/0.0514  P-Desc=30%/0.0749  P-Grasp=30%/0.0807  P-Move=0%/0.2955  P-Rel=100%/0.2492  C-Reach=0%/0.3861  C-Desc=0%/0.4699  C-Grasp=0%/0.4699  C-Move=0%/0.2676  C-Rel=100%/0.2174
+
+Iter  750:  Σrew=76.856  grad=1306.6  [reset=0.0s bptt=12.0s elapsed=7712s]
+  heads (0/5 clipped)   trunk |g|=304 lim=1500 x1.00
+          reach x3  |g|=     923 lim=  3000 x1.00       descend x3  |g|=     767 lim=  1500 x1.00  
+          grasp x3  |g|=     304 lim=  1000 x1.00          move x3  |g|=     286 lim=  1000 x1.00  
+        release x3  |g|=       3 lim=   500 x1.00  
+    container       rew=  76.856  ph=7  success=1.67/20 (8%) (partial) streak=0  | B-Reach=100%/0.0090  B-Desc=100%/0.0093  B-Grasp=100%/0.0079  B-Move=10%/0.2244  B-Rel=100%/0.2026  P-Reach=90%/0.0376  P-Desc=55%/0.0509  P-Grasp=60%/0.0561  P-Move=0%/0.3203  P-Rel=100%/0.2777  C-Reach=0%/0.4102  C-Desc=0%/0.4993  C-Grasp=0%/0.4993  C-Move=0%/0.2735  C-Rel=100%/0.2247
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 750
+
+Iter  755:  Σrew=82.316  grad=1047.7  [reset=0.0s bptt=12.0s elapsed=7790s]
+  heads (0/5 clipped)   trunk |g|=290 lim=1500 x1.00
+        descend x3  |g|=     785 lim=  1500 x1.00          move x3  |g|=     451 lim=  1000 x1.00  
+          reach x3  |g|=     332 lim=  3000 x1.00         grasp x3  |g|=     288 lim=  1000 x1.00  
+        release x3  |g|=       9 lim=   500 x1.00  
+    container       rew=  82.316  ph=7  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0081  B-Desc=100%/0.0053  B-Grasp=100%/0.0102  B-Move=45%/0.1638  B-Rel=100%/0.1507  P-Reach=85%/0.0443  P-Desc=75%/0.0506  P-Grasp=60%/0.0763  P-Move=0%/0.3281  P-Rel=100%/0.2859  C-Reach=0%/0.4196  C-Desc=0%/0.4989  C-Grasp=0%/0.4989  C-Move=0%/0.2687  C-Rel=100%/0.2189
+    ──→ container: phase 8, active=180
+
+Iter  760:  Σrew=79.067  grad=4047.6  [reset=0.0s bptt=12.7s elapsed=7870s]
+  heads (1/5 clipped)   trunk |g|=830 lim=1500 x1.00
+        descend x3  |g|=    3303 lim=  1500 x0.45         reach x3  |g|=    2072 lim=  3000 x1.00  
+           move x3  |g|=     677 lim=  1000 x1.00         grasp x3  |g|=     181 lim=  1000 x1.00  
+        release x3  |g|=      17 lim=   500 x1.00  
+    container       rew=  79.067  ph=8  success=4/20 (20%) (partial) streak=0  | B-Reach=100%/0.0094  B-Desc=100%/0.0076  B-Grasp=100%/0.0069  B-Move=15%/0.1953  B-Rel=100%/0.1676  P-Reach=70%/0.0432  P-Desc=50%/0.0547  P-Grasp=45%/0.0909  P-Move=0%/0.3385  P-Rel=100%/0.2974  C-Reach=0%/0.2981  C-Desc=0%/0.3602  C-Grasp=0%/0.3602  C-Move=0%/0.2744  C-Rel=100%/0.2258
+
+Iter  765:  Σrew=83.966  grad=1645.6  [reset=0.0s bptt=12.7s elapsed=7951s]
+  heads (0/5 clipped)   trunk |g|=318 lim=1500 x1.00
+          reach x3  |g|=    1361 lim=  3000 x1.00       descend x3  |g|=     854 lim=  1500 x1.00  
+          grasp x3  |g|=     115 lim=  1000 x1.00          move x3  |g|=     109 lim=  1000 x1.00  
+        release x3  |g|=      23 lim=   500 x1.00  
+    container       rew=  83.966  ph=8  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0093  B-Desc=100%/0.0068  B-Grasp=95%/0.0097  B-Move=40%/0.1597  B-Rel=100%/0.1283  P-Reach=90%/0.0357  P-Desc=65%/0.0528  P-Grasp=45%/0.0670  P-Move=0%/0.2862  P-Rel=100%/0.2385  C-Reach=0%/0.2998  C-Desc=0%/0.3452  C-Grasp=0%/0.3452  C-Move=0%/0.2644  C-Rel=100%/0.2136
+
+Iter  770:  Σrew=96.606  grad=1449.3  [reset=0.0s bptt=12.7s elapsed=8031s]
+  heads (0/5 clipped)   trunk |g|=332 lim=1500 x1.00
+          reach x3  |g|=    1084 lim=  3000 x1.00       descend x3  |g|=     890 lim=  1500 x1.00  
+          grasp x3  |g|=     128 lim=  1000 x1.00          move x3  |g|=      72 lim=  1000 x1.00  
+        release x3  |g|=      20 lim=   500 x1.00  
+    container       rew=  96.606  ph=8  success=4.67/20 (23%) (partial) streak=0  | B-Reach=100%/0.0162  B-Desc=100%/0.0085  B-Grasp=100%/0.0083  B-Move=5%/0.1736  B-Rel=100%/0.1021  P-Reach=100%/0.0237  P-Desc=85%/0.0289  P-Grasp=80%/0.0240  P-Move=0%/0.2830  P-Rel=100%/0.2333  C-Reach=0%/0.2505  C-Desc=0%/0.2899  C-Grasp=0%/0.2899  C-Move=0%/0.2675  C-Rel=100%/0.2174
+
+Iter  775:  Σrew=68.433  grad=1263.1  [reset=0.0s bptt=12.7s elapsed=8111s]
+  heads (0/5 clipped)   trunk |g|=286 lim=1500 x1.00
+          reach x3  |g|=     942 lim=  3000 x1.00       descend x3  |g|=     782 lim=  1500 x1.00  
+           move x3  |g|=      88 lim=  1000 x1.00         grasp x3  |g|=      84 lim=  1000 x1.00  
+        release x3  |g|=      17 lim=   500 x1.00  
+    container       rew=  68.433  ph=8  success=4.67/20 (23%) (partial) streak=0  | B-Reach=95%/0.0123  B-Desc=95%/0.0104  B-Grasp=95%/0.0138  B-Move=30%/0.1643  B-Rel=100%/0.1498  P-Reach=90%/0.0356  P-Desc=55%/0.0464  P-Grasp=65%/0.0435  P-Move=0%/0.2923  P-Rel=100%/0.2453  C-Reach=0%/0.2103  C-Desc=0%/0.2634  C-Grasp=0%/0.2634  C-Move=0%/0.2711  C-Rel=100%/0.2217
+
+Iter  780:  Σrew=92.544  grad=1131.0  [reset=0.0s bptt=12.7s elapsed=8192s]
+  heads (0/5 clipped)   trunk |g|=258 lim=1500 x1.00
+          reach x3  |g|=     926 lim=  3000 x1.00       descend x3  |g|=     573 lim=  1500 x1.00  
+          grasp x3  |g|=     147 lim=  1000 x1.00          move x3  |g|=      74 lim=  1000 x1.00  
+        release x3  |g|=      27 lim=   500 x1.00  
+    container       rew=  92.544  ph=8  success=2.67/20 (13%) (partial) streak=0  | B-Reach=100%/0.0116  B-Desc=100%/0.0095  B-Grasp=100%/0.0114  B-Move=5%/0.2113  B-Rel=100%/0.1649  P-Reach=90%/0.0293  P-Desc=90%/0.0334  P-Grasp=90%/0.0311  P-Move=0%/0.3157  P-Rel=100%/0.2705  C-Reach=0%/0.2192  C-Desc=0%/0.2669  C-Grasp=0%/0.2669  C-Move=0%/0.2686  C-Rel=100%/0.2188
+
+Iter  785:  Σrew=111.195  grad=1071.9  [reset=0.0s bptt=12.7s elapsed=8272s]
+  heads (0/5 clipped)   trunk |g|=275 lim=1500 x1.00
+          reach x3  |g|=     806 lim=  3000 x1.00       descend x3  |g|=     593 lim=  1500 x1.00  
+          grasp x3  |g|=     222 lim=  1000 x1.00          move x3  |g|=     140 lim=  1000 x1.00  
+        release x3  |g|=      48 lim=   500 x1.00  
+    container       rew= 111.195  ph=8  success=3.67/20 (18%) (partial) streak=0  | B-Reach=100%/0.0102  B-Desc=100%/0.0092  B-Grasp=100%/0.0099  B-Move=25%/0.1738  B-Rel=100%/0.1319  P-Reach=95%/0.0260  P-Desc=95%/0.0272  P-Grasp=85%/0.0274  P-Move=0%/0.2831  P-Rel=100%/0.2345  C-Reach=0%/0.2960  C-Desc=0%/0.3291  C-Grasp=0%/0.3291  C-Move=0%/0.2706  C-Rel=100%/0.2212
+
+Iter  790:  Σrew=80.161  grad=1295.8  [reset=0.0s bptt=12.7s elapsed=8352s]
+  heads (0/5 clipped)   trunk |g|=322 lim=1500 x1.00
+          reach x3  |g|=     923 lim=  3000 x1.00       descend x3  |g|=     826 lim=  1500 x1.00  
+           move x3  |g|=     192 lim=  1000 x1.00         grasp x3  |g|=      66 lim=  1000 x1.00  
+        release x3  |g|=      20 lim=   500 x1.00  
+    container       rew=  80.161  ph=8  success=2/20 (10%) (partial) streak=0  | B-Reach=100%/0.0112  B-Desc=100%/0.0104  B-Grasp=95%/0.0147  B-Move=10%/0.2551  B-Rel=100%/0.2538  P-Reach=55%/0.0523  P-Desc=60%/0.0519  P-Grasp=45%/0.0653  P-Move=0%/0.2928  P-Rel=100%/0.2463  C-Reach=0%/0.3036  C-Desc=0%/0.3635  C-Grasp=0%/0.3635  C-Move=0%/0.2682  C-Rel=100%/0.2182
+
+Iter  795:  Σrew=101.998  grad=1588.0  [reset=0.0s bptt=12.7s elapsed=8433s]
+  heads (0/5 clipped)   trunk |g|=348 lim=1500 x1.00
+          reach x3  |g|=    1418 lim=  3000 x1.00       descend x3  |g|=     586 lim=  1500 x1.00  
+           move x3  |g|=     157 lim=  1000 x1.00         grasp x3  |g|=     140 lim=  1000 x1.00  
+        release x3  |g|=      43 lim=   500 x1.00  
+    container       rew= 101.998  ph=8  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0085  B-Desc=100%/0.0042  B-Grasp=100%/0.0050  B-Move=0%/0.2138  B-Rel=100%/0.1642  P-Reach=80%/0.0415  P-Desc=80%/0.0362  P-Grasp=55%/0.0430  P-Move=0%/0.3009  P-Rel=100%/0.2538  C-Reach=0%/0.2938  C-Desc=0%/0.3347  C-Grasp=0%/0.3347  C-Move=0%/0.2709  C-Rel=100%/0.2215
+
+Iter  800:  Σrew=123.267  grad=999.6  [reset=0.0s bptt=12.7s elapsed=8513s]
+  heads (0/5 clipped)   trunk |g|=202 lim=1500 x1.00
+          reach x3  |g|=     862 lim=  3000 x1.00       descend x3  |g|=     333 lim=  1500 x1.00  
+           move x3  |g|=     306 lim=  1000 x1.00         grasp x3  |g|=     102 lim=  1000 x1.00  
+        release x3  |g|=      32 lim=   500 x1.00  
+    container       rew= 123.267  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0096  B-Desc=100%/0.0081  B-Grasp=100%/0.0117  B-Move=40%/0.1395  B-Rel=100%/0.1172  P-Reach=95%/0.0278  P-Desc=75%/0.0362  P-Grasp=80%/0.0367  P-Move=0%/0.2799  P-Rel=100%/0.2317  C-Reach=0%/0.3030  C-Desc=0%/0.3254  C-Grasp=0%/0.3254  C-Move=0%/0.2654  C-Rel=100%/0.2146
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 800
+
+Iter  805:  Σrew=110.970  grad=1400.4  [reset=0.0s bptt=12.7s elapsed=8595s]
+  heads (0/5 clipped)   trunk |g|=269 lim=1500 x1.00
+        descend x3  |g|=     966 lim=  1500 x1.00         reach x3  |g|=     932 lim=  3000 x1.00  
+           move x3  |g|=     274 lim=  1000 x1.00         grasp x3  |g|=     104 lim=  1000 x1.00  
+        release x3  |g|=      33 lim=   500 x1.00  
+    container       rew= 110.970  ph=8  success=4/20 (20%) (partial) streak=0  | B-Reach=100%/0.0122  B-Desc=100%/0.0066  B-Grasp=100%/0.0078  B-Move=15%/0.1838  B-Rel=100%/0.1394  P-Reach=85%/0.0231  P-Desc=90%/0.0300  P-Grasp=75%/0.0267  P-Move=0%/0.3026  P-Rel=100%/0.2576  C-Reach=0%/0.3161  C-Desc=0%/0.3426  C-Grasp=0%/0.3426  C-Move=0%/0.2680  C-Rel=100%/0.2179
+
+Iter  810:  Σrew=120.968  grad=715.8  [reset=0.0s bptt=12.7s elapsed=8675s]
+  heads (0/5 clipped)   trunk |g|=170 lim=1500 x1.00
+          reach x3  |g|=     517 lim=  3000 x1.00          move x3  |g|=     358 lim=  1000 x1.00  
+        descend x3  |g|=     272 lim=  1500 x1.00         grasp x3  |g|=     115 lim=  1000 x1.00  
+        release x3  |g|=      32 lim=   500 x1.00  
+    container       rew= 120.968  ph=8  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0072  B-Desc=100%/0.0058  B-Grasp=100%/0.0068  B-Move=10%/0.1805  B-Rel=100%/0.1299  P-Reach=95%/0.0202  P-Desc=95%/0.0213  P-Grasp=95%/0.0173  P-Move=0%/0.3016  P-Rel=100%/0.2561  C-Reach=0%/0.3325  C-Desc=0%/0.3626  C-Grasp=0%/0.3626  C-Move=0%/0.2698  C-Rel=100%/0.2203
+
+Iter  815:  Σrew=130.005  grad=1942.9  [reset=0.0s bptt=12.7s elapsed=8756s]
+  heads (0/5 clipped)   trunk |g|=477 lim=1500 x1.00
+          reach x3  |g|=    1820 lim=  3000 x1.00       descend x3  |g|=     342 lim=  1500 x1.00  
+           move x3  |g|=     313 lim=  1000 x1.00         grasp x3  |g|=     135 lim=  1000 x1.00  
+        release x3  |g|=      49 lim=   500 x1.00  
+    container       rew= 130.005  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0075  B-Desc=100%/0.0051  B-Grasp=100%/0.0049  B-Move=25%/0.1406  B-Rel=100%/0.0970  P-Reach=95%/0.0168  P-Desc=100%/0.0147  P-Grasp=90%/0.0154  P-Move=0%/0.2821  P-Rel=100%/0.2380  C-Reach=0%/0.3960  C-Desc=0%/0.4250  C-Grasp=0%/0.4250  C-Move=0%/0.2681  C-Rel=100%/0.2181
+
+Iter  820:  Σrew=117.499  grad=1403.3  [reset=0.0s bptt=12.7s elapsed=8836s]
+  heads (0/5 clipped)   trunk |g|=317 lim=1500 x1.00
+          reach x3  |g|=     884 lim=  3000 x1.00       descend x3  |g|=     863 lim=  1500 x1.00  
+           move x3  |g|=     545 lim=  1000 x1.00         grasp x3  |g|=     210 lim=  1000 x1.00  
+        release x3  |g|=      22 lim=   500 x1.00  
+    container       rew= 117.499  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0082  B-Desc=100%/0.0055  B-Grasp=100%/0.0055  B-Move=5%/0.1806  B-Rel=100%/0.1185  P-Reach=90%/0.0214  P-Desc=90%/0.0217  P-Grasp=95%/0.0187  P-Move=0%/0.2768  P-Rel=100%/0.2491  C-Reach=0%/0.3735  C-Desc=0%/0.3959  C-Grasp=0%/0.3959  C-Move=0%/0.2673  C-Rel=100%/0.2170
+
+Iter  825:  Σrew=125.446  grad=1490.0  [reset=0.0s bptt=12.7s elapsed=8916s]
+  heads (0/5 clipped)   trunk |g|=260 lim=1500 x1.00
+          reach x3  |g|=    1404 lim=  3000 x1.00          move x3  |g|=     293 lim=  1000 x1.00  
+        descend x3  |g|=     269 lim=  1500 x1.00         grasp x3  |g|=     147 lim=  1000 x1.00  
+        release x3  |g|=      22 lim=   500 x1.00  
+    container       rew= 125.446  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0075  B-Desc=100%/0.0074  B-Grasp=100%/0.0076  B-Move=10%/0.1838  B-Rel=100%/0.1311  P-Reach=95%/0.0194  P-Desc=100%/0.0207  P-Grasp=80%/0.0241  P-Move=0%/0.2311  P-Rel=100%/0.2043  C-Reach=0%/0.2676  C-Desc=0%/0.3020  C-Grasp=0%/0.3020  C-Move=0%/0.2694  C-Rel=100%/0.2197
+
+Iter  830:  Σrew=124.841  grad=1144.0  [reset=0.0s bptt=12.7s elapsed=8997s]
+  heads (0/5 clipped)   trunk |g|=340 lim=1500 x1.00
+          reach x3  |g|=     829 lim=  3000 x1.00       descend x3  |g|=     651 lim=  1500 x1.00  
+           move x3  |g|=     204 lim=  1000 x1.00         grasp x3  |g|=     203 lim=  1000 x1.00  
+        release x3  |g|=      26 lim=   500 x1.00  
+    container       rew= 124.841  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0099  B-Desc=100%/0.0077  B-Grasp=100%/0.0083  B-Move=50%/0.1322  B-Rel=100%/0.1186  P-Reach=85%/0.0284  P-Desc=95%/0.0187  P-Grasp=95%/0.0157  P-Move=0%/0.2981  P-Rel=100%/0.2535  C-Reach=0%/0.2750  C-Desc=0%/0.3419  C-Grasp=0%/0.3419  C-Move=0%/0.2729  C-Rel=100%/0.2240
+
+Iter  835:  Σrew=106.586  grad=1655.7  [reset=0.0s bptt=12.7s elapsed=9077s]
+  heads (0/5 clipped)   trunk |g|=364 lim=1500 x1.00
+          reach x3  |g|=    1214 lim=  3000 x1.00       descend x3  |g|=    1042 lim=  1500 x1.00  
+          grasp x3  |g|=     188 lim=  1000 x1.00          move x3  |g|=     121 lim=  1000 x1.00  
+        release x3  |g|=      18 lim=   500 x1.00  
+    container       rew= 106.586  ph=8  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0059  B-Grasp=100%/0.0066  B-Move=5%/0.2254  B-Rel=100%/0.1959  P-Reach=80%/0.0301  P-Desc=90%/0.0271  P-Grasp=80%/0.0265  P-Move=5%/0.2524  P-Rel=100%/0.2149  C-Reach=0%/0.2375  C-Desc=0%/0.3053  C-Grasp=0%/0.3053  C-Move=0%/0.2692  C-Rel=100%/0.2194
+
+Iter  840:  Σrew=145.775  grad=1332.8  [reset=0.0s bptt=12.7s elapsed=9158s]
+  heads (0/5 clipped)   trunk |g|=309 lim=1500 x1.00
+          reach x3  |g|=     909 lim=  3000 x1.00       descend x3  |g|=     658 lim=  1500 x1.00  
+           move x3  |g|=     553 lim=  1000 x1.00         grasp x3  |g|=     339 lim=  1000 x1.00  
+        release x3  |g|=      27 lim=   500 x1.00  
+    container       rew= 145.775  ph=8  success=4.33/20 (22%) (partial) streak=0  | B-Reach=100%/0.0100  B-Desc=100%/0.0070  B-Grasp=100%/0.0090  B-Move=45%/0.1554  B-Rel=100%/0.1449  P-Reach=85%/0.0198  P-Desc=85%/0.0269  P-Grasp=85%/0.0397  P-Move=0%/0.2825  P-Rel=100%/0.2384  C-Reach=0%/0.3089  C-Desc=0%/0.3819  C-Grasp=0%/0.3819  C-Move=0%/0.2717  C-Rel=100%/0.2225
+
+Iter  845:  Σrew=101.892  grad=2445.8  [reset=0.0s bptt=12.6s elapsed=9238s]
+  heads (0/5 clipped)   trunk |g|=487 lim=1500 x1.00
+          reach x3  |g|=    1929 lim=  3000 x1.00       descend x3  |g|=    1415 lim=  1500 x1.00  
+           move x3  |g|=     126 lim=  1000 x1.00         grasp x3  |g|=      87 lim=  1000 x1.00  
+        release x3  |g|=      18 lim=   500 x1.00  
+    container       rew= 101.892  ph=8  success=5/20 (25%) (partial) streak=0  | B-Reach=100%/0.0111  B-Desc=100%/0.0039  B-Grasp=100%/0.0053  B-Move=35%/0.1287  B-Rel=100%/0.0872  P-Reach=100%/0.0196  P-Desc=100%/0.0147  P-Grasp=95%/0.0160  P-Move=0%/0.3221  P-Rel=100%/0.2813  C-Reach=0%/0.3227  C-Desc=0%/0.3924  C-Grasp=0%/0.3924  C-Move=0%/0.2716  C-Rel=100%/0.2224
+
+Iter  850:  Σrew=121.728  grad=1196.5  [reset=0.0s bptt=12.7s elapsed=9318s]
+  heads (0/5 clipped)   trunk |g|=231 lim=1500 x1.00
+          reach x3  |g|=     799 lim=  3000 x1.00       descend x3  |g|=     762 lim=  1500 x1.00  
+           move x3  |g|=     359 lim=  1000 x1.00         grasp x3  |g|=     173 lim=  1000 x1.00  
+        release x3  |g|=      35 lim=   500 x1.00  
+    container       rew= 121.728  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0100  B-Desc=100%/0.0091  B-Grasp=100%/0.0101  B-Move=45%/0.1292  B-Rel=100%/0.1091  P-Reach=95%/0.0243  P-Desc=90%/0.0240  P-Grasp=90%/0.0247  P-Move=0%/0.2923  P-Rel=100%/0.2436  C-Reach=0%/0.3218  C-Desc=0%/0.3884  C-Grasp=0%/0.3884  C-Move=0%/0.2744  C-Rel=100%/0.2258
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 850
+
+Iter  855:  Σrew=126.058  grad=1078.8  [reset=0.0s bptt=12.6s elapsed=9400s]
+  heads (0/5 clipped)   trunk |g|=275 lim=1500 x1.00
+          reach x3  |g|=     779 lim=  3000 x1.00       descend x3  |g|=     544 lim=  1500 x1.00  
+           move x3  |g|=     396 lim=  1000 x1.00         grasp x3  |g|=     167 lim=  1000 x1.00  
+        release x3  |g|=      21 lim=   500 x1.00  
+    container       rew= 126.058  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0122  B-Desc=100%/0.0081  B-Grasp=100%/0.0092  B-Move=30%/0.1552  B-Rel=100%/0.1397  P-Reach=85%/0.0265  P-Desc=90%/0.0189  P-Grasp=90%/0.0173  P-Move=0%/0.3039  P-Rel=100%/0.2529  C-Reach=0%/0.4099  C-Desc=0%/0.4764  C-Grasp=0%/0.4764  C-Move=0%/0.2723  C-Rel=100%/0.2232
+
+Iter  860:  Σrew=139.278  grad=1612.9  [reset=0.0s bptt=12.7s elapsed=9480s]
+  heads (0/5 clipped)   trunk |g|=334 lim=1500 x1.00
+        descend x3  |g|=    1165 lim=  1500 x1.00         reach x3  |g|=    1026 lim=  3000 x1.00  
+           move x3  |g|=     250 lim=  1000 x1.00         grasp x3  |g|=     132 lim=  1000 x1.00  
+        release x3  |g|=      32 lim=   500 x1.00  
+    container       rew= 139.278  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0061  B-Desc=100%/0.0039  B-Grasp=100%/0.0041  B-Move=75%/0.0685  B-Rel=100%/0.0669  P-Reach=100%/0.0178  P-Desc=100%/0.0129  P-Grasp=100%/0.0086  P-Move=0%/0.3192  P-Rel=100%/0.2767  C-Reach=0%/0.4796  C-Desc=0%/0.5414  C-Grasp=0%/0.5414  C-Move=0%/0.2681  C-Rel=100%/0.2181
+
+Iter  865:  Σrew=132.398  grad=1055.5  [reset=0.0s bptt=12.7s elapsed=9561s]
+  heads (0/5 clipped)   trunk |g|=247 lim=1500 x1.00
+          reach x3  |g|=     823 lim=  3000 x1.00       descend x3  |g|=     483 lim=  1500 x1.00  
+           move x3  |g|=     344 lim=  1000 x1.00         grasp x3  |g|=     153 lim=  1000 x1.00  
+        release x3  |g|=      36 lim=   500 x1.00  
+    container       rew= 132.398  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0071  B-Desc=100%/0.0039  B-Grasp=100%/0.0047  B-Move=30%/0.1434  B-Rel=100%/0.1028  P-Reach=100%/0.0205  P-Desc=95%/0.0152  P-Grasp=95%/0.0150  P-Move=0%/0.3317  P-Rel=100%/0.2916  C-Reach=0%/0.4913  C-Desc=0%/0.5597  C-Grasp=0%/0.5597  C-Move=0%/0.2712  C-Rel=100%/0.2220
+
+Iter  870:  Σrew=137.496  grad=1423.4  [reset=0.0s bptt=12.7s elapsed=9641s]
+  heads (0/5 clipped)   trunk |g|=333 lim=1500 x1.00
+          reach x3  |g|=    1250 lim=  3000 x1.00       descend x3  |g|=     446 lim=  1500 x1.00  
+           move x3  |g|=     339 lim=  1000 x1.00         grasp x3  |g|=     197 lim=  1000 x1.00  
+        release x3  |g|=      35 lim=   500 x1.00  
+    container       rew= 137.496  ph=8  success=6.33/20 (32%) (partial) streak=0  | B-Reach=100%/0.0070  B-Desc=100%/0.0055  B-Grasp=100%/0.0069  B-Move=55%/0.0926  B-Rel=100%/0.0689  P-Reach=100%/0.0141  P-Desc=100%/0.0171  P-Grasp=100%/0.0125  P-Move=0%/0.3541  P-Rel=100%/0.3149  C-Reach=0%/0.5352  C-Desc=0%/0.6032  C-Grasp=0%/0.6032  C-Move=0%/0.2724  C-Rel=100%/0.2234
+
+Iter  875:  Σrew=145.514  grad=1462.0  [reset=0.0s bptt=12.6s elapsed=9721s]
+  heads (0/5 clipped)   trunk |g|=328 lim=1500 x1.00
+          reach x3  |g|=    1163 lim=  3000 x1.00       descend x3  |g|=     595 lim=  1500 x1.00  
+           move x3  |g|=     510 lim=  1000 x1.00         grasp x3  |g|=     250 lim=  1000 x1.00  
+        release x3  |g|=      36 lim=   500 x1.00  
+    container       rew= 145.514  ph=8  success=6/20 (30%) (partial) streak=0  | B-Reach=100%/0.0061  B-Desc=100%/0.0068  B-Grasp=100%/0.0069  B-Move=60%/0.1063  B-Rel=100%/0.1028  P-Reach=95%/0.0187  P-Desc=95%/0.0167  P-Grasp=95%/0.0184  P-Move=0%/0.3467  P-Rel=100%/0.3066  C-Reach=0%/0.5698  C-Desc=0%/0.6346  C-Grasp=0%/0.6346  C-Move=0%/0.2671  C-Rel=100%/0.2169
+
+Iter  880:  Σrew=137.402  grad=1435.5  [reset=0.0s bptt=12.7s elapsed=9802s]
+  heads (0/5 clipped)   trunk |g|=304 lim=1500 x1.00
+          reach x3  |g|=    1126 lim=  3000 x1.00       descend x3  |g|=     704 lim=  1500 x1.00  
+           move x3  |g|=     418 lim=  1000 x1.00         grasp x3  |g|=     170 lim=  1000 x1.00  
+        release x3  |g|=      21 lim=   500 x1.00  
+    container       rew= 137.402  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0067  B-Desc=100%/0.0056  B-Grasp=100%/0.0067  B-Move=50%/0.0971  B-Rel=100%/0.0695  P-Reach=100%/0.0126  P-Desc=100%/0.0113  P-Grasp=95%/0.0094  P-Move=0%/0.3261  P-Rel=100%/0.2835  C-Reach=0%/0.5640  C-Desc=0%/0.6306  C-Grasp=0%/0.6306  C-Move=0%/0.2721  C-Rel=100%/0.2230
+
+Iter  885:  Σrew=135.203  grad=2062.7  [reset=0.0s bptt=12.7s elapsed=9882s]
+  heads (0/5 clipped)   trunk |g|=626 lim=1500 x1.00
+          reach x3  |g|=    1525 lim=  3000 x1.00       descend x3  |g|=     877 lim=  1500 x1.00  
+           move x3  |g|=     840 lim=  1000 x1.00         grasp x3  |g|=     246 lim=  1000 x1.00  
+        release x3  |g|=      14 lim=   500 x1.00  
+    container       rew= 135.203  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0085  B-Desc=100%/0.0076  B-Grasp=100%/0.0095  B-Move=15%/0.1480  B-Rel=100%/0.0820  P-Reach=100%/0.0105  P-Desc=100%/0.0124  P-Grasp=100%/0.0063  P-Move=0%/0.3314  P-Rel=100%/0.2901  C-Reach=0%/0.6006  C-Desc=0%/0.6644  C-Grasp=0%/0.6644  C-Move=0%/0.2673  C-Rel=100%/0.2171
+
+Iter  890:  Σrew=121.626  grad=1532.1  [reset=0.0s bptt=12.7s elapsed=9962s]
+  heads (0/5 clipped)   trunk |g|=345 lim=1500 x1.00
+          reach x3  |g|=    1067 lim=  3000 x1.00       descend x3  |g|=    1015 lim=  1500 x1.00  
+          grasp x3  |g|=     227 lim=  1000 x1.00          move x3  |g|=      79 lim=  1000 x1.00  
+        release x3  |g|=      14 lim=   500 x1.00  
+    container       rew= 121.626  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0064  B-Desc=100%/0.0061  B-Grasp=100%/0.0056  B-Move=25%/0.1326  B-Rel=100%/0.0807  P-Reach=100%/0.0131  P-Desc=100%/0.0161  P-Grasp=100%/0.0118  P-Move=0%/0.3371  P-Rel=100%/0.2983  C-Reach=0%/0.5379  C-Desc=0%/0.6013  C-Grasp=0%/0.6013  C-Move=0%/0.2683  C-Rel=100%/0.2183
+
+Iter  895:  Σrew=109.927  grad=2080.2  [reset=0.0s bptt=12.7s elapsed=10042s]
+  heads (1/5 clipped)   trunk |g|=430 lim=1500 x1.00
+          reach x3  |g|=    1336 lim=  3000 x1.00       descend x3  |g|=    1105 lim=  1500 x1.00  
+           move x3  |g|=    1050 lim=  1000 x0.95         grasp x3  |g|=     180 lim=  1000 x1.00  
+        release x3  |g|=       8 lim=   500 x1.00  
+    container       rew= 109.927  ph=8  success=5.67/20 (28%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0055  B-Grasp=100%/0.0054  B-Move=20%/0.1847  B-Rel=100%/0.1465  P-Reach=95%/0.0205  P-Desc=90%/0.0189  P-Grasp=85%/0.0196  P-Move=0%/0.2699  P-Rel=100%/0.2286  C-Reach=0%/0.4619  C-Desc=0%/0.5214  C-Grasp=0%/0.5214  C-Move=0%/0.2651  C-Rel=100%/0.2143
+
+Iter  900:  Σrew=142.410  grad=1614.4  [reset=0.0s bptt=12.7s elapsed=10123s]
+  heads (0/5 clipped)   trunk |g|=362 lim=1500 x1.00
+          reach x3  |g|=    1237 lim=  3000 x1.00       descend x3  |g|=     786 lim=  1500 x1.00  
+           move x3  |g|=     473 lim=  1000 x1.00         grasp x3  |g|=     320 lim=  1000 x1.00  
+        release x3  |g|=      29 lim=   500 x1.00  
+    container       rew= 142.410  ph=8  success=7/20 (35%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0050  B-Grasp=100%/0.0049  B-Move=40%/0.1193  B-Rel=100%/0.0739  P-Reach=100%/0.0117  P-Desc=100%/0.0258  P-Grasp=100%/0.0234  P-Move=0%/0.1748  P-Rel=100%/0.2043  C-Reach=0%/0.3557  C-Desc=0%/0.4238  C-Grasp=0%/0.4238  C-Move=0%/0.2694  C-Rel=100%/0.2197
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 900
+
+Iter  905:  Σrew=112.457  grad=1877.6  [reset=0.0s bptt=12.7s elapsed=10205s]
+  heads (0/5 clipped)   trunk |g|=417 lim=1500 x1.00
+          reach x3  |g|=    1259 lim=  3000 x1.00          move x3  |g|=     960 lim=  1000 x1.00  
+        descend x3  |g|=     861 lim=  1500 x1.00         grasp x3  |g|=     320 lim=  1000 x1.00  
+        release x3  |g|=      13 lim=   500 x1.00  
+    container       rew= 112.457  ph=8  success=5.33/20 (27%) (partial) streak=0  | B-Reach=100%/0.0077  B-Desc=100%/0.0055  B-Grasp=100%/0.0059  B-Move=20%/0.1498  B-Rel=100%/0.0958  P-Reach=95%/0.0168  P-Desc=95%/0.0213  P-Grasp=95%/0.0277  P-Move=0%/0.1851  P-Rel=100%/0.2672  C-Reach=0%/0.3492  C-Desc=0%/0.4162  C-Grasp=0%/0.4162  C-Move=0%/0.2713  C-Rel=100%/0.2220
+
+Iter  910:  Σrew=175.738  grad=1466.2  [reset=0.0s bptt=12.7s elapsed=10285s]
+  heads (0/5 clipped)   trunk |g|=338 lim=1500 x1.00
+          reach x3  |g|=    1184 lim=  3000 x1.00       descend x3  |g|=     729 lim=  1500 x1.00  
+           move x3  |g|=     293 lim=  1000 x1.00         grasp x3  |g|=     117 lim=  1000 x1.00  
+        release x3  |g|=      51 lim=   500 x1.00  
+    container       rew= 175.738  ph=8  success=6.33/20 (32%) (partial) streak=0  | B-Reach=100%/0.0087  B-Desc=100%/0.0050  B-Grasp=100%/0.0059  B-Move=50%/0.0931  B-Rel=100%/0.0583  P-Reach=100%/0.0145  P-Desc=100%/0.0089  P-Grasp=100%/0.0092  P-Move=5%/0.1323  P-Rel=100%/0.2118  C-Reach=0%/0.2525  C-Desc=0%/0.3197  C-Grasp=0%/0.3197  C-Move=0%/0.2709  C-Rel=100%/0.2214
+
+Iter  915:  Σrew=161.153  grad=2070.7  [reset=0.0s bptt=12.7s elapsed=10365s]
+  heads (0/5 clipped)   trunk |g|=414 lim=1500 x1.00
+          reach x3  |g|=    1613 lim=  3000 x1.00       descend x3  |g|=     952 lim=  1500 x1.00  
+           move x3  |g|=     748 lim=  1000 x1.00         grasp x3  |g|=     222 lim=  1000 x1.00  
+        release x3  |g|=      35 lim=   500 x1.00  
+    container       rew= 161.153  ph=8  success=11/20 (55%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0051  B-Grasp=100%/0.0054  B-Move=50%/0.1128  B-Rel=100%/0.0807  P-Reach=95%/0.0175  P-Desc=95%/0.0193  P-Grasp=95%/0.0161  P-Move=40%/0.1024  P-Rel=100%/0.0936  C-Reach=0%/0.3058  C-Desc=0%/0.3610  C-Grasp=0%/0.3610  C-Move=0%/0.2658  C-Rel=100%/0.2152
+
+Iter  920:  Σrew=161.831  grad=1961.6  [reset=0.0s bptt=12.7s elapsed=10445s]
+  heads (0/5 clipped)   trunk |g|=381 lim=1500 x1.00
+          reach x3  |g|=    1248 lim=  3000 x1.00       descend x3  |g|=    1168 lim=  1500 x1.00  
+           move x3  |g|=     878 lim=  1000 x1.00         grasp x3  |g|=      96 lim=  1000 x1.00  
+        release x3  |g|=      34 lim=   500 x1.00  
+    container       rew= 161.831  ph=8  success=10/20 (50%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0044  B-Grasp=100%/0.0045  B-Move=65%/0.0902  B-Rel=100%/0.0734  P-Reach=95%/0.0150  P-Desc=95%/0.0131  P-Grasp=95%/0.0133  P-Move=65%/0.1017  P-Rel=100%/0.1224  C-Reach=0%/0.3728  C-Desc=0%/0.4319  C-Grasp=0%/0.4319  C-Move=0%/0.2689  C-Rel=100%/0.2191
+
+Iter  925:  Σrew=171.355  grad=1454.8  [reset=0.0s bptt=12.6s elapsed=10526s]
+  heads (1/5 clipped)   trunk |g|=309 lim=1500 x1.00
+           move x3  |g|=    1111 lim=  1000 x0.90         reach x3  |g|=     743 lim=  3000 x1.00  
+        descend x3  |g|=     477 lim=  1500 x1.00         grasp x3  |g|=      82 lim=  1000 x1.00  
+        release x3  |g|=      29 lim=   500 x1.00  
+    container       rew= 171.355  ph=8  success=11/20 (55%) (partial) streak=0  | B-Reach=100%/0.0092  B-Desc=100%/0.0079  B-Grasp=100%/0.0086  B-Move=45%/0.1045  B-Rel=100%/0.0783  P-Reach=100%/0.0122  P-Desc=100%/0.0130  P-Grasp=100%/0.0094  P-Move=60%/0.0959  P-Rel=100%/0.1069  C-Reach=0%/0.2945  C-Desc=0%/0.3573  C-Grasp=0%/0.3573  C-Move=0%/0.2717  C-Rel=100%/0.2225
+    ──→ container: phase 9, active=205
+
+Iter  930:  Σrew=175.141  grad=1824.6  [reset=0.0s bptt=14.4s elapsed=10615s]
+  heads (0/5 clipped)   trunk |g|=371 lim=1500 x1.00
+          reach x3  |g|=    1404 lim=  3000 x1.00       descend x3  |g|=     905 lim=  1500 x1.00  
+           move x3  |g|=     621 lim=  1000 x1.00         grasp x3  |g|=     115 lim=  1000 x1.00  
+        release x3  |g|=      40 lim=   500 x1.00  
+    container       rew= 175.141  ph=9  success=12.67/20 (63%) (partial) streak=0  | B-Reach=100%/0.0064  B-Desc=100%/0.0036  B-Grasp=100%/0.0039  B-Move=80%/0.0506  B-Rel=100%/0.0600  P-Reach=100%/0.0111  P-Desc=100%/0.0152  P-Grasp=100%/0.0099  P-Move=100%/0.0500  P-Rel=100%/0.0613  C-Reach=0%/0.2065  C-Desc=0%/0.2431  C-Grasp=0%/0.2431  C-Move=0%/0.2712  C-Rel=100%/0.2219
+
+Iter  935:  Σrew=181.308  grad=1317.0  [reset=0.0s bptt=14.4s elapsed=10704s]
+  heads (0/5 clipped)   trunk |g|=281 lim=1500 x1.00
+          reach x3  |g|=     999 lim=  3000 x1.00       descend x3  |g|=     585 lim=  1500 x1.00  
+           move x3  |g|=     547 lim=  1000 x1.00         grasp x3  |g|=     116 lim=  1000 x1.00  
+        release x3  |g|=      47 lim=   500 x1.00  
+    container       rew= 181.308  ph=9  success=13.33/20 (67%) (partial) streak=0  | B-Reach=100%/0.0083  B-Desc=100%/0.0043  B-Grasp=100%/0.0045  B-Move=65%/0.0739  B-Rel=100%/0.0668  P-Reach=100%/0.0078  P-Desc=100%/0.0072  P-Grasp=100%/0.0076  P-Move=100%/0.0396  P-Rel=100%/0.0521  C-Reach=0%/0.1635  C-Desc=0%/0.2019  C-Grasp=0%/0.2019  C-Move=0%/0.2705  C-Rel=100%/0.2210
+    ──→ container: phase 10, active=225
+
+Iter  940:  Σrew=199.458  grad=1368.7  [reset=0.0s bptt=15.7s elapsed=10800s]
+  heads (0/5 clipped)   trunk |g|=315 lim=1500 x1.00
+          reach x3  |g|=     996 lim=  3000 x1.00          move x3  |g|=     635 lim=  1000 x1.00  
+        descend x3  |g|=     595 lim=  1500 x1.00         grasp x3  |g|=     148 lim=  1000 x1.00  
+        release x3  |g|=      50 lim=   500 x1.00  
+    container       rew= 199.458  ph=10  success=12/20 (60%) (partial) streak=0  | B-Reach=100%/0.0069  B-Desc=100%/0.0036  B-Grasp=100%/0.0038  B-Move=60%/0.0787  B-Rel=100%/0.0559  P-Reach=100%/0.0115  P-Desc=100%/0.0161  P-Grasp=100%/0.0081  P-Move=100%/0.0404  P-Rel=100%/0.0534  C-Reach=0%/0.0905  C-Desc=0%/0.1274  C-Grasp=0%/0.1274  C-Move=0%/0.2667  C-Rel=100%/0.2168
+
+Iter  945:  Σrew=202.078  grad=1726.7  [reset=0.0s bptt=15.7s elapsed=10896s]
+  heads (0/5 clipped)   trunk |g|=406 lim=1500 x1.00
+          reach x3  |g|=    1363 lim=  3000 x1.00       descend x3  |g|=     911 lim=  1500 x1.00  
+           move x3  |g|=     292 lim=  1000 x1.00         grasp x3  |g|=     200 lim=  1000 x1.00  
+        release x3  |g|=      55 lim=   500 x1.00  
+    container       rew= 202.078  ph=10  success=11.67/20 (58%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0043  B-Grasp=100%/0.0049  B-Move=80%/0.0631  B-Rel=100%/0.0749  P-Reach=95%/0.0108  P-Desc=100%/0.0107  P-Grasp=95%/0.0119  P-Move=95%/0.0537  P-Rel=100%/0.0664  C-Reach=65%/0.0683  C-Desc=40%/0.0848  C-Grasp=15%/0.0848  C-Move=0%/0.2801  C-Rel=100%/0.2331
+
+Iter  950:  Σrew=178.473  grad=2135.2  [reset=0.0s bptt=15.7s elapsed=10992s]
+  heads (0/5 clipped)   trunk |g|=521 lim=1500 x1.00
+          reach x3  |g|=    1635 lim=  3000 x1.00       descend x3  |g|=    1157 lim=  1500 x1.00  
+           move x3  |g|=     420 lim=  1000 x1.00         grasp x3  |g|=     311 lim=  1000 x1.00  
+        release x3  |g|=      60 lim=   500 x1.00  
+    container       rew= 178.473  ph=10  success=13.33/20 (67%) (partial) streak=0  | B-Reach=100%/0.0068  B-Desc=100%/0.0037  B-Grasp=100%/0.0042  B-Move=65%/0.0705  B-Rel=100%/0.0528  P-Reach=100%/0.0216  P-Desc=100%/0.0143  P-Grasp=100%/0.0092  P-Move=100%/0.0243  P-Rel=100%/0.0367  C-Reach=5%/0.0942  C-Desc=0%/0.1107  C-Grasp=0%/0.1107  C-Move=0%/0.2704  C-Rel=100%/0.2209
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 950
+
+Iter  955:  Σrew=195.488  grad=1182.3  [reset=0.0s bptt=15.7s elapsed=11090s]
+  heads (0/5 clipped)   trunk |g|=309 lim=1500 x1.00
+          reach x3  |g|=     913 lim=  3000 x1.00       descend x3  |g|=     498 lim=  1500 x1.00  
+           move x3  |g|=     427 lim=  1000 x1.00       release x3  |g|=     139 lim=   500 x1.00  
+          grasp x3  |g|=     139 lim=  1000 x1.00  
+    container       rew= 195.488  ph=10  success=13.33/20 (67%) (partial) streak=0  | B-Reach=100%/0.0081  B-Desc=100%/0.0079  B-Grasp=100%/0.0058  B-Move=45%/0.0967  B-Rel=100%/0.0633  P-Reach=100%/0.0143  P-Desc=100%/0.0159  P-Grasp=100%/0.0144  P-Move=100%/0.0398  P-Rel=100%/0.0506  C-Reach=55%/0.0523  C-Desc=50%/0.0550  C-Grasp=35%/0.0550  C-Move=0%/0.2723  C-Rel=100%/0.2240
+
+Iter  960:  Σrew=213.464  grad=1826.3  [reset=0.0s bptt=15.7s elapsed=11187s]
+  heads (0/5 clipped)   trunk |g|=484 lim=1500 x1.00
+          reach x3  |g|=    1192 lim=  3000 x1.00       descend x3  |g|=    1062 lim=  1500 x1.00  
+           move x3  |g|=     688 lim=  1000 x1.00         grasp x3  |g|=     273 lim=  1000 x1.00  
+        release x3  |g|=      76 lim=   500 x1.00  
+    container       rew= 213.464  ph=10  success=12.33/20 (62%) (partial) streak=0  | B-Reach=100%/0.0081  B-Desc=100%/0.0074  B-Grasp=100%/0.0088  B-Move=80%/0.0435  B-Rel=100%/0.0385  P-Reach=100%/0.0102  P-Desc=100%/0.0130  P-Grasp=95%/0.0097  P-Move=95%/0.0444  P-Rel=100%/0.0374  C-Reach=55%/0.0629  C-Desc=60%/0.0570  C-Grasp=60%/0.0570  C-Move=0%/0.2717  C-Rel=100%/0.2236
+    ──→ container: phase 11, active=235
+
+Iter  965:  Σrew=190.135  grad=1578.7  [reset=0.0s bptt=16.4s elapsed=11286s]
+  heads (0/5 clipped)   trunk |g|=446 lim=1500 x1.00
+          reach x3  |g|=    1030 lim=  3000 x1.00       descend x3  |g|=    1004 lim=  1500 x1.00  
+           move x3  |g|=     418 lim=  1000 x1.00         grasp x3  |g|=     216 lim=  1000 x1.00  
+        release x3  |g|=      68 lim=   500 x1.00  
+    container       rew= 190.135  ph=11  success=13.33/20 (67%) (partial) streak=0  | B-Reach=100%/0.0066  B-Desc=100%/0.0068  B-Grasp=100%/0.0073  B-Move=45%/0.1031  B-Rel=100%/0.0676  P-Reach=100%/0.0138  P-Desc=100%/0.0152  P-Grasp=100%/0.0143  P-Move=100%/0.0227  P-Rel=100%/0.0221  C-Reach=75%/0.0401  C-Desc=65%/0.0339  C-Grasp=45%/0.0725  C-Move=0%/0.2617  C-Rel=100%/0.2228
+
+Iter  970:  Σrew=214.720  grad=1756.2  [reset=0.0s bptt=16.4s elapsed=11386s]
+  heads (0/5 clipped)   trunk |g|=421 lim=1500 x1.00
+          reach x3  |g|=    1307 lim=  3000 x1.00       descend x3  |g|=     864 lim=  1500 x1.00  
+           move x3  |g|=     575 lim=  1000 x1.00         grasp x3  |g|=     329 lim=  1000 x1.00  
+        release x3  |g|=     124 lim=   500 x1.00  
+    container       rew= 214.720  ph=11  success=13/20 (65%) (partial) streak=0  | B-Reach=100%/0.0062  B-Desc=100%/0.0038  B-Grasp=100%/0.0044  B-Move=85%/0.0461  B-Rel=100%/0.0522  P-Reach=100%/0.0134  P-Desc=100%/0.0148  P-Grasp=100%/0.0070  P-Move=100%/0.0258  P-Rel=100%/0.0165  C-Reach=70%/0.0411  C-Desc=55%/0.0587  C-Grasp=15%/0.0658  C-Move=0%/0.2751  C-Rel=100%/0.2337
+    ──→ container: phase 12, active=260
+
+Iter  975:  Σrew=192.598  grad=1838.9  [reset=0.0s bptt=18.1s elapsed=11495s]
+  heads (0/5 clipped)   trunk |g|=447 lim=1500 x1.00
+          reach x3  |g|=    1342 lim=  3000 x1.00       descend x3  |g|=    1000 lim=  1500 x1.00  
+           move x3  |g|=     523 lim=  1000 x1.00         grasp x3  |g|=     320 lim=  1000 x1.00  
+        release x3  |g|=      75 lim=   500 x1.00  
+    container       rew= 192.598  ph=12  success=14/20 (70%) (partial) streak=0  | B-Reach=100%/0.0052  B-Desc=100%/0.0040  B-Grasp=100%/0.0051  B-Move=65%/0.0733  B-Rel=100%/0.0555  P-Reach=100%/0.0126  P-Desc=100%/0.0122  P-Grasp=100%/0.0080  P-Move=95%/0.0312  P-Rel=100%/0.0240  C-Reach=95%/0.0279  C-Desc=45%/0.0542  C-Grasp=30%/0.1068  C-Move=0%/0.2560  C-Rel=100%/0.1972
+
+Iter  980:  Σrew=225.602  grad=1633.9  [reset=0.0s bptt=18.1s elapsed=11604s]
+  heads (0/5 clipped)   trunk |g|=409 lim=1500 x1.00
+          reach x3  |g|=    1382 lim=  3000 x1.00       descend x3  |g|=     550 lim=  1500 x1.00  
+           move x3  |g|=     515 lim=  1000 x1.00       release x3  |g|=     120 lim=   500 x1.00  
+          grasp x3  |g|=     101 lim=  1000 x1.00  
+    container       rew= 225.602  ph=12  success=12.33/20 (62%) (partial) streak=0  | B-Reach=100%/0.0064  B-Desc=100%/0.0074  B-Grasp=100%/0.0087  B-Move=35%/0.1459  B-Rel=100%/0.1201  P-Reach=90%/0.0361  P-Desc=90%/0.0334  P-Grasp=90%/0.0271  P-Move=90%/0.0424  P-Rel=100%/0.0650  C-Reach=45%/0.0965  C-Desc=55%/0.0901  C-Grasp=35%/0.0996  C-Move=0%/0.2481  C-Rel=100%/0.1983
+
+Iter  985:  Σrew=219.224  grad=2039.1  [reset=0.0s bptt=18.2s elapsed=11712s]
+  heads (1/5 clipped)   trunk |g|=515 lim=1500 x1.00
+          reach x3  |g|=    1556 lim=  3000 x1.00          move x3  |g|=    1108 lim=  1000 x0.90  
+        descend x3  |g|=     428 lim=  1500 x1.00         grasp x3  |g|=     227 lim=  1000 x1.00  
+        release x3  |g|=     102 lim=   500 x1.00  
+    container       rew= 219.224  ph=12  success=11/20 (55%) (partial) streak=0  | B-Reach=100%/0.0098  B-Desc=100%/0.0046  B-Grasp=100%/0.0083  B-Move=70%/0.0857  B-Rel=100%/0.1022  P-Reach=90%/0.0189  P-Desc=95%/0.0257  P-Grasp=90%/0.0233  P-Move=90%/0.0493  P-Rel=100%/0.0600  C-Reach=80%/0.0847  C-Desc=35%/0.1126  C-Grasp=25%/0.1467  C-Move=0%/0.2522  C-Rel=100%/0.2154
+
+Iter  990:  Σrew=210.890  grad=1641.7  [reset=0.0s bptt=18.2s elapsed=11821s]
+  heads (0/5 clipped)   trunk |g|=445 lim=1500 x1.00
+          reach x3  |g|=    1147 lim=  3000 x1.00       descend x3  |g|=     793 lim=  1500 x1.00  
+           move x3  |g|=     733 lim=  1000 x1.00         grasp x3  |g|=      95 lim=  1000 x1.00  
+        release x3  |g|=      75 lim=   500 x1.00  
+    container       rew= 210.890  ph=12  success=13.33/20 (67%) (partial) streak=0  | B-Reach=100%/0.0068  B-Desc=100%/0.0041  B-Grasp=100%/0.0059  B-Move=55%/0.0840  B-Rel=100%/0.0652  P-Reach=100%/0.0201  P-Desc=100%/0.0167  P-Grasp=100%/0.0123  P-Move=100%/0.0301  P-Rel=100%/0.0251  C-Reach=45%/0.0588  C-Desc=80%/0.0323  C-Grasp=35%/0.0721  C-Move=0%/0.2347  C-Rel=100%/0.1984
+
+Iter  995:  Σrew=199.081  grad=1712.3  [reset=0.0s bptt=18.1s elapsed=11930s]
+  heads (0/5 clipped)   trunk |g|=455 lim=1500 x1.00
+          reach x3  |g|=    1349 lim=  3000 x1.00          move x3  |g|=     777 lim=  1000 x1.00  
+        descend x3  |g|=     512 lim=  1500 x1.00         grasp x3  |g|=     172 lim=  1000 x1.00  
+        release x3  |g|=      93 lim=   500 x1.00  
+    container       rew= 199.081  ph=12  success=13/20 (65%) (partial) streak=0  | B-Reach=100%/0.0079  B-Desc=100%/0.0045  B-Grasp=100%/0.0051  B-Move=75%/0.0650  B-Rel=100%/0.0531  P-Reach=100%/0.0166  P-Desc=100%/0.0129  P-Grasp=100%/0.0080  P-Move=100%/0.0178  P-Rel=100%/0.0358  C-Reach=65%/0.0464  C-Desc=5%/0.0928  C-Grasp=0%/0.1385  C-Move=0%/0.2737  C-Rel=100%/0.2249
+
+Training stopped: reached --iters after 999 iters, 12020.7s
+  ✓ saved container_state_{params,obs_rms,opt}.pkl + _learning.png + _gradients.png at iter 999 (final)

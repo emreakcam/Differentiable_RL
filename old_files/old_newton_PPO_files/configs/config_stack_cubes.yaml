@@ -1,0 +1,130 @@
+# Configuration for stack cubes task with Franka Panda
+
+# Franka Panda placement
+franka:
+  position: [0.0, 0.0, 0.0]
+  orientation: identity  # w, x, y, z
+  initial_arm_q: [0.0, -0.785, 0.0, -2.356, 0.0, 2.571, 0.785]
+  initial_gripper_q: 0.04
+
+# World-frame center of the initial cube cluster.
+# Cubes spawn in a small neighborhood around this point.
+cluster_center: [0.4, 0.0, 0.05]
+
+# Cubes to be stacked
+cubes:
+  - name: red_cube
+    size: 0.05
+    mass: 0.05
+    position: [0.2, 0.1, 0.05]
+    color: [1.0, 0.0, 0.0, 1.0]  # RGBA
+
+  - name: green_cube
+    size: 0.05
+    mass: 0.05
+    position: [-0.2, 0.1, 0.05]
+    color: [0.0, 1.0, 0.0, 1.0]  # RGBA
+
+  - name: blue_cube
+    size: 0.05
+    mass: 0.05
+    position: [0.0, -0.2, 0.05]
+    color: [0.0, 0.0, 1.0, 1.0]  # RGBA
+
+# RL task and action interface
+rl:
+  num_envs: 512
+  num_rendered_envs: 4
+  max_episode_length: 300
+  action_scales:
+    # policy outputs a 7-vector: [ee_angular_vel (3), ee_linear_vel (3), delta_gripper (1)]
+    delta_pos: 0.3       # m/s commanded EE linear speed
+    delta_theta: 0.5     # rad/s commanded EE angular speed
+    gripper: 0.01        # finger joint position per policy step
+  gripper_open_limit: 0.04
+  workspace_limits:
+    x: [-0.2, 0.8]
+    y: [-0.5, 0.5]
+    z: [0.02, 0.8]
+  init_orientation_rand_rad: 0.3   # random perturbation of EE orientation at episode start (rad)
+  ee_velocity_tracking:
+    jacobian_damping: 0.05
+
+# Cost / reward
+# reward = stack pair bonus + completion bonus + densers
+reward:
+  # Discrete bonus for each stacked cube pair, independent of cube identity/order.
+  stack_pair_bonus: 5.0
+  stack_xy_threshold_m: 0.03
+  stack_z_threshold_m: 0.03
+  # Small dense bonus for lifting any cube off the table.
+  lift_bonus_weight: 0.5
+  # Small dense bonus for the end-effector being close to any cube.
+  ee_proximity_weight: 0.5
+  ee_proximity_scale_m: 0.08
+  # Small bonus when cubes are stacked and the gripper is not nearby.
+  stacked_no_grip_bonus_weight: 1.0
+  stacked_no_grip_distance_m: 0.08
+  # Final success reward once any 3-cube tower is formed.
+  success_threshold_m: 0.03
+  success_bonus: 25.0
+  # Penalty for the robot contacting the ground.
+  ground_contact_penalty: 1.0
+
+# Minimal rsl-rl PPO setup
+training:
+  logger: tensorboard
+  num_steps_per_env: 48
+  save_interval: 50
+  run_name: stack_3_cubes_min
+  obs_groups:
+    actor: ["policy"]
+    critic: ["policy"]
+  actor:
+    class_name: MLPModel
+    hidden_dims: [256, 256, 128]
+    activation: elu
+    distribution_cfg:
+      class_name: GaussianDistribution
+      init_std: 0.8
+      std_type: scalar
+  critic:
+    class_name: MLPModel
+    hidden_dims: [256, 256, 128]
+    activation: elu
+  algorithm:
+    class_name: PPO
+    rnd_cfg: null
+    symmetry_cfg: null
+    num_learning_epochs: 1
+    num_mini_batches: 8
+    clip_param: 0.2
+    gamma: 0.995
+    lam: 0.97
+    value_loss_coef: 1.0
+    entropy_coef: 0.005
+    learning_rate: 0.0002
+    max_grad_norm: 1.0
+    optimizer: adam
+    use_clipped_value_loss: true
+    schedule: adaptive
+    desired_kl: 0.02
+    normalize_advantage_per_mini_batch: true
+  max_iterations: 10000
+
+# Runtime configuration (no CLI overrides)
+run:
+  mode: train              # train | eval
+  ckpt: null               # path to checkpoint for resume/eval
+  rl_device: cuda:0           # torch device for policy/runner
+  sim_device: cuda:0          # warp/newton d evice, e.g. cpu or cuda:0
+  quiet: false             # suppress warp compile logs
+  render_train: true       # render during train mode
+  num_frames: 1800         # eval rollout length
+  log_dir: aerial_manipulation/logs/rl_stack_cubes
+  viewer:
+    type: gl               # gl | null
+    headless: false
+    width: 1080
+    height: 720
+    vsync: false

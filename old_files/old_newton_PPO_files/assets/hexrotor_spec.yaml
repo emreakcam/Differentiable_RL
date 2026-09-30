@@ -1,0 +1,209 @@
+# Hexrotor Aerial Manipulator Specification
+# 900mm diameter, fully-actuated hexrotor with tilted rotors
+version: "1.0"
+
+add_arm: true
+
+sim:
+  defaults:
+    geom:
+      contype: 1
+      conaffinity: 1
+      margin: 0.002
+      friction: [1.0, 0.1, 0.1]
+    joint:
+      damping: 0.01
+      armature: 0.01
+    root_free_joint:
+      damping: 0.0
+      armature: 0.0
+    actuator:
+      ctrllimited: false
+      ctrlrange: [-5000, 5000]
+      gear: 1.0
+
+drone:
+  body:
+    mass: 6  # kg
+    size: [0.15, 0.15, 0.15]  # [length, width, height] in meters - compact center body
+    rgba: [0.25, 0.25, 0.3, 1.0]
+
+  # Hexrotor geometry parameters
+  frame_diameter: 1.0  # 900mm motor-to-motor diameter
+
+  arms:
+    # Hollow carbon tube arms - low mass
+    - name: arm_1  # Front-left
+      yaw_deg: 30
+      tilt_deg: 0
+      radius: 0.01  # 20mm diameter = 10mm radius
+      mass: 0.1    # Light carbon tube
+      rgba: [0.15, 0.15, 0.15, 1.0]
+
+    - name: arm_2  # Front-right
+      yaw_deg: -30
+      tilt_deg: 0
+      radius: 0.01
+      mass: 0.1
+      rgba: [0.15, 0.15, 0.15, 1.0]
+
+    - name: arm_3  # Right
+      yaw_deg: -90
+      tilt_deg: 0
+      radius: 0.01
+      mass: 0.1
+      rgba: [0.15, 0.15, 0.15, 1.0]
+
+    - name: arm_4  # Back-right
+      yaw_deg: -150
+      tilt_deg: 0
+      radius: 0.01
+      mass: 0.1
+      rgba: [0.15, 0.15, 0.15, 1.0]
+
+    - name: arm_5  # Back-left
+      yaw_deg: -210
+      tilt_deg: 0
+      radius: 0.01
+      mass: 0.1
+      rgba: [0.15, 0.15, 0.15, 1.0]
+
+    - name: arm_6  # Left
+      yaw_deg: -270
+      tilt_deg: 0
+      radius: 0.01
+      mass: 0.1
+      rgba: [0.15, 0.15, 0.15, 1.0]
+
+  rotor_joint:
+    axis: [0.0, 0.0, 1.0]
+    damping: 0.0001
+    armature: 0.0001
+
+  rotors:
+    # Motor/prop parameters (same for all rotors)
+    motor_mass: 0.2      # kg
+    motor_radius: 0.06   # m
+    motor_height: 0.015   # m
+    prop_mass: 0.1       # kg
+    prop_diameter: 0.30   # 12-inch props (~300mm)
+    disk_thickness_ratio: 0.05
+
+    # Individual rotor specifications (list format)
+    rotor_1:
+      name: rotor_1
+      arm_index: 0
+      motor_tilt_deg: -45  # Tilt around arm axis (outward)
+
+    rotor_2:
+      name: rotor_2
+      arm_index: 1
+      motor_tilt_deg: 45
+
+    rotor_3:
+      name: rotor_3
+      arm_index: 2
+      motor_tilt_deg: -45
+
+    rotor_4:
+      name: rotor_4
+      arm_index: 3
+      motor_tilt_deg: 45
+
+    rotor_5:
+      name: rotor_5
+      arm_index: 4
+      motor_tilt_deg: -45
+
+    rotor_6:
+      name: rotor_6
+      arm_index: 5
+      motor_tilt_deg: 45
+
+# Robot arm configuration - wx250s-like serial manipulator
+# Copied strictly from merged_drone_with_arm.xml wx250s structure
+robot_arm:
+  type: "wx250s_like"
+  base_offset: [0, 0, -0.05]
+  base_quat: [0.0, 1.0, 0.0, 0.0]
+
+  visual:
+    link_rgba: [0.2, 0.5, 0.9, 1.0]
+    link_friction: [0.8, 0.1, 0.1]
+
+  gripper_layout:
+    finger_mount_offset: 0.066
+    finger_geom_offset_y: 0.005
+    finger_rgba: [0.3, 0.3, 0.3, 1.0]
+    palm_rgba: [0.3, 0.3, 0.3, 1.0]
+
+  # wx250s link chain - EXACTLY from merged_drone_with_arm.xml
+  links:
+    # shoulder_link: pos="0 0 0.072", joint waist axis="0 0 1"
+    - name: shoulder_link
+      pos: [0, 0, 0.072]
+      axis: [0, 0, 1]
+      mass: 0.2
+      radius: 0.03
+      length: 0.0
+      type: revolute
+      limit: [-3.14158, 3.14158]
+
+    # upper_arm_link: pos="0 0 0.03865", joint shoulder axis="0 1 0"
+    - name: upper_arm_link
+      pos: [0, 0, 0.03865]
+      axis: [0, 1, 0]
+      mass: 0.2
+      radius: 0.025
+      length: 0.25
+      type: revolute
+      limit: [-1.88496, 1.98968]
+
+    # upper_forearm_link: pos="0.04975 0 0.25", joint elbow axis="0 1 0"
+    - name: upper_forearm_link
+      pos: [0.04975, 0, 0.25]
+      axis: [0, 1, 0]
+      mass: 0.2
+      radius: 0.02
+      length: 0.175
+      type: revolute
+      limit: [-2.14675, 1.6057]
+
+    # lower_forearm_link: pos="0.175 0 0", joint forearm_roll axis="1 0 0"
+    - name: lower_forearm_link
+      pos: [0.175, 0, 0]
+      axis: [1, 0, 0]
+      mass: 0.1
+      radius: 0.018
+      length: 0.0
+      type: revolute
+      limit: [-3.14158, 3.14158]
+
+    # wrist_link: pos="0.075 0 0", joint wrist_angle axis="0 1 0"
+    - name: wrist_link
+      pos: [0.075, 0, 0]
+      axis: [0, 1, 0]
+      mass: 0.1
+      radius: 0.015
+      length: 0.0
+      type: revolute
+      limit: [-1.74533, 2.14675]
+
+    # gripper_link: pos="0.065 0 0", joint wrist_rotate axis="1 0 0"
+    - name: gripper_link
+      pos: [0.085, 0, 0]
+      axis: [1, 0, 0]
+      mass: 0.1
+      radius: 0.012
+      length: 0.0
+      type: revolute
+      limit: [-3.14158, 3.14158]
+
+  gripper:
+    # left/right_finger_link: pos="0.066 0 0", slide joint axis="0 1 0"
+    finger_mass: 0.05
+    finger_size: [0.06, 0.012, 0.02]  # box size for finger
+    finger_span: 0.0  # Both fingers at same X pos, separated by slide joint
+    finger_range: [0.0, 0.05]  # range="0.015 0.037" for left, negated for right
+    palm_size: [0.05, 0.04, 0.02]
+    palm_mass: 0.1

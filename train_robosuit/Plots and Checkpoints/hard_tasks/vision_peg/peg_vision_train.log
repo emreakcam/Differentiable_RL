@@ -1,0 +1,1735 @@
+
+######################################################################
+# run started 2026-09-24 17:14:15
+# train_primitives_vision.py --tasks peg_insertion --out-prefix peg_vision
+######################################################################
+======================================================================
+JOINT VISION-PRIMITIVE TRAINING — robosuite
+  Tasks: peg_insertion
+  Batch: {'peg_insertion': 20}
+  Proprio dim: 31 (shared trunk)
+  Viewer: on
+  Saving to peg_vision_*  every 50 iters
+======================================================================
+
+[1] DINOv3 backbone (shared)...
+  DINOv3: 64x64 → 4x4 patches, dim=768
+
+[2] Shared primitive policy...
+
+  Primitive Policy:
+    Projection: 768 → 128 (1 camera) → spatial softmax → 256
+    Trunk: 287 → 256 → 256 (shared)
+    Heads (14), 2 hidden layer(s), width by usage:
+      reach          256 → 224 → 224 → 8    109,768 params
+      descend        256 → 112 → 112 → 8     42,344 params
+      grasp          256 → 192 → 192 → 8     87,944 params
+      move           256 → 96 → 96 → 8     34,760 params
+      release        256 → 80 → 80 → 8     27,688 params
+      align          256 → 32 → 32 → 8      9,544 params
+      insert         256 → 32 → 32 → 8      9,544 params
+      pull_drawer    256 → 32 → 32 → 8      9,544 params
+      push_drawer    256 → 32 → 32 → 8      9,544 params
+      push_object    256 → 32 → 32 → 8      9,544 params
+      slide_open     256 → 32 → 32 → 8      9,544 params
+      slide_close    256 → 32 → 32 → 8      9,544 params
+      turn           256 → 32 → 32 → 8      9,544 params
+      swing          256 → 32 → 32 → 8      9,544 params
+    Shared: 239,038   Heads: 388,400   Total trainable: 627,438
+
+[3] Building task 'peg_insertion' (peg_insertion env) ...
+
+[1] Loading MuJoCo model: /home/emre/newton_diff_RL/MJX_Franka_DiffSim/assets/robosuite_peg.xml
+  ee_site: 3
+  hand_body: 13
+  peg_body: 26
+  peg_bottom: 10
+  peg_grip: 11
+  slot_entry: 9
+  slot_target: 8
+  nq=16, nu=9, nsite=12
+  Steps: 130, Chunks: 26, Chunk size: 5
+  Feature slots: 27, frame_dt: 0.0400s
+
+[2] Creating MJWarp GPU renderer...
+Warp 1.16.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.0
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/emre/.cache/warp/1.16.0
+Module mujoco.mjx.third_party.mujoco_warp._src.render_util 97c6606 load on device 'cuda:0' took 5.32 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.io 89aaeca load on device 'cuda:0' took 9.07 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.bvh f2c5137 load on device 'cuda:0' took 2.61 ms  (cached)
+  Camera: robot0_eye_in_hand → cam_id: 5
+  Render context: nworld=20, 64x64
+Module mujoco.mjx.warp.ffi 7a22eb4 load on device 'cuda:0' took 65.74 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.smooth 47158eb load on device 'cuda:0' took 11.09 ms  (cached)
+Module _nxn_broadphase__locals__kernel_3e896ca5 3e896ca load on device 'cuda:0' took 1.88 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 ef3754c load on device 'cuda:0' took 123.39 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_ef3754c3 231e976 load on device 'cuda:0' took 9.84 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_caf42918 caf4291 load on device 'cuda:0' took 3.74 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.constraint 36c8060 load on device 'cuda:0' took 2.65 ms  (cached)
+Module _friction_dof__locals__kernel_a6ed3529 a6ed352 load on device 'cuda:0' took 3.07 ms  (cached)
+Module _limit_slide_hinge__locals__kernel_56cb53b3 56cb53b load on device 'cuda:0' took 1.75 ms  (cached)
+Module _efc_contact_init__locals__kernel_0bd15084 0bd1508 load on device 'cuda:0' took 1.65 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_f15eda8d 1ff2125 load on device 'cuda:0' took 1.36 ms  (cached)
+Module _efc_contact_update__locals__kernel_8c34abe6 8c34abe load on device 'cuda:0' took 2.06 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward 81c85c8 load on device 'cuda:0' took 3.35 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.passive efc109c load on device 'cuda:0' took 6.21 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.forward fc5c4e4 load on device 'cuda:0' took 3.72 ms  (cached)
+Module _qfrc_smooth__locals__kernel_b98573a2 b98573a load on device 'cuda:0' took 1.33 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.support ca784c5 load on device 'cuda:0' took 1.62 ms  (cached)
+Module _tile_cholesky_factorize_solve_block__locals__kernel_8d2c83d3 bb4c15e load on device 'cuda:0' took 41.40 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.solver 4a1f2fb load on device 'cuda:0' took 5.51 ms  (cached)
+Module _solve_init_jaref_kernel__locals__kernel_dff68271 dff6827 load on device 'cuda:0' took 3.41 ms  (cached)
+Module mul_m_kernel__locals___mul_m_dc7994af dc7994a load on device 'cuda:0' took 1.96 ms  (cached)
+Module _update_constraint_efc__locals__kernel_34351367 3435136 load on device 'cuda:0' took 1.52 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_626172ab 626172a load on device 'cuda:0' took 1.54 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_d22ec30a d22ec30 load on device 'cuda:0' took 1.16 ms  (cached)
+Module _update_gradient_grad__locals__kernel_30531d0a 30531d0 load on device 'cuda:0' took 1.11 ms  (cached)
+Module _update_gradient_JTDAJ_dense_tiled__locals__kernel_756199cb d3e7a83 load on device 'cuda:0' took 1.86 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_345434dd ff9982d load on device 'cuda:0' took 38.91 ms  (cached)
+Module _linesearch_iterative_kernel__locals__kernel_fd8c9e1b c7b3998 load on device 'cuda:0' took 2.36 ms  (cached)
+Module _update_constraint_efc__locals__kernel_8791d97d 8791d97 load on device 'cuda:0' took 1.93 ms  (cached)
+Module _update_constraint_init_qfrc_constraint_dense__locals__kernel_e7e36618 e7e3661 load on device 'cuda:0' took 1.48 ms  (cached)
+Module _update_gradient_zero_grad_dot__locals__kernel_e3354673 e335467 load on device 'cuda:0' took 1.21 ms  (cached)
+Module _update_gradient_grad__locals__kernel_f92b7b33 f92b7b3 load on device 'cuda:0' took 1.27 ms  (cached)
+Module _update_gradient_cholesky__locals__kernel_c56f6d92 34f3426 load on device 'cuda:0' took 42.17 ms  (cached)
+Module _solve_zero_search_dot__locals__kernel_a3b7406e a3b7406 load on device 'cuda:0' took 2.94 ms  (cached)
+Module _solve_search_update__locals__kernel_f542f3c2 f542f3c load on device 'cuda:0' took 1.65 ms  (cached)
+Module mujoco.mjx.third_party.mujoco_warp._src.sensor de892d8 load on device 'cuda:0' took 5.27 ms  (cached)
+    segments [25, 20, 10, 25, 20, 20, 10] → primitives ['reach', 'descend', 'grasp', 'move', 'align', 'insert', 'release']
+
+  Task minibatching: off (one update per iteration).
+
+  Active primitives: reach, descend, grasp, move, release, align, insert
+  Head LR: 2.0e-04   overrides: align=2.0e-05  insert=2.0e-05
+✓ Viewer opened — close it to stop training (a checkpoint is written first)
+
+======================================================================
+Training — stop when all 1 tasks hold ≥80% success for 4 consecutive logs
+======================================================================
+Module render__locals___render_megakernel_b55cbe04 a6579b0 load on device 'cuda:0' took 5.39 ms  (cached)
+  [warmup 2 iters, 5200 samples]  std min=1.387e-04 (dim 25) max=2.002e-01
+  ! dim 25 std=1.387e-04 → normalising amplifies it 7211x; expect a gradient spike. A variance floor in helpers/obs.py would be the actual fix.
+
+Iter    2:  Σrew=-48.105  grad=214.8  [phase1=1.3s bptt=2.5s elapsed=246s]
+  heads (0/7 clipped)   trunk |g|=30 lim=1500 x1.00
+          reach x1  |g|=     166 lim=  3000 x1.00       descend x1  |g|=     133 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -48.105  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.5739  Descend=0%/0.6171  Grasp=0%/0.6171  Move=0%/0.2331  Align=0%/0.2053  Insert=0%/0.2056  Release=100%/0.2056
+
+Iter    5:  Σrew=-38.298  grad=139.6  [phase1=1.2s bptt=2.6s elapsed=299s]
+  heads (0/7 clipped)   trunk |g|=23 lim=1500 x1.00
+          reach x1  |g|=      99 lim=  3000 x1.00       descend x1  |g|=      96 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -38.298  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.4879  Descend=0%/0.5168  Grasp=0%/0.5168  Move=0%/0.2417  Align=0%/0.2151  Insert=0%/0.2153  Release=100%/0.2153
+
+Iter   10:  Σrew=-26.838  grad=174.6  [phase1=1.2s bptt=2.6s elapsed=321s]
+  heads (0/7 clipped)   trunk |g|=23 lim=1500 x1.00
+        descend x1  |g|=     146 lim=  1500 x1.00         reach x1  |g|=      93 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -26.838  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3608  Descend=0%/0.3501  Grasp=0%/0.3501  Move=0%/0.2389  Align=0%/0.2119  Insert=0%/0.2122  Release=100%/0.2122
+
+Iter   15:  Σrew=-21.966  grad=194.8  [phase1=1.2s bptt=2.6s elapsed=343s]
+  heads (0/7 clipped)   trunk |g|=21 lim=1500 x1.00
+        descend x1  |g|=     158 lim=  1500 x1.00         reach x1  |g|=     112 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -21.966  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.3067  Descend=0%/0.2869  Grasp=0%/0.2869  Move=0%/0.2381  Align=0%/0.2109  Insert=0%/0.2112  Release=100%/0.2112
+
+Iter   20:  Σrew=-12.545  grad=149.5  [phase1=1.2s bptt=2.6s elapsed=366s]
+  heads (0/7 clipped)   trunk |g|=18 lim=1500 x1.00
+          reach x1  |g|=     140 lim=  3000 x1.00       descend x1  |g|=      50 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -12.545  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1862  Descend=10%/0.1208  Grasp=10%/0.1208  Move=0%/0.2412  Align=0%/0.2149  Insert=0%/0.2151  Release=100%/0.2151
+
+Iter   25:  Σrew=-6.961  grad=309.9  [phase1=3.0s bptt=2.6s elapsed=390s]
+  heads (0/7 clipped)   trunk |g|=53 lim=1500 x1.00
+          reach x1  |g|=     225 lim=  3000 x1.00       descend x1  |g|=     207 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -6.961  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.0886  Descend=5%/0.1111  Grasp=5%/0.1111  Move=0%/0.2317  Align=0%/0.2092  Insert=0%/0.2096  Release=100%/0.2096
+
+Iter   30:  Σrew=-7.050  grad=469.9  [phase1=1.2s bptt=2.6s elapsed=412s]
+  heads (0/7 clipped)   trunk |g|=52 lim=1500 x1.00
+        descend x1  |g|=     446 lim=  1500 x1.00         reach x1  |g|=     140 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -7.050  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=0%/0.1638  Descend=0%/0.1572  Grasp=0%/0.1572  Move=0%/0.2348  Align=0%/0.2114  Insert=0%/0.2117  Release=100%/0.2117
+
+Iter   35:  Σrew=-6.174  grad=244.3  [phase1=1.2s bptt=2.6s elapsed=434s]
+  heads (0/7 clipped)   trunk |g|=28 lim=1500 x1.00
+          reach x1  |g|=     239 lim=  3000 x1.00       descend x1  |g|=      43 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -6.174  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=10%/0.1060  Descend=20%/0.1386  Grasp=20%/0.1386  Move=0%/0.2387  Align=0%/0.2185  Insert=0%/0.2188  Release=100%/0.2188
+
+Iter   40:  Σrew=-4.512  grad=379.8  [phase1=1.3s bptt=2.6s elapsed=457s]
+  heads (0/7 clipped)   trunk |g|=67 lim=1500 x1.00
+        descend x1  |g|=     357 lim=  1500 x1.00         reach x1  |g|=     112 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -4.512  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=5%/0.1146  Descend=5%/0.1426  Grasp=0%/0.1426  Move=0%/0.2402  Align=0%/0.2165  Insert=0%/0.2168  Release=100%/0.2168
+
+Iter   45:  Σrew=-1.092  grad=323.2  [phase1=1.3s bptt=2.6s elapsed=479s]
+  heads (0/7 clipped)   trunk |g|=40 lim=1500 x1.00
+          reach x1  |g|=     284 lim=  3000 x1.00       descend x1  |g|=     148 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -1.092  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=30%/0.0653  Descend=20%/0.0782  Grasp=5%/0.0782  Move=0%/0.2522  Align=0%/0.2327  Insert=0%/0.2331  Release=100%/0.2331
+
+Iter   50:  Σrew=-1.154  grad=201.9  [phase1=1.2s bptt=2.6s elapsed=501s]
+  heads (0/7 clipped)   trunk |g|=33 lim=1500 x1.00
+          reach x1  |g|=     169 lim=  3000 x1.00       descend x1  |g|=     105 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -1.154  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=25%/0.0754  Descend=30%/0.0734  Grasp=25%/0.0734  Move=0%/0.2515  Align=0%/0.2288  Insert=0%/0.2290  Release=100%/0.2290
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 50
+
+Iter   55:  Σrew=-1.971  grad=460.9  [phase1=1.2s bptt=2.6s elapsed=527s]
+  heads (0/7 clipped)   trunk |g|=66 lim=1500 x1.00
+        descend x1  |g|=     441 lim=  1500 x1.00         reach x1  |g|=     117 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -1.971  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=25%/0.0723  Descend=20%/0.0976  Grasp=20%/0.0976  Move=0%/0.2606  Align=0%/0.2394  Insert=0%/0.2397  Release=100%/0.2397
+
+Iter   60:  Σrew=-0.904  grad=263.3  [phase1=1.2s bptt=2.6s elapsed=549s]
+  heads (0/7 clipped)   trunk |g|=54 lim=1500 x1.00
+        descend x1  |g|=     187 lim=  1500 x1.00         reach x1  |g|=     177 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -0.904  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=20%/0.0777  Descend=35%/0.0884  Grasp=25%/0.0884  Move=0%/0.2499  Align=0%/0.2296  Insert=0%/0.2299  Release=100%/0.2299
+
+Iter   65:  Σrew=-1.383  grad=461.1  [phase1=1.3s bptt=2.6s elapsed=572s]
+  heads (0/7 clipped)   trunk |g|=67 lim=1500 x1.00
+        descend x1  |g|=     448 lim=  1500 x1.00         reach x1  |g|=      84 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -1.383  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=15%/0.0723  Descend=35%/0.0809  Grasp=25%/0.0809  Move=0%/0.2400  Align=0%/0.2146  Insert=0%/0.2149  Release=100%/0.2149
+
+Iter   70:  Σrew=0.999  grad=353.7  [phase1=1.2s bptt=2.6s elapsed=594s]
+  heads (0/7 clipped)   trunk |g|=56 lim=1500 x1.00
+          reach x1  |g|=     257 lim=  3000 x1.00       descend x1  |g|=     237 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   0.999  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=55%/0.0486  Descend=45%/0.0585  Grasp=30%/0.0585  Move=0%/0.2450  Align=0%/0.2211  Insert=0%/0.2213  Release=100%/0.2213
+
+Iter   75:  Σrew=-2.183  grad=334.1  [phase1=3.0s bptt=2.5s elapsed=618s]
+  heads (0/7 clipped)   trunk |g|=57 lim=1500 x1.00
+        descend x1  |g|=     302 lim=  1500 x1.00         reach x1  |g|=     131 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -2.183  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=30%/0.0731  Descend=0%/0.1134  Grasp=0%/0.1134  Move=0%/0.2286  Align=0%/0.2071  Insert=0%/0.2076  Release=100%/0.2076
+
+Iter   80:  Σrew=-2.154  grad=219.9  [phase1=1.3s bptt=2.6s elapsed=640s]
+  heads (0/7 clipped)   trunk |g|=34 lim=1500 x1.00
+          reach x1  |g|=     207 lim=  3000 x1.00       descend x1  |g|=      68 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -2.154  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0527  Descend=15%/0.1150  Grasp=15%/0.1150  Move=0%/0.2378  Align=0%/0.2154  Insert=0%/0.2157  Release=100%/0.2157
+
+Iter   85:  Σrew=-0.507  grad=586.0  [phase1=1.2s bptt=2.6s elapsed=663s]
+  heads (0/7 clipped)   trunk |g|=94 lim=1500 x1.00
+        descend x1  |g|=     530 lim=  1500 x1.00         reach x1  |g|=     232 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -0.507  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=35%/0.0605  Descend=5%/0.1125  Grasp=5%/0.1125  Move=0%/0.2353  Align=0%/0.2135  Insert=0%/0.2138  Release=100%/0.2138
+
+Iter   90:  Σrew=-1.825  grad=194.8  [phase1=1.3s bptt=2.6s elapsed=685s]
+  heads (0/7 clipped)   trunk |g|=30 lim=1500 x1.00
+        descend x1  |g|=     172 lim=  1500 x1.00         reach x1  |g|=      87 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -1.825  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0395  Descend=0%/0.1195  Grasp=0%/0.1195  Move=0%/0.2398  Align=0%/0.2163  Insert=0%/0.2166  Release=100%/0.2166
+
+Iter   95:  Σrew=-0.516  grad=428.6  [phase1=1.2s bptt=2.6s elapsed=707s]
+  heads (0/7 clipped)   trunk |g|=66 lim=1500 x1.00
+          reach x1  |g|=     417 lim=  3000 x1.00       descend x1  |g|=      77 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -0.516  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0558  Descend=15%/0.0855  Grasp=15%/0.0855  Move=0%/0.2290  Align=0%/0.2079  Insert=0%/0.2082  Release=100%/0.2082
+
+Iter  100:  Σrew=2.686  grad=699.5  [phase1=1.2s bptt=2.6s elapsed=731s]
+  heads (0/7 clipped)   trunk |g|=101 lim=1500 x1.00
+        descend x1  |g|=     521 lim=  1500 x1.00         reach x1  |g|=     456 lim=  3000 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   2.686  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=30%/0.0658  Descend=25%/0.1069  Grasp=25%/0.1069  Move=0%/0.2364  Align=0%/0.2160  Insert=0%/0.2164  Release=100%/0.2164
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 100
+
+Iter  105:  Σrew=1.198  grad=518.5  [phase1=1.2s bptt=2.6s elapsed=755s]
+  heads (0/7 clipped)   trunk |g|=85 lim=1500 x1.00
+          reach x1  |g|=     464 lim=  3000 x1.00       descend x1  |g|=     216 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   1.198  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0500  Descend=15%/0.1230  Grasp=15%/0.1230  Move=0%/0.2338  Align=0%/0.2137  Insert=0%/0.2142  Release=100%/0.2142
+
+Iter  110:  Σrew=1.330  grad=413.1  [phase1=1.3s bptt=2.6s elapsed=778s]
+  heads (0/7 clipped)   trunk |g|=74 lim=1500 x1.00
+          reach x1  |g|=     293 lim=  3000 x1.00       descend x1  |g|=     281 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   1.330  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=50%/0.0509  Descend=40%/0.0805  Grasp=25%/0.0805  Move=0%/0.2379  Align=0%/0.2151  Insert=0%/0.2154  Release=100%/0.2154
+
+Iter  115:  Σrew=0.780  grad=383.6  [phase1=1.2s bptt=2.6s elapsed=800s]
+  heads (0/7 clipped)   trunk |g|=74 lim=1500 x1.00
+          reach x1  |g|=     343 lim=  3000 x1.00       descend x1  |g|=     155 lim=  1500 x1.00  
+          grasp x1  |g|=       0 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   0.780  ph=0  success=0/20 (0%) (partial) streak=0  | Reach=50%/0.0441  Descend=35%/0.0733  Grasp=20%/0.0733  Move=0%/0.2451  Align=0%/0.2234  Insert=0%/0.2237  Release=100%/0.2237
+    ──→ peg_insertion: phase 1, active=55
+
+Iter  120:  Σrew=1.237  grad=371.6  [phase1=1.5s bptt=3.1s elapsed=826s]
+  heads (0/7 clipped)   trunk |g|=55 lim=1500 x1.00
+        descend x1  |g|=     324 lim=  1500 x1.00         reach x1  |g|=     169 lim=  3000 x1.00  
+          grasp x1  |g|=      36 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   1.237  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=70%/0.0404  Descend=30%/0.0833  Grasp=5%/0.1199  Move=0%/0.2382  Align=0%/0.2188  Insert=0%/0.2192  Release=100%/0.2192
+
+Iter  125:  Σrew=2.003  grad=268.6  [phase1=1.4s bptt=3.1s elapsed=853s]
+  heads (0/7 clipped)   trunk |g|=47 lim=1500 x1.00
+        descend x1  |g|=     232 lim=  1500 x1.00         reach x1  |g|=     124 lim=  3000 x1.00  
+          grasp x1  |g|=      26 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   2.003  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=60%/0.0441  Descend=45%/0.0741  Grasp=20%/0.1054  Move=0%/0.2422  Align=0%/0.2252  Insert=0%/0.2256  Release=100%/0.2256
+
+Iter  130:  Σrew=2.271  grad=493.3  [phase1=1.6s bptt=3.1s elapsed=882s]
+  heads (0/7 clipped)   trunk |g|=83 lim=1500 x1.00
+        descend x1  |g|=     372 lim=  1500 x1.00         reach x1  |g|=     312 lim=  3000 x1.00  
+          grasp x1  |g|=      13 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   2.271  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=50%/0.0478  Descend=30%/0.0848  Grasp=15%/0.1293  Move=0%/0.2359  Align=0%/0.2209  Insert=0%/0.2247  Release=100%/0.2247
+
+Iter  135:  Σrew=-0.811  grad=599.8  [phase1=1.4s bptt=3.1s elapsed=908s]
+  heads (0/7 clipped)   trunk |g|=105 lim=1500 x1.00
+          reach x1  |g|=     527 lim=  3000 x1.00       descend x1  |g|=     267 lim=  1500 x1.00  
+          grasp x1  |g|=      11 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -0.811  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0379  Descend=10%/0.1212  Grasp=10%/0.1076  Move=0%/0.2539  Align=0%/0.2360  Insert=0%/0.2364  Release=100%/0.2364
+
+Iter  140:  Σrew=-1.706  grad=415.6  [phase1=1.5s bptt=3.1s elapsed=935s]
+  heads (0/7 clipped)   trunk |g|=72 lim=1500 x1.00
+          reach x1  |g|=     359 lim=  3000 x1.00       descend x1  |g|=     187 lim=  1500 x1.00  
+          grasp x1  |g|=      63 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -1.706  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=60%/0.0433  Descend=0%/0.0987  Grasp=5%/0.0812  Move=0%/0.2400  Align=0%/0.2192  Insert=0%/0.2194  Release=100%/0.2194
+
+Iter  145:  Σrew=0.264  grad=570.1  [phase1=1.5s bptt=3.1s elapsed=962s]
+  heads (0/7 clipped)   trunk |g|=101 lim=1500 x1.00
+          reach x1  |g|=     504 lim=  3000 x1.00       descend x1  |g|=     247 lim=  1500 x1.00  
+          grasp x1  |g|=      12 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   0.264  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0574  Descend=15%/0.1056  Grasp=5%/0.1088  Move=0%/0.2448  Align=0%/0.2273  Insert=0%/0.2278  Release=100%/0.2278
+
+Iter  150:  Σrew=1.192  grad=371.0  [phase1=3.2s bptt=3.1s elapsed=990s]
+  heads (0/7 clipped)   trunk |g|=66 lim=1500 x1.00
+          reach x1  |g|=     331 lim=  3000 x1.00       descend x1  |g|=     154 lim=  1500 x1.00  
+          grasp x1  |g|=       8 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   1.192  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=50%/0.0541  Descend=0%/0.1201  Grasp=0%/0.1291  Move=0%/0.2399  Align=0%/0.2222  Insert=0%/0.2226  Release=100%/0.2226
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 150
+
+Iter  155:  Σrew=-0.035  grad=738.1  [phase1=1.5s bptt=3.1s elapsed=1019s]
+  heads (0/7 clipped)   trunk |g|=137 lim=1500 x1.00
+          reach x1  |g|=     697 lim=  3000 x1.00       descend x1  |g|=     199 lim=  1500 x1.00  
+          grasp x1  |g|=      25 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -0.035  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0305  Descend=10%/0.0751  Grasp=5%/0.1121  Move=0%/0.2422  Align=0%/0.2189  Insert=0%/0.2192  Release=100%/0.2192
+
+Iter  160:  Σrew=1.497  grad=713.0  [phase1=1.5s bptt=3.1s elapsed=1046s]
+  heads (0/7 clipped)   trunk |g|=119 lim=1500 x1.00
+        descend x1  |g|=     563 lim=  1500 x1.00         reach x1  |g|=     419 lim=  3000 x1.00  
+          grasp x1  |g|=      37 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   1.497  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=65%/0.0472  Descend=45%/0.0636  Grasp=0%/0.0988  Move=0%/0.2331  Align=0%/0.2139  Insert=0%/0.2144  Release=100%/0.2144
+
+Iter  165:  Σrew=1.936  grad=3125.2  [phase1=1.5s bptt=3.1s elapsed=1073s]
+  heads (1/7 clipped)   trunk |g|=390 lim=1500 x1.00
+        descend x1  |g|=    3065 lim=  1500 x0.49         reach x1  |g|=     467 lim=  3000 x1.00  
+          grasp x1  |g|=      38 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   1.936  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=45%/0.0563  Descend=30%/0.1054  Grasp=5%/0.1188  Move=0%/0.2447  Align=0%/0.2264  Insert=0%/0.2268  Release=100%/0.2268
+
+Iter  170:  Σrew=5.533  grad=911.5  [phase1=3.3s bptt=3.1s elapsed=1102s]
+  heads (0/7 clipped)   trunk |g|=184 lim=1500 x1.00
+        descend x1  |g|=     883 lim=  1500 x1.00         grasp x1  |g|=     111 lim=  1000 x1.00  
+          reach x1  |g|=      65 lim=  3000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   5.533  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0364  Descend=80%/0.0463  Grasp=35%/0.0799  Move=0%/0.2612  Align=0%/0.2447  Insert=0%/0.2451  Release=100%/0.2451
+
+Iter  175:  Σrew=5.452  grad=367.2  [phase1=1.5s bptt=3.1s elapsed=1129s]
+  heads (0/7 clipped)   trunk |g|=66 lim=1500 x1.00
+        descend x1  |g|=     280 lim=  1500 x1.00         reach x1  |g|=     228 lim=  3000 x1.00  
+          grasp x1  |g|=      13 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   5.452  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0319  Descend=40%/0.0735  Grasp=20%/0.1025  Move=0%/0.2938  Align=0%/0.2805  Insert=0%/0.2814  Release=100%/0.2814
+
+Iter  180:  Σrew=4.690  grad=650.8  [phase1=1.4s bptt=3.1s elapsed=1156s]
+  heads (0/7 clipped)   trunk |g|=107 lim=1500 x1.00
+        descend x1  |g|=     576 lim=  1500 x1.00         reach x1  |g|=     282 lim=  3000 x1.00  
+          grasp x1  |g|=      21 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   4.690  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=70%/0.0392  Descend=45%/0.0740  Grasp=20%/0.0905  Move=0%/0.2659  Align=0%/0.2487  Insert=0%/0.2492  Release=100%/0.2492
+
+Iter  185:  Σrew=4.415  grad=342.4  [phase1=1.5s bptt=3.1s elapsed=1182s]
+  heads (0/7 clipped)   trunk |g|=63 lim=1500 x1.00
+        descend x1  |g|=     289 lim=  1500 x1.00         reach x1  |g|=     171 lim=  3000 x1.00  
+          grasp x1  |g|=      16 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   4.415  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0392  Descend=80%/0.0411  Grasp=40%/0.0656  Move=0%/0.2488  Align=0%/0.2286  Insert=0%/0.2288  Release=100%/0.2288
+
+Iter  190:  Σrew=2.571  grad=325.8  [phase1=1.5s bptt=3.1s elapsed=1209s]
+  heads (0/7 clipped)   trunk |g|=59 lim=1500 x1.00
+          reach x1  |g|=     253 lim=  3000 x1.00       descend x1  |g|=     183 lim=  1500 x1.00  
+          grasp x1  |g|=      71 lim=  1000 x1.00          move x1  |g|=       0 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=   2.571  ph=1  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0366  Descend=70%/0.0489  Grasp=30%/0.0814  Move=0%/0.2505  Align=0%/0.2301  Insert=0%/0.2304  Release=100%/0.2304
+    ──→ peg_insertion: phase 2, active=80
+
+Iter  195:  Σrew=-16.594  grad=1133.5  [phase1=2.0s bptt=4.5s elapsed=1247s]
+  heads (0/7 clipped)   trunk |g|=211 lim=1500 x1.00
+           move x1  |g|=     982 lim=  1000 x1.00       descend x1  |g|=     366 lim=  1500 x1.00  
+          reach x1  |g|=     364 lim=  3000 x1.00         grasp x1  |g|=      93 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -16.594  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=75%/0.0366  Descend=80%/0.0438  Grasp=55%/0.0574  Move=0%/0.2306  Align=0%/0.2120  Insert=0%/0.2144  Release=100%/0.2144
+
+Iter  200:  Σrew=-16.471  grad=426.9  [phase1=2.1s bptt=4.4s elapsed=1285s]
+  heads (0/7 clipped)   trunk |g|=86 lim=1500 x1.00
+          reach x1  |g|=     378 lim=  3000 x1.00       descend x1  |g|=     145 lim=  1500 x1.00  
+           move x1  |g|=     101 lim=  1000 x1.00         grasp x1  |g|=      28 lim=  1000 x1.00  
+        release x1  |g|=       0 lim=   500 x1.00         align x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -16.471  ph=2  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0313  Descend=80%/0.0414  Grasp=50%/0.0643  Move=0%/0.3244  Align=0%/0.2755  Insert=0%/0.3359  Release=100%/0.3359
+    ──→ peg_insertion: phase 3, active=100
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 200
+
+Iter  205:  Σrew=-89.607  grad=4492.8  [phase1=2.5s bptt=5.5s elapsed=1333s]
+  heads (2/7 clipped)   trunk |g|=1050 lim=1500 x1.00
+        descend x1  |g|=    4201 lim=  1500 x0.36          move x1  |g|=    1091 lim=  1000 x0.92  
+          reach x1  |g|=     428 lim=  3000 x1.00         align x1  |g|=     242 lim=   500 x1.00  
+          grasp x1  |g|=      50 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -89.607  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0327  Descend=45%/0.0562  Grasp=0%/0.0726  Move=0%/0.2584  Align=0%/0.2351  Insert=0%/0.2354  Release=100%/0.2354
+
+Iter  210:  Σrew=-141.598  grad=726.9  [phase1=2.6s bptt=5.5s elapsed=1380s]
+  heads (0/7 clipped)   trunk |g|=122 lim=1500 x1.00
+        descend x1  |g|=     594 lim=  1500 x1.00         reach x1  |g|=     324 lim=  3000 x1.00  
+          align x1  |g|=     226 lim=   500 x1.00          move x1  |g|=      67 lim=  1000 x1.00  
+          grasp x1  |g|=       9 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-141.598  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0264  Descend=80%/0.0346  Grasp=15%/0.0794  Move=0%/0.3461  Align=0%/0.2482  Insert=0%/0.3274  Release=100%/0.3274
+
+Iter  215:  Σrew=-138.512  grad=565.1  [phase1=2.5s bptt=5.5s elapsed=1427s]
+  heads (0/7 clipped)   trunk |g|=86 lim=1500 x1.00
+          align x1  |g|=     363 lim=   500 x1.00         reach x1  |g|=     291 lim=  3000 x1.00  
+           move x1  |g|=     277 lim=  1000 x1.00       descend x1  |g|=     133 lim=  1500 x1.00  
+          grasp x1  |g|=      36 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-138.512  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0281  Descend=35%/0.0575  Grasp=25%/0.0674  Move=0%/0.5238  Align=0%/0.3463  Insert=0%/0.5000  Release=100%/0.5000
+
+Iter  220:  Σrew=-107.053  grad=685.6  [phase1=2.5s bptt=5.4s elapsed=1474s]
+  heads (0/7 clipped)   trunk |g|=116 lim=1500 x1.00
+          reach x1  |g|=     474 lim=  3000 x1.00         align x1  |g|=     358 lim=   500 x1.00  
+        descend x1  |g|=     320 lim=  1500 x1.00          move x1  |g|=      35 lim=  1000 x1.00  
+          grasp x1  |g|=       7 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-107.053  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0290  Descend=35%/0.0802  Grasp=20%/0.0891  Move=0%/0.3219  Align=0%/0.2487  Insert=0%/0.2796  Release=100%/0.2796
+
+Iter  225:  Σrew=-105.566  grad=647.0  [phase1=2.5s bptt=5.5s elapsed=1522s]
+  heads (0/7 clipped)   trunk |g|=102 lim=1500 x1.00
+          align x1  |g|=     419 lim=   500 x1.00         reach x1  |g|=     391 lim=  3000 x1.00  
+        descend x1  |g|=     230 lim=  1500 x1.00          move x1  |g|=     164 lim=  1000 x1.00  
+          grasp x1  |g|=      11 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-105.566  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0322  Descend=70%/0.0436  Grasp=35%/0.0614  Move=0%/0.4052  Align=0%/0.2269  Insert=0%/0.2888  Release=100%/0.2888
+
+Iter  230:  Σrew=-133.282  grad=1018.5  [phase1=2.9s bptt=5.5s elapsed=1570s]
+  heads (0/7 clipped)   trunk |g|=159 lim=1500 x1.00
+           move x1  |g|=     753 lim=  1000 x1.00       descend x1  |g|=     427 lim=  1500 x1.00  
+          reach x1  |g|=     415 lim=  3000 x1.00         align x1  |g|=     299 lim=   500 x1.00  
+          grasp x1  |g|=      22 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-133.282  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0332  Descend=45%/0.0645  Grasp=25%/0.0805  Move=0%/0.3485  Align=0%/0.2170  Insert=0%/0.2617  Release=100%/0.2617
+
+Iter  235:  Σrew=-86.121  grad=740.1  [phase1=2.7s bptt=5.5s elapsed=1618s]
+  heads (0/7 clipped)   trunk |g|=148 lim=1500 x1.00
+          reach x1  |g|=     612 lim=  3000 x1.00         align x1  |g|=     285 lim=   500 x1.00  
+           move x1  |g|=     207 lim=  1000 x1.00       descend x1  |g|=     165 lim=  1500 x1.00  
+          grasp x1  |g|=      13 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -86.121  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=75%/0.0395  Descend=75%/0.0450  Grasp=40%/0.0672  Move=0%/0.3668  Align=0%/0.2460  Insert=0%/0.2928  Release=100%/0.2928
+
+Iter  240:  Σrew=-91.959  grad=1322.1  [phase1=2.9s bptt=5.5s elapsed=1670s]
+  heads (1/7 clipped)   trunk |g|=196 lim=1500 x1.00
+           move x1  |g|=    1014 lim=  1000 x0.99         reach x1  |g|=     623 lim=  3000 x1.00  
+        descend x1  |g|=     529 lim=  1500 x1.00         align x1  |g|=     117 lim=   500 x1.00  
+          grasp x1  |g|=      41 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -91.959  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0262  Descend=70%/0.0362  Grasp=35%/0.0877  Move=0%/0.2813  Align=0%/0.2443  Insert=0%/0.2511  Release=100%/0.2511
+
+Iter  245:  Σrew=-117.643  grad=1277.6  [phase1=2.8s bptt=5.5s elapsed=1718s]
+  heads (1/7 clipped)   trunk |g|=150 lim=1500 x1.00
+           move x1  |g|=    1133 lim=  1000 x0.88         reach x1  |g|=     487 lim=  3000 x1.00  
+          align x1  |g|=     214 lim=   500 x1.00       descend x1  |g|=     207 lim=  1500 x1.00  
+          grasp x1  |g|=      12 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-117.643  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0306  Descend=50%/0.0581  Grasp=20%/0.0845  Move=0%/0.3067  Align=0%/0.2959  Insert=0%/0.3133  Release=100%/0.3133
+
+Iter  250:  Σrew=-115.880  grad=493.4  [phase1=2.9s bptt=5.5s elapsed=1766s]
+  heads (0/7 clipped)   trunk |g|=76 lim=1500 x1.00
+        descend x1  |g|=     312 lim=  1500 x1.00         reach x1  |g|=     273 lim=  3000 x1.00  
+           move x1  |g|=     182 lim=  1000 x1.00         align x1  |g|=     178 lim=   500 x1.00  
+          grasp x1  |g|=      28 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-115.880  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0367  Descend=55%/0.0621  Grasp=20%/0.0884  Move=0%/0.2353  Align=0%/0.2270  Insert=0%/0.2325  Release=100%/0.2325
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 250
+
+Iter  255:  Σrew=-59.875  grad=2202.2  [phase1=2.7s bptt=5.5s elapsed=1816s]
+  heads (1/7 clipped)   trunk |g|=424 lim=1500 x1.00
+           move x1  |g|=    2134 lim=  1000 x0.47         reach x1  |g|=     297 lim=  3000 x1.00  
+          align x1  |g|=     132 lim=   500 x1.00       descend x1  |g|=      94 lim=  1500 x1.00  
+          grasp x1  |g|=      24 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -59.875  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=65%/0.0437  Descend=80%/0.0346  Grasp=35%/0.0848  Move=0%/0.2232  Align=0%/0.2188  Insert=0%/0.2198  Release=100%/0.2198
+
+Iter  260:  Σrew=-118.396  grad=1210.9  [phase1=2.8s bptt=5.5s elapsed=1864s]
+  heads (1/7 clipped)   trunk |g|=239 lim=1500 x1.00
+           move x1  |g|=    1001 lim=  1000 x1.00         reach x1  |g|=     599 lim=  3000 x1.00  
+        descend x1  |g|=     182 lim=  1500 x1.00         align x1  |g|=     124 lim=   500 x1.00  
+          grasp x1  |g|=       6 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-118.396  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=80%/0.0333  Descend=30%/0.0747  Grasp=0%/0.0907  Move=5%/0.2237  Align=5%/0.1540  Insert=0%/0.2124  Release=100%/0.2124
+
+Iter  265:  Σrew=-112.039  grad=823.4  [phase1=2.8s bptt=5.5s elapsed=1912s]
+  heads (0/7 clipped)   trunk |g|=158 lim=1500 x1.00
+        descend x1  |g|=     650 lim=  1500 x1.00         reach x1  |g|=     448 lim=  3000 x1.00  
+           move x1  |g|=     162 lim=  1000 x1.00         grasp x1  |g|=      46 lim=  1000 x1.00  
+          align x1  |g|=      38 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-112.039  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0324  Descend=45%/0.0607  Grasp=0%/0.0987  Move=0%/0.2448  Align=0%/0.2254  Insert=0%/0.2258  Release=100%/0.2258
+
+Iter  270:  Σrew=-50.551  grad=953.8  [phase1=2.8s bptt=5.5s elapsed=1960s]
+  heads (0/7 clipped)   trunk |g|=198 lim=1500 x1.00
+        descend x1  |g|=     606 lim=  1500 x1.00         reach x1  |g|=     583 lim=  3000 x1.00  
+           move x1  |g|=     376 lim=  1000 x1.00         align x1  |g|=     143 lim=   500 x1.00  
+          grasp x1  |g|=      35 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -50.551  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0324  Descend=50%/0.0545  Grasp=25%/0.0740  Move=25%/0.1936  Align=0%/0.1804  Insert=0%/0.2180  Release=100%/0.2180
+
+Iter  275:  Σrew=-107.882  grad=2015.6  [phase1=2.7s bptt=5.5s elapsed=2010s]
+  heads (1/7 clipped)   trunk |g|=409 lim=1500 x1.00
+           move x1  |g|=    1593 lim=  1000 x0.63       descend x1  |g|=    1083 lim=  1500 x1.00  
+          reach x1  |g|=     426 lim=  3000 x1.00         align x1  |g|=      64 lim=   500 x1.00  
+          grasp x1  |g|=      18 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-107.882  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0310  Descend=30%/0.0843  Grasp=10%/0.0899  Move=0%/0.2344  Align=0%/0.2162  Insert=0%/0.2168  Release=100%/0.2168
+
+Iter  280:  Σrew=-134.302  grad=703.7  [phase1=2.9s bptt=5.5s elapsed=2057s]
+  heads (0/7 clipped)   trunk |g|=183 lim=1500 x1.00
+           move x1  |g|=     497 lim=  1000 x1.00       descend x1  |g|=     398 lim=  1500 x1.00  
+          reach x1  |g|=     229 lim=  3000 x1.00         align x1  |g|=      49 lim=   500 x1.00  
+          grasp x1  |g|=      38 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-134.302  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=85%/0.0292  Descend=55%/0.0599  Grasp=10%/0.0801  Move=0%/0.1854  Align=0%/0.1684  Insert=0%/0.1711  Release=100%/0.1711
+
+Iter  285:  Σrew=-121.826  grad=16947.3  [phase1=2.7s bptt=5.7s elapsed=2105s]
+  heads (1/7 clipped)   trunk |g|=3397 lim=1500 x0.44
+           move x1  |g|=   16599 lim=  1000 x0.06         reach x1  |g|=     315 lim=  3000 x1.00  
+        descend x1  |g|=     223 lim=  1500 x1.00         align x1  |g|=     107 lim=   500 x1.00  
+          grasp x1  |g|=      21 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-121.826  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0307  Descend=50%/0.0768  Grasp=30%/0.1118  Move=5%/0.2232  Align=0%/0.2083  Insert=0%/0.2088  Release=100%/0.2088
+
+Iter  290:  Σrew=-123.240  grad=686.7  [phase1=2.8s bptt=5.6s elapsed=2153s]
+  heads (0/7 clipped)   trunk |g|=154 lim=1500 x1.00
+        descend x1  |g|=     479 lim=  1500 x1.00         reach x1  |g|=     385 lim=  3000 x1.00  
+           move x1  |g|=     263 lim=  1000 x1.00         align x1  |g|=      25 lim=   500 x1.00  
+          grasp x1  |g|=      20 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-123.240  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0289  Descend=25%/0.0826  Grasp=5%/0.1316  Move=0%/0.2862  Align=0%/0.2733  Insert=0%/0.2758  Release=100%/0.2758
+
+Iter  295:  Σrew=-122.677  grad=657.2  [phase1=4.3s bptt=5.5s elapsed=2202s]
+  heads (0/7 clipped)   trunk |g|=148 lim=1500 x1.00
+        descend x1  |g|=     577 lim=  1500 x1.00         reach x1  |g|=     255 lim=  3000 x1.00  
+           move x1  |g|=     102 lim=  1000 x1.00         align x1  |g|=      43 lim=   500 x1.00  
+          grasp x1  |g|=      10 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-122.677  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=70%/0.0388  Descend=5%/0.1372  Grasp=0%/0.1292  Move=0%/0.2234  Align=0%/0.2026  Insert=0%/0.2031  Release=100%/0.2031
+
+Iter  300:  Σrew=-39.390  grad=348.5  [phase1=2.6s bptt=5.6s elapsed=2249s]
+  heads (0/7 clipped)   trunk |g|=85 lim=1500 x1.00
+          reach x1  |g|=     260 lim=  3000 x1.00          move x1  |g|=     168 lim=  1000 x1.00  
+        descend x1  |g|=     132 lim=  1500 x1.00         align x1  |g|=      27 lim=   500 x1.00  
+          grasp x1  |g|=       9 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -39.390  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=65%/0.0445  Descend=0%/0.1554  Grasp=0%/0.1395  Move=0%/0.2343  Align=0%/0.2084  Insert=0%/0.2087  Release=100%/0.2087
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 300
+
+Iter  305:  Σrew=-63.926  grad=1178.7  [phase1=2.6s bptt=5.4s elapsed=2298s]
+  heads (1/7 clipped)   trunk |g|=398 lim=1500 x1.00
+           move x1  |g|=    1047 lim=  1000 x0.95         reach x1  |g|=     342 lim=  3000 x1.00  
+        descend x1  |g|=     119 lim=  1500 x1.00         align x1  |g|=      56 lim=   500 x1.00  
+          grasp x1  |g|=      12 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -63.926  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=70%/0.0391  Descend=0%/0.1265  Grasp=0%/0.1049  Move=0%/0.2321  Align=0%/0.2076  Insert=0%/0.2079  Release=100%/0.2079
+
+Iter  310:  Σrew=-55.415  grad=383.5  [phase1=2.6s bptt=5.5s elapsed=2345s]
+  heads (0/7 clipped)   trunk |g|=99 lim=1500 x1.00
+          reach x1  |g|=     351 lim=  3000 x1.00       descend x1  |g|=      99 lim=  1500 x1.00  
+          align x1  |g|=      67 lim=   500 x1.00         grasp x1  |g|=       6 lim=  1000 x1.00  
+           move x1  |g|=       4 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -55.415  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0273  Descend=0%/0.1445  Grasp=0%/0.0966  Move=0%/0.2507  Align=0%/0.2271  Insert=0%/0.2274  Release=100%/0.2274
+
+Iter  315:  Σrew=-115.187  grad=5247.2  [phase1=2.5s bptt=5.5s elapsed=2392s]
+  heads (1/7 clipped)   trunk |g|=1583 lim=1500 x0.95
+           move x1  |g|=    4975 lim=  1000 x0.20         reach x1  |g|=     523 lim=  3000 x1.00  
+        descend x1  |g|=      62 lim=  1500 x1.00         align x1  |g|=      41 lim=   500 x1.00  
+          grasp x1  |g|=       6 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-115.187  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0317  Descend=0%/0.1162  Grasp=0%/0.0925  Move=0%/0.2416  Align=0%/0.2221  Insert=0%/0.2225  Release=100%/0.2225
+
+Iter  320:  Σrew=-97.463  grad=439.1  [phase1=2.5s bptt=5.5s elapsed=2439s]
+  heads (0/7 clipped)   trunk |g|=114 lim=1500 x1.00
+          reach x1  |g|=     375 lim=  3000 x1.00          move x1  |g|=     174 lim=  1000 x1.00  
+        descend x1  |g|=      85 lim=  1500 x1.00         align x1  |g|=      39 lim=   500 x1.00  
+          grasp x1  |g|=       7 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -97.463  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0304  Descend=0%/0.1415  Grasp=0%/0.0957  Move=0%/0.2200  Align=0%/0.1996  Insert=0%/0.2001  Release=100%/0.2001
+
+Iter  325:  Σrew=-148.958  grad=1142.2  [phase1=2.6s bptt=5.5s elapsed=2488s]
+  heads (0/7 clipped)   trunk |g|=232 lim=1500 x1.00
+           move x1  |g|=     953 lim=  1000 x1.00       descend x1  |g|=     512 lim=  1500 x1.00  
+          reach x1  |g|=     281 lim=  3000 x1.00         align x1  |g|=      31 lim=   500 x1.00  
+          grasp x1  |g|=       4 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-148.958  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0319  Descend=5%/0.1039  Grasp=0%/0.1102  Move=0%/0.2886  Align=0%/0.2671  Insert=0%/0.2741  Release=100%/0.2741
+
+Iter  330:  Σrew=-106.023  grad=345.0  [phase1=2.5s bptt=5.4s elapsed=2535s]
+  heads (0/7 clipped)   trunk |g|=94 lim=1500 x1.00
+          reach x1  |g|=     303 lim=  3000 x1.00          move x1  |g|=     103 lim=  1000 x1.00  
+          align x1  |g|=      77 lim=   500 x1.00       descend x1  |g|=      39 lim=  1500 x1.00  
+          grasp x1  |g|=       4 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-106.023  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0289  Descend=0%/0.1197  Grasp=0%/0.0944  Move=0%/0.2360  Align=0%/0.2176  Insert=0%/0.2180  Release=100%/0.2180
+
+Iter  335:  Σrew=-116.951  grad=354.1  [phase1=2.5s bptt=5.5s elapsed=2582s]
+  heads (0/7 clipped)   trunk |g|=94 lim=1500 x1.00
+          reach x1  |g|=     313 lim=  3000 x1.00       descend x1  |g|=      98 lim=  1500 x1.00  
+          align x1  |g|=      73 lim=   500 x1.00          move x1  |g|=      52 lim=  1000 x1.00  
+          grasp x1  |g|=      34 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-116.951  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0190  Descend=10%/0.0961  Grasp=10%/0.0948  Move=0%/0.2760  Align=0%/0.2507  Insert=0%/0.2583  Release=100%/0.2583
+
+Iter  340:  Σrew=-100.779  grad=2212.6  [phase1=2.6s bptt=5.5s elapsed=2629s]
+  heads (1/7 clipped)   trunk |g|=312 lim=1500 x1.00
+           move x1  |g|=    2170 lim=  1000 x0.46         reach x1  |g|=     256 lim=  3000 x1.00  
+        descend x1  |g|=     144 lim=  1500 x1.00         align x1  |g|=      58 lim=   500 x1.00  
+          grasp x1  |g|=      16 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-100.779  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0312  Descend=10%/0.0909  Grasp=0%/0.1016  Move=0%/0.2501  Align=0%/0.2320  Insert=0%/0.2324  Release=100%/0.2324
+
+Iter  345:  Σrew=-137.242  grad=579.8  [phase1=2.5s bptt=5.4s elapsed=2678s]
+  heads (0/7 clipped)   trunk |g|=141 lim=1500 x1.00
+        descend x1  |g|=     400 lim=  1500 x1.00         reach x1  |g|=     349 lim=  3000 x1.00  
+           move x1  |g|=     177 lim=  1000 x1.00         align x1  |g|=      55 lim=   500 x1.00  
+          grasp x1  |g|=      16 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-137.242  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0306  Descend=35%/0.0688  Grasp=10%/0.0792  Move=0%/0.3067  Align=0%/0.3345  Insert=0%/0.3583  Release=100%/0.3583
+
+Iter  350:  Σrew=-119.915  grad=791.3  [phase1=2.5s bptt=5.5s elapsed=2725s]
+  heads (0/7 clipped)   trunk |g|=222 lim=1500 x1.00
+        descend x1  |g|=     555 lim=  1500 x1.00          move x1  |g|=     425 lim=  1000 x1.00  
+          reach x1  |g|=     293 lim=  3000 x1.00         align x1  |g|=      53 lim=   500 x1.00  
+          grasp x1  |g|=      20 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-119.915  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0289  Descend=55%/0.0641  Grasp=5%/0.1169  Move=0%/0.2374  Align=0%/0.2183  Insert=0%/0.2188  Release=100%/0.2188
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 350
+
+Iter  355:  Σrew=-70.976  grad=758.0  [phase1=2.6s bptt=5.5s elapsed=2774s]
+  heads (0/7 clipped)   trunk |g|=113 lim=1500 x1.00
+           move x1  |g|=     686 lim=  1000 x1.00         reach x1  |g|=     240 lim=  3000 x1.00  
+          align x1  |g|=     133 lim=   500 x1.00       descend x1  |g|=     123 lim=  1500 x1.00  
+          grasp x1  |g|=      32 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -70.976  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0237  Descend=85%/0.0470  Grasp=45%/0.0764  Move=0%/0.3113  Align=0%/0.3344  Insert=0%/0.3804  Release=100%/0.3804
+
+Iter  360:  Σrew=-105.853  grad=13639.1  [phase1=2.6s bptt=5.4s elapsed=2821s]
+  heads (1/7 clipped)   trunk |g|=1883 lim=1500 x0.80
+           move x1  |g|=   13497 lim=  1000 x0.07       descend x1  |g|=     467 lim=  1500 x1.00  
+          reach x1  |g|=     322 lim=  3000 x1.00         grasp x1  |g|=      40 lim=  1000 x1.00  
+          align x1  |g|=      24 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-105.853  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0229  Descend=75%/0.0464  Grasp=40%/0.0617  Move=0%/0.2087  Align=0%/0.1817  Insert=0%/0.1891  Release=100%/0.1891
+
+Iter  365:  Σrew=-65.815  grad=2880.7  [phase1=2.5s bptt=5.5s elapsed=2868s]
+  heads (1/7 clipped)   trunk |g|=487 lim=1500 x1.00
+           move x1  |g|=    2521 lim=  1000 x0.40       descend x1  |g|=    1275 lim=  1500 x1.00  
+          reach x1  |g|=     234 lim=  3000 x1.00         align x1  |g|=     126 lim=   500 x1.00  
+          grasp x1  |g|=      79 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -65.815  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0237  Descend=85%/0.0261  Grasp=65%/0.0415  Move=15%/0.1799  Align=0%/0.1916  Insert=0%/0.2075  Release=100%/0.2075
+
+Iter  370:  Σrew=-107.187  grad=973.5  [phase1=2.6s bptt=5.5s elapsed=2917s]
+  heads (0/7 clipped)   trunk |g|=205 lim=1500 x1.00
+        descend x1  |g|=     796 lim=  1500 x1.00          move x1  |g|=     370 lim=  1000 x1.00  
+          reach x1  |g|=     296 lim=  3000 x1.00         align x1  |g|=     215 lim=   500 x1.00  
+          grasp x1  |g|=      48 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-107.187  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0270  Descend=90%/0.0338  Grasp=65%/0.0515  Move=0%/0.2302  Align=0%/0.2520  Insert=0%/0.2638  Release=100%/0.2638
+
+Iter  375:  Σrew=-112.178  grad=1585.5  [phase1=2.5s bptt=5.5s elapsed=2964s]
+  heads (0/7 clipped)   trunk |g|=497 lim=1500 x1.00
+        descend x1  |g|=    1360 lim=  1500 x1.00          move x1  |g|=     454 lim=  1000 x1.00  
+          reach x1  |g|=     381 lim=  3000 x1.00         align x1  |g|=     244 lim=   500 x1.00  
+          grasp x1  |g|=      71 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-112.178  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0250  Descend=75%/0.0408  Grasp=50%/0.0521  Move=5%/0.1822  Align=5%/0.1820  Insert=0%/0.2248  Release=100%/0.2248
+
+Iter  380:  Σrew=-112.838  grad=1863.7  [phase1=2.6s bptt=5.5s elapsed=3011s]
+  heads (1/7 clipped)   trunk |g|=503 lim=1500 x1.00
+        descend x1  |g|=    1520 lim=  1500 x0.99          move x1  |g|=     832 lim=  1000 x1.00  
+          reach x1  |g|=     434 lim=  3000 x1.00         grasp x1  |g|=     121 lim=  1000 x1.00  
+          align x1  |g|=     118 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-112.838  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0197  Descend=35%/0.0735  Grasp=0%/0.0908  Move=0%/0.2415  Align=0%/0.2235  Insert=0%/0.2240  Release=100%/0.2240
+
+Iter  385:  Σrew=-97.035  grad=2149.8  [phase1=2.5s bptt=5.4s elapsed=3057s]
+  heads (1/7 clipped)   trunk |g|=277 lim=1500 x1.00
+           move x1  |g|=    2029 lim=  1000 x0.49       descend x1  |g|=     557 lim=  1500 x1.00  
+          reach x1  |g|=     341 lim=  3000 x1.00         align x1  |g|=      21 lim=   500 x1.00  
+          grasp x1  |g|=      16 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -97.035  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0283  Descend=40%/0.0612  Grasp=10%/0.0788  Move=0%/0.2233  Align=0%/0.2038  Insert=0%/0.2044  Release=100%/0.2044
+
+Iter  390:  Σrew=-78.144  grad=1761.2  [phase1=2.5s bptt=5.5s elapsed=3104s]
+  heads (1/7 clipped)   trunk |g|=334 lim=1500 x1.00
+           move x1  |g|=    1572 lim=  1000 x0.64         reach x1  |g|=     584 lim=  3000 x1.00  
+        descend x1  |g|=     391 lim=  1500 x1.00         align x1  |g|=     147 lim=   500 x1.00  
+          grasp x1  |g|=      35 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -78.144  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0248  Descend=60%/0.0557  Grasp=45%/0.0769  Move=0%/0.2357  Align=0%/0.2143  Insert=0%/0.2713  Release=100%/0.2713
+
+Iter  395:  Σrew=-89.195  grad=6032.9  [phase1=2.7s bptt=5.5s elapsed=3153s]
+  heads (1/7 clipped)   trunk |g|=717 lim=1500 x1.00
+           move x1  |g|=    5963 lim=  1000 x0.17       descend x1  |g|=     480 lim=  1500 x1.00  
+          reach x1  |g|=     295 lim=  3000 x1.00         align x1  |g|=      42 lim=   500 x1.00  
+          grasp x1  |g|=      24 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -89.195  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0269  Descend=30%/0.0891  Grasp=0%/0.1428  Move=0%/0.2528  Align=0%/0.2368  Insert=0%/0.2373  Release=100%/0.2373
+
+Iter  400:  Σrew=-77.153  grad=459.3  [phase1=2.5s bptt=5.5s elapsed=3200s]
+  heads (0/7 clipped)   trunk |g|=110 lim=1500 x1.00
+        descend x1  |g|=     367 lim=  1500 x1.00         reach x1  |g|=     242 lim=  3000 x1.00  
+          align x1  |g|=      63 lim=   500 x1.00          move x1  |g|=      37 lim=  1000 x1.00  
+          grasp x1  |g|=      13 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -77.153  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0266  Descend=45%/0.0645  Grasp=0%/0.1390  Move=0%/0.2526  Align=0%/0.2350  Insert=0%/0.2354  Release=100%/0.2354
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 400
+
+Iter  405:  Σrew=-96.740  grad=546.6  [phase1=2.6s bptt=5.5s elapsed=3249s]
+  heads (0/7 clipped)   trunk |g|=129 lim=1500 x1.00
+        descend x1  |g|=     439 lim=  1500 x1.00         reach x1  |g|=     287 lim=  3000 x1.00  
+          align x1  |g|=      81 lim=   500 x1.00         grasp x1  |g|=      24 lim=  1000 x1.00  
+           move x1  |g|=       5 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -96.740  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0214  Descend=25%/0.0801  Grasp=10%/0.1401  Move=0%/0.2436  Align=0%/0.2250  Insert=0%/0.2255  Release=100%/0.2255
+
+Iter  410:  Σrew=-94.511  grad=910.6  [phase1=2.5s bptt=5.5s elapsed=3295s]
+  heads (0/7 clipped)   trunk |g|=192 lim=1500 x1.00
+           move x1  |g|=     613 lim=  1000 x1.00         reach x1  |g|=     502 lim=  3000 x1.00  
+        descend x1  |g|=     390 lim=  1500 x1.00         align x1  |g|=     104 lim=   500 x1.00  
+          grasp x1  |g|=      42 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -94.511  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0303  Descend=50%/0.0588  Grasp=25%/0.0988  Move=0%/0.2347  Align=0%/0.2220  Insert=0%/0.2295  Release=100%/0.2295
+
+Iter  415:  Σrew=-106.151  grad=1622.1  [phase1=2.6s bptt=5.5s elapsed=3343s]
+  heads (1/7 clipped)   trunk |g|=199 lim=1500 x1.00
+           move x1  |g|=    1576 lim=  1000 x0.63         reach x1  |g|=     264 lim=  3000 x1.00  
+        descend x1  |g|=     177 lim=  1500 x1.00         align x1  |g|=      81 lim=   500 x1.00  
+          grasp x1  |g|=      19 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-106.151  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0187  Descend=65%/0.0507  Grasp=40%/0.0955  Move=0%/0.2297  Align=0%/0.2074  Insert=0%/0.2079  Release=100%/0.2079
+
+Iter  420:  Σrew=-110.779  grad=1201.9  [phase1=2.5s bptt=5.5s elapsed=3390s]
+  heads (0/7 clipped)   trunk |g|=319 lim=1500 x1.00
+        descend x1  |g|=     839 lim=  1500 x1.00         reach x1  |g|=     767 lim=  3000 x1.00  
+           move x1  |g|=     203 lim=  1000 x1.00         grasp x1  |g|=      79 lim=  1000 x1.00  
+          align x1  |g|=      38 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-110.779  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0190  Descend=65%/0.0432  Grasp=35%/0.0927  Move=0%/0.2204  Align=10%/0.1880  Insert=0%/0.2117  Release=100%/0.2117
+
+Iter  425:  Σrew=-96.167  grad=9802.1  [phase1=2.7s bptt=5.5s elapsed=3439s]
+  heads (1/7 clipped)   trunk |g|=2113 lim=1500 x0.71
+        descend x1  |g|=    9568 lim=  1500 x0.16         reach x1  |g|=     219 lim=  3000 x1.00  
+           move x1  |g|=     113 lim=  1000 x1.00         grasp x1  |g|=      54 lim=  1000 x1.00  
+          align x1  |g|=      40 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -96.167  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0232  Descend=55%/0.0428  Grasp=10%/0.0888  Move=0%/0.2681  Align=0%/0.1825  Insert=0%/0.2986  Release=100%/0.2986
+
+Iter  430:  Σrew=-99.126  grad=804.8  [phase1=2.6s bptt=5.5s elapsed=3486s]
+  heads (0/7 clipped)   trunk |g|=208 lim=1500 x1.00
+          reach x1  |g|=     553 lim=  3000 x1.00       descend x1  |g|=     514 lim=  1500 x1.00  
+           move x1  |g|=     167 lim=  1000 x1.00         align x1  |g|=      70 lim=   500 x1.00  
+          grasp x1  |g|=      36 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -99.126  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0200  Descend=55%/0.0633  Grasp=15%/0.1210  Move=0%/0.2518  Align=5%/0.2048  Insert=0%/0.2432  Release=100%/0.2432
+
+Iter  435:  Σrew=-115.557  grad=502.4  [phase1=2.6s bptt=5.5s elapsed=3533s]
+  heads (0/7 clipped)   trunk |g|=134 lim=1500 x1.00
+        descend x1  |g|=     346 lim=  1500 x1.00         reach x1  |g|=     322 lim=  3000 x1.00  
+          align x1  |g|=      87 lim=   500 x1.00          move x1  |g|=      53 lim=  1000 x1.00  
+          grasp x1  |g|=      26 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-115.557  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0186  Descend=60%/0.0655  Grasp=5%/0.1491  Move=0%/0.2544  Align=0%/0.2301  Insert=0%/0.2417  Release=100%/0.2417
+
+Iter  440:  Σrew=-105.743  grad=297.2  [phase1=4.5s bptt=5.4s elapsed=3582s]
+  heads (0/7 clipped)   trunk |g|=82 lim=1500 x1.00
+        descend x1  |g|=     202 lim=  1500 x1.00         reach x1  |g|=     170 lim=  3000 x1.00  
+          grasp x1  |g|=      97 lim=  1000 x1.00         align x1  |g|=      45 lim=   500 x1.00  
+           move x1  |g|=      20 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-105.743  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0264  Descend=30%/0.0877  Grasp=15%/0.1145  Move=0%/0.2382  Align=0%/0.2210  Insert=0%/0.2215  Release=100%/0.2215
+
+Iter  445:  Σrew=-111.303  grad=1722.4  [phase1=2.7s bptt=5.5s elapsed=3629s]
+  heads (1/7 clipped)   trunk |g|=339 lim=1500 x1.00
+           move x1  |g|=    1246 lim=  1000 x0.80       descend x1  |g|=    1116 lim=  1500 x1.00  
+          reach x1  |g|=     225 lim=  3000 x1.00         grasp x1  |g|=      45 lim=  1000 x1.00  
+          align x1  |g|=      31 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-111.303  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=90%/0.0268  Descend=15%/0.0808  Grasp=5%/0.1366  Move=0%/0.2569  Align=0%/0.2322  Insert=0%/0.2453  Release=100%/0.2453
+
+Iter  450:  Σrew=-81.270  grad=564.8  [phase1=2.5s bptt=5.5s elapsed=3676s]
+  heads (0/7 clipped)   trunk |g|=169 lim=1500 x1.00
+          reach x1  |g|=     461 lim=  3000 x1.00       descend x1  |g|=     180 lim=  1500 x1.00  
+          align x1  |g|=     176 lim=   500 x1.00         grasp x1  |g|=     112 lim=  1000 x1.00  
+           move x1  |g|=      48 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -81.270  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0205  Descend=65%/0.0406  Grasp=35%/0.0822  Move=0%/0.2553  Align=10%/0.1526  Insert=0%/0.2516  Release=100%/0.2516
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 450
+
+Iter  455:  Σrew=-74.577  grad=1454.8  [phase1=2.5s bptt=5.4s elapsed=3724s]
+  heads (1/7 clipped)   trunk |g|=233 lim=1500 x1.00
+           move x1  |g|=    1206 lim=  1000 x0.83       descend x1  |g|=     690 lim=  1500 x1.00  
+          reach x1  |g|=     342 lim=  3000 x1.00         align x1  |g|=     109 lim=   500 x1.00  
+          grasp x1  |g|=      49 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -74.577  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0275  Descend=40%/0.0690  Grasp=25%/0.0927  Move=0%/0.2447  Align=5%/0.2105  Insert=0%/0.2359  Release=100%/0.2359
+
+Iter  460:  Σrew=-94.810  grad=730.6  [phase1=2.7s bptt=5.5s elapsed=3772s]
+  heads (0/7 clipped)   trunk |g|=186 lim=1500 x1.00
+        descend x1  |g|=     609 lim=  1500 x1.00         reach x1  |g|=     307 lim=  3000 x1.00  
+           move x1  |g|=     148 lim=  1000 x1.00         grasp x1  |g|=      88 lim=  1000 x1.00  
+          align x1  |g|=      65 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -94.810  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0294  Descend=80%/0.0461  Grasp=65%/0.0660  Move=0%/0.2186  Align=5%/0.1598  Insert=0%/0.2288  Release=100%/0.2288
+
+Iter  465:  Σrew=-67.246  grad=1051.6  [phase1=2.6s bptt=5.5s elapsed=3819s]
+  heads (0/7 clipped)   trunk |g|=245 lim=1500 x1.00
+        descend x1  |g|=     814 lim=  1500 x1.00          move x1  |g|=     438 lim=  1000 x1.00  
+          reach x1  |g|=     358 lim=  3000 x1.00         align x1  |g|=     250 lim=   500 x1.00  
+          grasp x1  |g|=      30 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -67.246  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0315  Descend=55%/0.0527  Grasp=25%/0.0815  Move=0%/0.2341  Align=0%/0.2141  Insert=0%/0.2223  Release=100%/0.2223
+
+Iter  470:  Σrew=-73.814  grad=1484.7  [phase1=2.5s bptt=5.5s elapsed=3866s]
+  heads (0/7 clipped)   trunk |g|=315 lim=1500 x1.00
+        descend x1  |g|=    1338 lim=  1500 x1.00         reach x1  |g|=     549 lim=  3000 x1.00  
+           move x1  |g|=      85 lim=  1000 x1.00         align x1  |g|=      72 lim=   500 x1.00  
+          grasp x1  |g|=      27 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -73.814  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0197  Descend=90%/0.0306  Grasp=65%/0.0459  Move=0%/0.1884  Align=0%/0.1452  Insert=0%/0.2419  Release=100%/0.2419
+
+Iter  475:  Σrew=-107.950  grad=3203.5  [phase1=2.6s bptt=5.5s elapsed=3914s]
+  heads (1/7 clipped)   trunk |g|=629 lim=1500 x1.00
+        descend x1  |g|=    3030 lim=  1500 x0.50         reach x1  |g|=     811 lim=  3000 x1.00  
+           move x1  |g|=     155 lim=  1000 x1.00         align x1  |g|=      57 lim=   500 x1.00  
+          grasp x1  |g|=      23 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-107.950  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0277  Descend=35%/0.0693  Grasp=10%/0.0762  Move=0%/0.2406  Align=0%/0.2221  Insert=0%/0.2225  Release=100%/0.2225
+
+Iter  480:  Σrew=-80.983  grad=2777.8  [phase1=2.7s bptt=5.4s elapsed=3961s]
+  heads (1/7 clipped)   trunk |g|=393 lim=1500 x1.00
+           move x1  |g|=    2687 lim=  1000 x0.37       descend x1  |g|=     572 lim=  1500 x1.00  
+          reach x1  |g|=      96 lim=  3000 x1.00         align x1  |g|=      73 lim=   500 x1.00  
+          grasp x1  |g|=      29 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -80.983  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0276  Descend=65%/0.0454  Grasp=30%/0.0667  Move=0%/0.2155  Align=0%/0.1982  Insert=0%/0.2126  Release=100%/0.2126
+
+Iter  485:  Σrew=-64.788  grad=955.5  [phase1=2.5s bptt=5.5s elapsed=4008s]
+  heads (0/7 clipped)   trunk |g|=252 lim=1500 x1.00
+          reach x1  |g|=     737 lim=  3000 x1.00       descend x1  |g|=     446 lim=  1500 x1.00  
+           move x1  |g|=     301 lim=  1000 x1.00         align x1  |g|=     130 lim=   500 x1.00  
+          grasp x1  |g|=      26 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -64.788  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0200  Descend=60%/0.0480  Grasp=45%/0.0472  Move=0%/0.2194  Align=0%/0.2041  Insert=0%/0.2451  Release=100%/0.2451
+
+⚠ iter 490: non-finite loss+grads+proprio — update skipped (1 in a row, 1 total). Weights and ObsRMS left untouched.
+
+Iter  495:  Σrew=-77.453  grad=1607.1  [phase1=4.4s bptt=5.4s elapsed=4098s]
+  heads (0/7 clipped)   trunk |g|=339 lim=1500 x1.00
+        descend x1  |g|=    1174 lim=  1500 x1.00         reach x1  |g|=     760 lim=  3000 x1.00  
+           move x1  |g|=     710 lim=  1000 x1.00         grasp x1  |g|=      66 lim=  1000 x1.00  
+          align x1  |g|=      35 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -77.453  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0189  Descend=75%/0.0380  Grasp=40%/0.0657  Move=0%/0.2405  Align=25%/0.1546  Insert=0%/0.2921  Release=100%/0.2921
+
+Iter  500:  Σrew=-103.905  grad=988.1  [phase1=2.5s bptt=5.5s elapsed=4145s]
+  heads (0/7 clipped)   trunk |g|=255 lim=1500 x1.00
+          reach x1  |g|=     776 lim=  3000 x1.00       descend x1  |g|=     503 lim=  1500 x1.00  
+           move x1  |g|=     188 lim=  1000 x1.00         align x1  |g|=     124 lim=   500 x1.00  
+          grasp x1  |g|=      71 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-103.905  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0213  Descend=75%/0.0481  Grasp=10%/0.0899  Move=0%/0.2651  Align=0%/0.2345  Insert=0%/0.2589  Release=100%/0.2589
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 500
+
+Iter  505:  Σrew=-102.956  grad=18356.3  [phase1=2.6s bptt=5.5s elapsed=4193s]
+  heads (1/7 clipped)   trunk |g|=3875 lim=1500 x0.39
+        descend x1  |g|=   17936 lim=  1500 x0.08         reach x1  |g|=     460 lim=  3000 x1.00  
+          align x1  |g|=      62 lim=   500 x1.00          move x1  |g|=      57 lim=  1000 x1.00  
+          grasp x1  |g|=      51 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-102.956  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0185  Descend=50%/0.0533  Grasp=15%/0.0968  Move=0%/0.2487  Align=0%/0.2247  Insert=0%/0.2373  Release=100%/0.2373
+
+Iter  510:  Σrew=-105.809  grad=1016.1  [phase1=2.6s bptt=5.5s elapsed=4240s]
+  heads (0/7 clipped)   trunk |g|=248 lim=1500 x1.00
+        descend x1  |g|=     747 lim=  1500 x1.00         reach x1  |g|=     509 lim=  3000 x1.00  
+           move x1  |g|=     365 lim=  1000 x1.00         grasp x1  |g|=     104 lim=  1000 x1.00  
+          align x1  |g|=      96 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-105.809  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0203  Descend=55%/0.0595  Grasp=45%/0.0552  Move=0%/0.2213  Align=0%/0.1957  Insert=0%/0.2098  Release=100%/0.2098
+
+Iter  515:  Σrew=-115.176  grad=680.1  [phase1=2.7s bptt=5.5s elapsed=4287s]
+  heads (0/7 clipped)   trunk |g|=182 lim=1500 x1.00
+        descend x1  |g|=     549 lim=  1500 x1.00          move x1  |g|=     261 lim=  1000 x1.00  
+          reach x1  |g|=     201 lim=  3000 x1.00         align x1  |g|=     108 lim=   500 x1.00  
+          grasp x1  |g|=      90 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-115.176  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0206  Descend=55%/0.0507  Grasp=20%/0.0690  Move=0%/0.2573  Align=0%/0.2229  Insert=0%/0.2662  Release=100%/0.2662
+
+Iter  520:  Σrew=-112.494  grad=2072.8  [phase1=2.7s bptt=5.4s elapsed=4334s]
+  heads (1/7 clipped)   trunk |g|=520 lim=1500 x1.00
+        descend x1  |g|=    1867 lim=  1500 x0.80         reach x1  |g|=     649 lim=  3000 x1.00  
+           move x1  |g|=     280 lim=  1000 x1.00         grasp x1  |g|=     200 lim=  1000 x1.00  
+          align x1  |g|=      27 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-112.494  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0183  Descend=60%/0.0690  Grasp=25%/0.0794  Move=0%/0.2450  Align=0%/0.2230  Insert=0%/0.2354  Release=100%/0.2354
+
+Iter  525:  Σrew=-118.340  grad=1151.9  [phase1=2.5s bptt=5.5s elapsed=4383s]
+  heads (1/7 clipped)   trunk |g|=165 lim=1500 x1.00
+           move x1  |g|=    1097 lim=  1000 x0.91       descend x1  |g|=     200 lim=  1500 x1.00  
+          reach x1  |g|=     187 lim=  3000 x1.00         grasp x1  |g|=     139 lim=  1000 x1.00  
+          align x1  |g|=      39 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-118.340  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0209  Descend=30%/0.0669  Grasp=15%/0.0706  Move=0%/0.2655  Align=0%/0.2511  Insert=0%/0.2516  Release=100%/0.2516
+
+Iter  530:  Σrew=-119.983  grad=971.2  [phase1=2.5s bptt=5.5s elapsed=4430s]
+  heads (1/7 clipped)   trunk |g|=275 lim=1500 x1.00
+        descend x1  |g|=     633 lim=  1500 x1.00         align x1  |g|=     601 lim=   500 x0.83  
+          reach x1  |g|=     313 lim=  3000 x1.00          move x1  |g|=      85 lim=  1000 x1.00  
+          grasp x1  |g|=      21 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-119.983  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0223  Descend=10%/0.0824  Grasp=0%/0.1045  Move=0%/0.2743  Align=5%/0.2283  Insert=0%/0.2914  Release=100%/0.2914
+
+Iter  535:  Σrew=-69.772  grad=3146.4  [phase1=2.5s bptt=5.5s elapsed=4476s]
+  heads (2/7 clipped)   trunk |g|=689 lim=1500 x1.00
+        descend x1  |g|=    2730 lim=  1500 x0.55          move x1  |g|=    1359 lim=  1000 x0.74  
+          reach x1  |g|=     260 lim=  3000 x1.00         align x1  |g|=     225 lim=   500 x1.00  
+          grasp x1  |g|=      71 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -69.772  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0193  Descend=25%/0.0778  Grasp=10%/0.1053  Move=0%/0.2536  Align=0%/0.2244  Insert=0%/0.2615  Release=100%/0.2615
+
+Iter  540:  Σrew=-27.271  grad=1002.7  [phase1=2.5s bptt=5.5s elapsed=4523s]
+  heads (0/7 clipped)   trunk |g|=240 lim=1500 x1.00
+        descend x1  |g|=     809 lim=  1500 x1.00         align x1  |g|=     395 lim=   500 x1.00  
+          reach x1  |g|=     261 lim=  3000 x1.00          move x1  |g|=     245 lim=  1000 x1.00  
+          grasp x1  |g|=      96 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -27.271  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0209  Descend=100%/0.0194  Grasp=20%/0.1067  Move=0%/0.2298  Align=15%/0.1980  Insert=0%/0.2371  Release=100%/0.2371
+
+Iter  545:  Σrew=-88.230  grad=653.5  [phase1=4.5s bptt=5.5s elapsed=4572s]
+  heads (0/7 clipped)   trunk |g|=178 lim=1500 x1.00
+          reach x1  |g|=     429 lim=  3000 x1.00       descend x1  |g|=     382 lim=  1500 x1.00  
+           move x1  |g|=     232 lim=  1000 x1.00         align x1  |g|=     103 lim=   500 x1.00  
+          grasp x1  |g|=      29 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -88.230  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0173  Descend=35%/0.0520  Grasp=5%/0.1116  Move=0%/0.2218  Align=0%/0.2016  Insert=0%/0.2020  Release=100%/0.2020
+
+Iter  550:  Σrew=-65.620  grad=1942.2  [phase1=2.6s bptt=5.5s elapsed=4619s]
+  heads (1/7 clipped)   trunk |g|=524 lim=1500 x1.00
+        descend x1  |g|=    1765 lim=  1500 x0.85          move x1  |g|=     466 lim=  1000 x1.00  
+          reach x1  |g|=     345 lim=  3000 x1.00         align x1  |g|=     202 lim=   500 x1.00  
+          grasp x1  |g|=      62 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -65.620  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0156  Descend=75%/0.0459  Grasp=15%/0.0801  Move=0%/0.2569  Align=10%/0.1983  Insert=0%/0.2766  Release=100%/0.2766
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 550
+
+Iter  555:  Σrew=-71.454  grad=2593.7  [phase1=2.6s bptt=5.5s elapsed=4668s]
+  heads (1/7 clipped)   trunk |g|=357 lim=1500 x1.00
+           move x1  |g|=    2450 lim=  1000 x0.41       descend x1  |g|=     642 lim=  1500 x1.00  
+          reach x1  |g|=     395 lim=  3000 x1.00         align x1  |g|=     158 lim=   500 x1.00  
+          grasp x1  |g|=      53 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -71.454  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0189  Descend=55%/0.0617  Grasp=30%/0.0758  Move=0%/0.2190  Align=0%/0.1897  Insert=0%/0.2228  Release=100%/0.2228
+
+Iter  560:  Σrew=-43.841  grad=1109.6  [phase1=2.5s bptt=5.5s elapsed=4715s]
+  heads (0/7 clipped)   trunk |g|=213 lim=1500 x1.00
+           move x1  |g|=     879 lim=  1000 x1.00       descend x1  |g|=     611 lim=  1500 x1.00  
+          reach x1  |g|=     180 lim=  3000 x1.00         grasp x1  |g|=      74 lim=  1000 x1.00  
+          align x1  |g|=      46 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -43.841  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0269  Descend=85%/0.0335  Grasp=25%/0.0848  Move=0%/0.1945  Align=0%/0.1670  Insert=0%/0.1919  Release=100%/0.1919
+
+Iter  565:  Σrew=-9.929  grad=1369.7  [phase1=2.7s bptt=5.5s elapsed=4762s]
+  heads (1/7 clipped)   trunk |g|=243 lim=1500 x1.00
+           move x1  |g|=    1144 lim=  1000 x0.87         reach x1  |g|=     531 lim=  3000 x1.00  
+        descend x1  |g|=     432 lim=  1500 x1.00         grasp x1  |g|=     149 lim=  1000 x1.00  
+          align x1  |g|=     134 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=  -9.929  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0183  Descend=100%/0.0217  Grasp=70%/0.0341  Move=0%/0.1796  Align=0%/0.1507  Insert=0%/0.1927  Release=100%/0.1927
+
+Iter  570:  Σrew=-77.466  grad=889.1  [phase1=2.5s bptt=5.5s elapsed=4809s]
+  heads (0/7 clipped)   trunk |g|=262 lim=1500 x1.00
+          reach x1  |g|=     620 lim=  3000 x1.00       descend x1  |g|=     544 lim=  1500 x1.00  
+           move x1  |g|=     185 lim=  1000 x1.00         align x1  |g|=      75 lim=   500 x1.00  
+          grasp x1  |g|=      40 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -77.466  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0146  Descend=60%/0.0563  Grasp=15%/0.1119  Move=0%/0.2370  Align=0%/0.2201  Insert=0%/0.2257  Release=100%/0.2257
+
+Iter  575:  Σrew=-94.525  grad=5828.9  [phase1=2.5s bptt=5.5s elapsed=4858s]
+  heads (1/7 clipped)   trunk |g|=881 lim=1500 x1.00
+           move x1  |g|=    5745 lim=  1000 x0.17         reach x1  |g|=     334 lim=  3000 x1.00  
+        descend x1  |g|=     292 lim=  1500 x1.00         grasp x1  |g|=      47 lim=  1000 x1.00  
+          align x1  |g|=      41 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -94.525  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0171  Descend=75%/0.0566  Grasp=50%/0.0541  Move=0%/0.2078  Align=0%/0.1810  Insert=0%/0.2371  Release=100%/0.2371
+
+Iter  580:  Σrew=-99.590  grad=3167.7  [phase1=2.5s bptt=5.5s elapsed=4905s]
+  heads (1/7 clipped)   trunk |g|=783 lim=1500 x1.00
+        descend x1  |g|=    3040 lim=  1500 x0.49         reach x1  |g|=     384 lim=  3000 x1.00  
+           move x1  |g|=     166 lim=  1000 x1.00         align x1  |g|=      55 lim=   500 x1.00  
+          grasp x1  |g|=      17 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -99.590  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0178  Descend=30%/0.0854  Grasp=5%/0.1081  Move=0%/0.2428  Align=0%/0.2259  Insert=0%/0.2333  Release=100%/0.2333
+
+Iter  585:  Σrew=-41.530  grad=666.4  [phase1=2.5s bptt=5.5s elapsed=4952s]
+  heads (0/7 clipped)   trunk |g|=172 lim=1500 x1.00
+          reach x1  |g|=     538 lim=  3000 x1.00       descend x1  |g|=     314 lim=  1500 x1.00  
+           move x1  |g|=     139 lim=  1000 x1.00         align x1  |g|=      83 lim=   500 x1.00  
+          grasp x1  |g|=      23 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -41.530  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0221  Descend=65%/0.0497  Grasp=50%/0.0812  Move=0%/0.2155  Align=0%/0.1953  Insert=0%/0.2328  Release=100%/0.2328
+
+Iter  590:  Σrew=-101.502  grad=1087.9  [phase1=2.7s bptt=5.5s elapsed=4999s]
+  heads (0/7 clipped)   trunk |g|=338 lim=1500 x1.00
+        descend x1  |g|=     835 lim=  1500 x1.00         reach x1  |g|=     582 lim=  3000 x1.00  
+           move x1  |g|=     181 lim=  1000 x1.00         align x1  |g|=      40 lim=   500 x1.00  
+          grasp x1  |g|=      13 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-101.502  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0155  Descend=5%/0.1101  Grasp=5%/0.1198  Move=0%/0.2481  Align=0%/0.2282  Insert=0%/0.2286  Release=100%/0.2286
+
+Iter  595:  Σrew=-49.903  grad=425.3  [phase1=2.6s bptt=5.5s elapsed=5048s]
+  heads (0/7 clipped)   trunk |g|=130 lim=1500 x1.00
+          reach x1  |g|=     387 lim=  3000 x1.00       descend x1  |g|=     116 lim=  1500 x1.00  
+          align x1  |g|=      27 lim=   500 x1.00         grasp x1  |g|=       8 lim=  1000 x1.00  
+           move x1  |g|=       3 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -49.903  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0209  Descend=0%/0.0962  Grasp=0%/0.1225  Move=0%/0.2399  Align=0%/0.2147  Insert=0%/0.2150  Release=100%/0.2150
+
+Iter  600:  Σrew=-25.203  grad=416.8  [phase1=2.7s bptt=5.5s elapsed=5095s]
+  heads (0/7 clipped)   trunk |g|=109 lim=1500 x1.00
+          reach x1  |g|=     380 lim=  3000 x1.00       descend x1  |g|=     132 lim=  1500 x1.00  
+          align x1  |g|=      19 lim=   500 x1.00         grasp x1  |g|=       4 lim=  1000 x1.00  
+           move x1  |g|=       3 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -25.203  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0170  Descend=0%/0.1732  Grasp=0%/0.1967  Move=0%/0.2311  Align=0%/0.2035  Insert=0%/0.2038  Release=100%/0.2038
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 600
+
+Iter  605:  Σrew=-18.584  grad=677.5  [phase1=2.6s bptt=5.4s elapsed=5144s]
+  heads (0/7 clipped)   trunk |g|=216 lim=1500 x1.00
+          reach x1  |g|=     636 lim=  3000 x1.00       descend x1  |g|=      86 lim=  1500 x1.00  
+          align x1  |g|=      26 lim=   500 x1.00          move x1  |g|=       3 lim=  1000 x1.00  
+          grasp x1  |g|=       2 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -18.584  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0194  Descend=0%/0.1588  Grasp=0%/0.1845  Move=0%/0.2490  Align=0%/0.2259  Insert=0%/0.2262  Release=100%/0.2262
+
+Iter  610:  Σrew=-20.751  grad=390.7  [phase1=2.7s bptt=5.5s elapsed=5191s]
+  heads (0/7 clipped)   trunk |g|=125 lim=1500 x1.00
+          reach x1  |g|=     359 lim=  3000 x1.00       descend x1  |g|=      87 lim=  1500 x1.00  
+          align x1  |g|=      13 lim=   500 x1.00         grasp x1  |g|=       4 lim=  1000 x1.00  
+           move x1  |g|=       3 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -20.751  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0236  Descend=0%/0.1558  Grasp=0%/0.1917  Move=0%/0.2263  Align=0%/0.1993  Insert=0%/0.1996  Release=100%/0.1996
+
+Iter  615:  Σrew=-42.242  grad=684.6  [phase1=2.5s bptt=5.5s elapsed=5238s]
+  heads (0/7 clipped)   trunk |g|=201 lim=1500 x1.00
+          reach x1  |g|=     646 lim=  3000 x1.00       descend x1  |g|=      96 lim=  1500 x1.00  
+           move x1  |g|=      26 lim=  1000 x1.00         grasp x1  |g|=      24 lim=  1000 x1.00  
+          align x1  |g|=      24 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -42.242  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0173  Descend=5%/0.0913  Grasp=0%/0.1101  Move=0%/0.2351  Align=0%/0.2134  Insert=0%/0.2138  Release=100%/0.2138
+
+Iter  620:  Σrew=-80.993  grad=539.3  [phase1=2.6s bptt=5.5s elapsed=5287s]
+  heads (0/7 clipped)   trunk |g|=154 lim=1500 x1.00
+          reach x1  |g|=     371 lim=  3000 x1.00       descend x1  |g|=     322 lim=  1500 x1.00  
+           move x1  |g|=     153 lim=  1000 x1.00         align x1  |g|=      43 lim=   500 x1.00  
+          grasp x1  |g|=       7 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -80.993  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0185  Descend=20%/0.0758  Grasp=5%/0.0935  Move=0%/0.2288  Align=0%/0.2042  Insert=0%/0.2147  Release=100%/0.2147
+
+Iter  625:  Σrew=-122.785  grad=627.0  [phase1=2.6s bptt=5.5s elapsed=5334s]
+  heads (0/7 clipped)   trunk |g|=161 lim=1500 x1.00
+        descend x1  |g|=     436 lim=  1500 x1.00         reach x1  |g|=     416 lim=  3000 x1.00  
+           move x1  |g|=      48 lim=  1000 x1.00         align x1  |g|=      36 lim=   500 x1.00  
+          grasp x1  |g|=      18 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-122.785  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0170  Descend=55%/0.0611  Grasp=20%/0.1129  Move=0%/0.2426  Align=0%/0.2239  Insert=0%/0.2284  Release=100%/0.2284
+
+Iter  630:  Σrew=-99.930  grad=448.5  [phase1=2.7s bptt=5.4s elapsed=5381s]
+  heads (0/7 clipped)   trunk |g|=121 lim=1500 x1.00
+        descend x1  |g|=     382 lim=  1500 x1.00         reach x1  |g|=     189 lim=  3000 x1.00  
+           move x1  |g|=      63 lim=  1000 x1.00         grasp x1  |g|=      26 lim=  1000 x1.00  
+          align x1  |g|=      24 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -99.930  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0192  Descend=50%/0.0597  Grasp=15%/0.1506  Move=0%/0.2243  Align=0%/0.2062  Insert=0%/0.2094  Release=100%/0.2094
+
+Iter  635:  Σrew=-91.458  grad=1304.0  [phase1=2.5s bptt=5.5s elapsed=5428s]
+  heads (1/7 clipped)   trunk |g|=233 lim=1500 x1.00
+           move x1  |g|=    1027 lim=  1000 x0.97       descend x1  |g|=     573 lim=  1500 x1.00  
+          reach x1  |g|=     510 lim=  3000 x1.00         align x1  |g|=      35 lim=   500 x1.00  
+          grasp x1  |g|=      17 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -91.458  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0190  Descend=55%/0.0732  Grasp=20%/0.0851  Move=5%/0.2043  Align=0%/0.1813  Insert=0%/0.1940  Release=100%/0.1940
+
+Iter  640:  Σrew=-40.983  grad=673.6  [phase1=2.5s bptt=5.5s elapsed=5476s]
+  heads (0/7 clipped)   trunk |g|=164 lim=1500 x1.00
+        descend x1  |g|=     577 lim=  1500 x1.00         reach x1  |g|=     262 lim=  3000 x1.00  
+           move x1  |g|=     145 lim=  1000 x1.00         align x1  |g|=      62 lim=   500 x1.00  
+          grasp x1  |g|=       7 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -40.983  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0179  Descend=0%/0.1018  Grasp=0%/0.1265  Move=0%/0.2246  Align=0%/0.2031  Insert=0%/0.2081  Release=100%/0.2081
+
+Iter  645:  Σrew=-102.259  grad=934.8  [phase1=2.5s bptt=5.4s elapsed=5523s]
+  heads (0/7 clipped)   trunk |g|=153 lim=1500 x1.00
+           move x1  |g|=     808 lim=  1000 x1.00         reach x1  |g|=     350 lim=  3000 x1.00  
+        descend x1  |g|=     260 lim=  1500 x1.00         align x1  |g|=      88 lim=   500 x1.00  
+          grasp x1  |g|=       8 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-102.259  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0165  Descend=10%/0.1609  Grasp=5%/0.1864  Move=0%/0.2266  Align=0%/0.2129  Insert=0%/0.2168  Release=100%/0.2168
+
+Iter  650:  Σrew=-106.936  grad=542.9  [phase1=2.5s bptt=5.5s elapsed=5570s]
+  heads (0/7 clipped)   trunk |g|=164 lim=1500 x1.00
+          reach x1  |g|=     441 lim=  3000 x1.00       descend x1  |g|=     234 lim=  1500 x1.00  
+           move x1  |g|=     128 lim=  1000 x1.00         align x1  |g|=      44 lim=   500 x1.00  
+          grasp x1  |g|=      16 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-106.936  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0182  Descend=65%/0.0499  Grasp=15%/0.0901  Move=5%/0.2060  Align=0%/0.1919  Insert=0%/0.1981  Release=100%/0.1981
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 650
+
+Iter  655:  Σrew=-61.261  grad=1891.5  [phase1=2.6s bptt=5.5s elapsed=5619s]
+  heads (1/7 clipped)   trunk |g|=282 lim=1500 x1.00
+           move x1  |g|=    1812 lim=  1000 x0.55         reach x1  |g|=     365 lim=  3000 x1.00  
+        descend x1  |g|=     241 lim=  1500 x1.00         align x1  |g|=     117 lim=   500 x1.00  
+          grasp x1  |g|=     110 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -61.261  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0156  Descend=95%/0.0230  Grasp=90%/0.0236  Move=5%/0.1479  Align=0%/0.1458  Insert=0%/0.1796  Release=100%/0.1796
+
+Iter  660:  Σrew=-39.341  grad=1751.3  [phase1=2.6s bptt=5.5s elapsed=5666s]
+  heads (1/7 clipped)   trunk |g|=257 lim=1500 x1.00
+           move x1  |g|=    1591 lim=  1000 x0.63         reach x1  |g|=     466 lim=  3000 x1.00  
+        descend x1  |g|=     433 lim=  1500 x1.00         align x1  |g|=     250 lim=   500 x1.00  
+          grasp x1  |g|=      38 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -39.341  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0181  Descend=85%/0.0383  Grasp=50%/0.0571  Move=15%/0.1786  Align=0%/0.1798  Insert=0%/0.2008  Release=100%/0.2008
+
+Iter  665:  Σrew=-32.332  grad=1031.5  [phase1=2.6s bptt=5.5s elapsed=5713s]
+  heads (0/7 clipped)   trunk |g|=309 lim=1500 x1.00
+        descend x1  |g|=     745 lim=  1500 x1.00         reach x1  |g|=     625 lim=  3000 x1.00  
+           move x1  |g|=     135 lim=  1000 x1.00         align x1  |g|=      47 lim=   500 x1.00  
+          grasp x1  |g|=      45 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -32.332  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0166  Descend=50%/0.0537  Grasp=50%/0.0501  Move=0%/0.2193  Align=0%/0.2020  Insert=0%/0.2034  Release=100%/0.2034
+
+Iter  670:  Σrew=-67.352  grad=898.2  [phase1=4.5s bptt=5.5s elapsed=5762s]
+  heads (0/7 clipped)   trunk |g|=192 lim=1500 x1.00
+           move x1  |g|=     828 lim=  1000 x1.00         reach x1  |g|=     264 lim=  3000 x1.00  
+        descend x1  |g|=      82 lim=  1500 x1.00         align x1  |g|=      72 lim=   500 x1.00  
+          grasp x1  |g|=      57 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -67.352  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0209  Descend=15%/0.1182  Grasp=5%/0.1278  Move=0%/0.2409  Align=0%/0.2233  Insert=0%/0.2259  Release=100%/0.2259
+
+Iter  675:  Σrew=-59.571  grad=1010.4  [phase1=2.7s bptt=5.5s elapsed=5809s]
+  heads (0/7 clipped)   trunk |g|=298 lim=1500 x1.00
+          reach x1  |g|=     948 lim=  3000 x1.00       descend x1  |g|=     157 lim=  1500 x1.00  
+           move x1  |g|=      75 lim=  1000 x1.00         grasp x1  |g|=      46 lim=  1000 x1.00  
+          align x1  |g|=      36 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -59.571  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0180  Descend=20%/0.1205  Grasp=20%/0.1085  Move=0%/0.2370  Align=0%/0.2211  Insert=0%/0.2240  Release=100%/0.2240
+
+Iter  680:  Σrew=-83.262  grad=1390.0  [phase1=2.5s bptt=5.5s elapsed=5856s]
+  heads (1/7 clipped)   trunk |g|=194 lim=1500 x1.00
+           move x1  |g|=    1315 lim=  1000 x0.76         reach x1  |g|=     332 lim=  3000 x1.00  
+        descend x1  |g|=     226 lim=  1500 x1.00         grasp x1  |g|=      46 lim=  1000 x1.00  
+          align x1  |g|=      39 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -83.262  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0248  Descend=0%/0.1034  Grasp=5%/0.1007  Move=0%/0.2370  Align=0%/0.2172  Insert=0%/0.2176  Release=100%/0.2176
+
+Iter  685:  Σrew=-66.539  grad=345.7  [phase1=2.5s bptt=5.5s elapsed=5903s]
+  heads (0/7 clipped)   trunk |g|=101 lim=1500 x1.00
+          reach x1  |g|=     306 lim=  3000 x1.00       descend x1  |g|=     114 lim=  1500 x1.00  
+          align x1  |g|=      30 lim=   500 x1.00         grasp x1  |g|=      28 lim=  1000 x1.00  
+           move x1  |g|=      25 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -66.539  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0199  Descend=0%/0.1273  Grasp=0%/0.0821  Move=0%/0.2425  Align=0%/0.2220  Insert=0%/0.2224  Release=100%/0.2224
+
+Iter  690:  Σrew=-97.511  grad=593.7  [phase1=2.6s bptt=5.5s elapsed=5950s]
+  heads (0/7 clipped)   trunk |g|=176 lim=1500 x1.00
+          reach x1  |g|=     522 lim=  3000 x1.00       descend x1  |g|=     200 lim=  1500 x1.00  
+          grasp x1  |g|=      91 lim=  1000 x1.00         align x1  |g|=      26 lim=   500 x1.00  
+           move x1  |g|=      12 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -97.511  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0236  Descend=10%/0.0953  Grasp=0%/0.0750  Move=0%/0.2451  Align=0%/0.2264  Insert=0%/0.2268  Release=100%/0.2268
+
+Iter  695:  Σrew=-32.528  grad=875.8  [phase1=2.5s bptt=5.5s elapsed=5999s]
+  heads (0/7 clipped)   trunk |g|=160 lim=1500 x1.00
+           move x1  |g|=     772 lim=  1000 x1.00         reach x1  |g|=     303 lim=  3000 x1.00  
+        descend x1  |g|=     230 lim=  1500 x1.00         grasp x1  |g|=      26 lim=  1000 x1.00  
+          align x1  |g|=       7 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -32.528  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0200  Descend=60%/0.0489  Grasp=0%/0.0773  Move=0%/0.2376  Align=0%/0.2140  Insert=0%/0.2144  Release=100%/0.2144
+
+Iter  700:  Σrew=-59.707  grad=744.3  [phase1=2.7s bptt=5.5s elapsed=6046s]
+  heads (0/7 clipped)   trunk |g|=172 lim=1500 x1.00
+        descend x1  |g|=     601 lim=  1500 x1.00          move x1  |g|=     366 lim=  1000 x1.00  
+          reach x1  |g|=     158 lim=  3000 x1.00         align x1  |g|=      58 lim=   500 x1.00  
+          grasp x1  |g|=      31 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -59.707  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0228  Descend=60%/0.0483  Grasp=15%/0.1097  Move=0%/0.2417  Align=0%/0.2352  Insert=0%/0.2364  Release=100%/0.2364
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 700
+
+Iter  705:  Σrew=-84.770  grad=30775.2  [phase1=2.7s bptt=5.5s elapsed=6095s]
+  heads (1/7 clipped)   trunk |g|=2735 lim=1500 x0.55
+           move x1  |g|=   30640 lim=  1000 x0.03       descend x1  |g|=     767 lim=  1500 x1.00  
+          reach x1  |g|=     502 lim=  3000 x1.00         grasp x1  |g|=      67 lim=  1000 x1.00  
+          align x1  |g|=      58 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -84.770  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0246  Descend=60%/0.0505  Grasp=60%/0.0534  Move=0%/0.2007  Align=0%/0.1799  Insert=0%/0.1806  Release=100%/0.1806
+
+Iter  710:  Σrew=-103.781  grad=8474.6  [phase1=2.7s bptt=5.5s elapsed=6142s]
+  heads (2/7 clipped)   trunk |g|=912 lim=1500 x1.00
+           move x1  |g|=    8188 lim=  1000 x0.12       descend x1  |g|=    1934 lim=  1500 x0.78  
+          reach x1  |g|=     436 lim=  3000 x1.00         align x1  |g|=      91 lim=   500 x1.00  
+          grasp x1  |g|=      64 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-103.781  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0201  Descend=45%/0.0669  Grasp=0%/0.1093  Move=0%/0.2385  Align=0%/0.2198  Insert=0%/0.2285  Release=100%/0.2285
+
+Iter  715:  Σrew=-123.169  grad=1998.8  [phase1=2.5s bptt=5.5s elapsed=6189s]
+  heads (1/7 clipped)   trunk |g|=253 lim=1500 x1.00
+           move x1  |g|=    1910 lim=  1000 x0.52         reach x1  |g|=     387 lim=  3000 x1.00  
+        descend x1  |g|=     334 lim=  1500 x1.00         align x1  |g|=     136 lim=   500 x1.00  
+          grasp x1  |g|=      41 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-123.169  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=95%/0.0265  Descend=65%/0.0585  Grasp=15%/0.0779  Move=0%/0.2310  Align=0%/0.2087  Insert=0%/0.2159  Release=100%/0.2159
+
+Iter  720:  Σrew=-100.502  grad=778.6  [phase1=2.5s bptt=5.5s elapsed=6236s]
+  heads (0/7 clipped)   trunk |g|=156 lim=1500 x1.00
+           move x1  |g|=     599 lim=  1000 x1.00       descend x1  |g|=     441 lim=  1500 x1.00  
+          align x1  |g|=     121 lim=   500 x1.00         reach x1  |g|=     115 lim=  3000 x1.00  
+          grasp x1  |g|=      14 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-100.502  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0226  Descend=35%/0.0852  Grasp=15%/0.1032  Move=0%/0.2565  Align=0%/0.2375  Insert=0%/0.2438  Release=100%/0.2438
+
+Iter  725:  Σrew=-106.640  grad=1992.2  [phase1=2.6s bptt=5.5s elapsed=6284s]
+  heads (1/7 clipped)   trunk |g|=459 lim=1500 x1.00
+        descend x1  |g|=    1876 lim=  1500 x0.80         reach x1  |g|=     392 lim=  3000 x1.00  
+           move x1  |g|=     275 lim=  1000 x1.00         align x1  |g|=      86 lim=   500 x1.00  
+          grasp x1  |g|=      20 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-106.640  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0204  Descend=25%/0.0834  Grasp=10%/0.1082  Move=0%/0.2608  Align=0%/0.2380  Insert=0%/0.2442  Release=100%/0.2442
+
+Iter  730:  Σrew=-91.425  grad=915.2  [phase1=2.5s bptt=5.5s elapsed=6331s]
+  heads (0/7 clipped)   trunk |g|=280 lim=1500 x1.00
+        descend x1  |g|=     820 lim=  1500 x1.00         reach x1  |g|=     228 lim=  3000 x1.00  
+           move x1  |g|=     157 lim=  1000 x1.00         align x1  |g|=      77 lim=   500 x1.00  
+          grasp x1  |g|=      66 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -91.425  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0283  Descend=70%/0.0447  Grasp=50%/0.0660  Move=0%/0.2417  Align=0%/0.2095  Insert=0%/0.2338  Release=100%/0.2338
+
+Iter  735:  Σrew=-69.852  grad=14832.5  [phase1=2.6s bptt=5.5s elapsed=6378s]
+  heads (2/7 clipped)   trunk |g|=3742 lim=1500 x0.40
+        descend x1  |g|=   14273 lim=  1500 x0.11          move x1  |g|=    1441 lim=  1000 x0.69  
+          reach x1  |g|=     454 lim=  3000 x1.00         align x1  |g|=      82 lim=   500 x1.00  
+          grasp x1  |g|=      44 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -69.852  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0220  Descend=60%/0.0581  Grasp=35%/0.0804  Move=0%/0.2689  Align=0%/0.2250  Insert=0%/0.2755  Release=100%/0.2755
+
+Iter  740:  Σrew=-94.365  grad=2937.2  [phase1=2.5s bptt=5.5s elapsed=6425s]
+  heads (1/7 clipped)   trunk |g|=723 lim=1500 x1.00
+        descend x1  |g|=    2837 lim=  1500 x0.53         reach x1  |g|=     165 lim=  3000 x1.00  
+           move x1  |g|=     137 lim=  1000 x1.00         align x1  |g|=      66 lim=   500 x1.00  
+          grasp x1  |g|=      61 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -94.365  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0215  Descend=15%/0.0975  Grasp=10%/0.0927  Move=0%/0.2376  Align=0%/0.2204  Insert=0%/0.2209  Release=100%/0.2209
+
+Iter  745:  Σrew=-84.183  grad=1007.7  [phase1=2.5s bptt=5.5s elapsed=6474s]
+  heads (0/7 clipped)   trunk |g|=250 lim=1500 x1.00
+        descend x1  |g|=     906 lim=  1500 x1.00          move x1  |g|=     320 lim=  1000 x1.00  
+          reach x1  |g|=     148 lim=  3000 x1.00         align x1  |g|=      70 lim=   500 x1.00  
+          grasp x1  |g|=      41 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -84.183  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0263  Descend=25%/0.1111  Grasp=5%/0.1316  Move=0%/0.2486  Align=0%/0.2289  Insert=0%/0.2363  Release=100%/0.2363
+
+Iter  750:  Σrew=-95.766  grad=5373.6  [phase1=2.6s bptt=5.5s elapsed=6521s]
+  heads (2/7 clipped)   trunk |g|=1456 lim=1500 x1.00
+        descend x1  |g|=    5058 lim=  1500 x0.30          move x1  |g|=    1002 lim=  1000 x1.00  
+          reach x1  |g|=     411 lim=  3000 x1.00         align x1  |g|=      45 lim=   500 x1.00  
+          grasp x1  |g|=      12 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -95.766  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0200  Descend=65%/0.0563  Grasp=40%/0.0715  Move=0%/0.2553  Align=0%/0.2076  Insert=0%/0.2571  Release=100%/0.2571
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 750
+
+Iter  755:  Σrew=-123.353  grad=681.9  [phase1=2.6s bptt=5.4s elapsed=6570s]
+  heads (0/7 clipped)   trunk |g|=170 lim=1500 x1.00
+        descend x1  |g|=     447 lim=  1500 x1.00         reach x1  |g|=     411 lim=  3000 x1.00  
+           move x1  |g|=     254 lim=  1000 x1.00         align x1  |g|=      54 lim=   500 x1.00  
+          grasp x1  |g|=      15 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-123.353  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0194  Descend=20%/0.1059  Grasp=15%/0.1017  Move=0%/0.2601  Align=0%/0.2356  Insert=0%/0.2478  Release=100%/0.2478
+
+Iter  760:  Σrew=-120.837  grad=948.0  [phase1=2.5s bptt=5.5s elapsed=6617s]
+  heads (0/7 clipped)   trunk |g|=183 lim=1500 x1.00
+           move x1  |g|=     781 lim=  1000 x1.00       descend x1  |g|=     383 lim=  1500 x1.00  
+          reach x1  |g|=     321 lim=  3000 x1.00         align x1  |g|=      54 lim=   500 x1.00  
+          grasp x1  |g|=      51 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-120.837  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0178  Descend=10%/0.1221  Grasp=5%/0.1174  Move=0%/0.2566  Align=0%/0.2419  Insert=0%/0.2423  Release=100%/0.2423
+
+Iter  765:  Σrew=-114.416  grad=1717.7  [phase1=2.9s bptt=5.5s elapsed=6665s]
+  heads (1/7 clipped)   trunk |g|=466 lim=1500 x1.00
+        descend x1  |g|=    1547 lim=  1500 x0.97         reach x1  |g|=     494 lim=  3000 x1.00  
+           move x1  |g|=     284 lim=  1000 x1.00         grasp x1  |g|=     112 lim=  1000 x1.00  
+          align x1  |g|=      62 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-114.416  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0196  Descend=10%/0.1150  Grasp=15%/0.0937  Move=0%/0.2488  Align=0%/0.2287  Insert=0%/0.2367  Release=100%/0.2367
+
+Iter  770:  Σrew=-99.022  grad=607.7  [phase1=2.8s bptt=5.6s elapsed=6715s]
+  heads (0/7 clipped)   trunk |g|=176 lim=1500 x1.00
+        descend x1  |g|=     447 lim=  1500 x1.00         reach x1  |g|=     348 lim=  3000 x1.00  
+           move x1  |g|=     120 lim=  1000 x1.00         align x1  |g|=      45 lim=   500 x1.00  
+          grasp x1  |g|=      26 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -99.022  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0177  Descend=25%/0.0921  Grasp=10%/0.0779  Move=0%/0.2459  Align=0%/0.2292  Insert=0%/0.2296  Release=100%/0.2296
+
+Iter  775:  Σrew=-95.623  grad=1290.7  [phase1=2.7s bptt=5.5s elapsed=6763s]
+  heads (0/7 clipped)   trunk |g|=354 lim=1500 x1.00
+        descend x1  |g|=    1188 lim=  1500 x1.00         reach x1  |g|=     301 lim=  3000 x1.00  
+           move x1  |g|=     186 lim=  1000 x1.00         align x1  |g|=      64 lim=   500 x1.00  
+          grasp x1  |g|=      23 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -95.623  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0155  Descend=10%/0.0983  Grasp=10%/0.0948  Move=0%/0.2496  Align=0%/0.2232  Insert=0%/0.2393  Release=100%/0.2393
+
+Iter  780:  Σrew=-81.347  grad=2428.7  [phase1=3.0s bptt=5.5s elapsed=6811s]
+  heads (1/7 clipped)   trunk |g|=198 lim=1500 x1.00
+           move x1  |g|=    2405 lim=  1000 x0.42         reach x1  |g|=     234 lim=  3000 x1.00  
+        descend x1  |g|=     138 lim=  1500 x1.00         align x1  |g|=      55 lim=   500 x1.00  
+          grasp x1  |g|=      22 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -81.347  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0249  Descend=15%/0.1082  Grasp=5%/0.1143  Move=5%/0.3029  Align=0%/0.2687  Insert=0%/0.2837  Release=100%/0.2837
+
+Iter  785:  Σrew=-83.201  grad=972.6  [phase1=2.8s bptt=5.6s elapsed=6858s]
+  heads (0/7 clipped)   trunk |g|=109 lim=1500 x1.00
+           move x1  |g|=     958 lim=  1000 x1.00         reach x1  |g|=      93 lim=  3000 x1.00  
+        descend x1  |g|=      83 lim=  1500 x1.00         align x1  |g|=      33 lim=   500 x1.00  
+          grasp x1  |g|=      11 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -83.201  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0178  Descend=20%/0.0911  Grasp=10%/0.0934  Move=0%/0.2515  Align=0%/0.2310  Insert=0%/0.2367  Release=100%/0.2367
+
+Iter  790:  Σrew=-113.528  grad=336.3  [phase1=2.8s bptt=5.6s elapsed=6909s]
+  heads (0/7 clipped)   trunk |g|=114 lim=1500 x1.00
+          reach x1  |g|=     279 lim=  3000 x1.00          move x1  |g|=     119 lim=  1000 x1.00  
+        descend x1  |g|=      79 lim=  1500 x1.00         align x1  |g|=      39 lim=   500 x1.00  
+          grasp x1  |g|=      23 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-113.528  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0176  Descend=10%/0.1044  Grasp=0%/0.0960  Move=0%/0.2518  Align=0%/0.2249  Insert=0%/0.2339  Release=100%/0.2339
+
+Iter  795:  Σrew=-112.465  grad=821.0  [phase1=2.8s bptt=5.5s elapsed=6956s]
+  heads (0/7 clipped)   trunk |g|=134 lim=1500 x1.00
+           move x1  |g|=     708 lim=  1000 x1.00         reach x1  |g|=     386 lim=  3000 x1.00  
+        descend x1  |g|=      58 lim=  1500 x1.00         align x1  |g|=      44 lim=   500 x1.00  
+          grasp x1  |g|=      27 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-112.465  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0150  Descend=10%/0.0892  Grasp=5%/0.0913  Move=0%/0.2568  Align=0%/0.2406  Insert=0%/0.2410  Release=100%/0.2410
+
+Iter  800:  Σrew=-99.165  grad=342.6  [phase1=2.9s bptt=5.5s elapsed=7004s]
+  heads (0/7 clipped)   trunk |g|=72 lim=1500 x1.00
+           move x1  |g|=     274 lim=  1000 x1.00         reach x1  |g|=     180 lim=  3000 x1.00  
+        descend x1  |g|=      59 lim=  1500 x1.00         align x1  |g|=      31 lim=   500 x1.00  
+          grasp x1  |g|=      15 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -99.165  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0170  Descend=5%/0.0893  Grasp=10%/0.0827  Move=0%/0.2537  Align=0%/0.2348  Insert=0%/0.2405  Release=100%/0.2405
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 800
+
+Iter  805:  Σrew=-109.397  grad=231.9  [phase1=2.6s bptt=5.5s elapsed=7053s]
+  heads (0/7 clipped)   trunk |g|=67 lim=1500 x1.00
+          reach x1  |g|=     148 lim=  3000 x1.00       descend x1  |g|=     128 lim=  1500 x1.00  
+           move x1  |g|=     100 lim=  1000 x1.00         grasp x1  |g|=      31 lim=  1000 x1.00  
+          align x1  |g|=      20 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-109.397  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0190  Descend=15%/0.0880  Grasp=15%/0.0790  Move=0%/0.2363  Align=0%/0.2185  Insert=0%/0.2223  Release=100%/0.2223
+
+Iter  810:  Σrew=-121.456  grad=882.2  [phase1=2.5s bptt=5.4s elapsed=7100s]
+  heads (0/7 clipped)   trunk |g|=111 lim=1500 x1.00
+           move x1  |g|=     834 lim=  1000 x1.00         reach x1  |g|=     208 lim=  3000 x1.00  
+        descend x1  |g|=     153 lim=  1500 x1.00         align x1  |g|=      47 lim=   500 x1.00  
+          grasp x1  |g|=      37 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-121.456  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0222  Descend=30%/0.0689  Grasp=10%/0.1003  Move=0%/0.2457  Align=0%/0.2271  Insert=0%/0.2319  Release=100%/0.2319
+
+Iter  815:  Σrew=-70.572  grad=564.7  [phase1=2.6s bptt=5.5s elapsed=7147s]
+  heads (0/7 clipped)   trunk |g|=184 lim=1500 x1.00
+          reach x1  |g|=     477 lim=  3000 x1.00          move x1  |g|=     204 lim=  1000 x1.00  
+        descend x1  |g|=     118 lim=  1500 x1.00         grasp x1  |g|=      37 lim=  1000 x1.00  
+          align x1  |g|=      19 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -70.572  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0166  Descend=65%/0.0520  Grasp=25%/0.0722  Move=0%/0.2407  Align=0%/0.2211  Insert=0%/0.2434  Release=100%/0.2434
+
+Iter  820:  Σrew=-87.701  grad=409.4  [phase1=2.5s bptt=5.4s elapsed=7194s]
+  heads (0/7 clipped)   trunk |g|=110 lim=1500 x1.00
+          reach x1  |g|=     337 lim=  3000 x1.00       descend x1  |g|=     149 lim=  1500 x1.00  
+           move x1  |g|=     127 lim=  1000 x1.00         grasp x1  |g|=      48 lim=  1000 x1.00  
+          align x1  |g|=      32 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -87.701  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0154  Descend=55%/0.0546  Grasp=30%/0.0762  Move=0%/0.2299  Align=0%/0.2055  Insert=0%/0.2263  Release=100%/0.2263
+
+Iter  825:  Σrew=-85.105  grad=582.6  [phase1=2.6s bptt=5.5s elapsed=7243s]
+  heads (0/7 clipped)   trunk |g|=138 lim=1500 x1.00
+          reach x1  |g|=     426 lim=  3000 x1.00          move x1  |g|=     322 lim=  1000 x1.00  
+        descend x1  |g|=     179 lim=  1500 x1.00         align x1  |g|=      53 lim=   500 x1.00  
+          grasp x1  |g|=      18 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -85.105  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0150  Descend=55%/0.0611  Grasp=45%/0.0638  Move=0%/0.2172  Align=0%/0.1936  Insert=0%/0.2217  Release=100%/0.2217
+
+Iter  830:  Σrew=-92.909  grad=635.8  [phase1=2.7s bptt=5.5s elapsed=7290s]
+  heads (0/7 clipped)   trunk |g|=186 lim=1500 x1.00
+          reach x1  |g|=     540 lim=  3000 x1.00       descend x1  |g|=     238 lim=  1500 x1.00  
+           move x1  |g|=     110 lim=  1000 x1.00         grasp x1  |g|=      78 lim=  1000 x1.00  
+          align x1  |g|=      60 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -92.909  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0172  Descend=45%/0.0732  Grasp=30%/0.0683  Move=0%/0.2162  Align=0%/0.1933  Insert=0%/0.2093  Release=100%/0.2093
+
+Iter  835:  Σrew=-119.749  grad=637.4  [phase1=2.6s bptt=5.4s elapsed=7337s]
+  heads (0/7 clipped)   trunk |g|=173 lim=1500 x1.00
+          reach x1  |g|=     484 lim=  3000 x1.00          move x1  |g|=     309 lim=  1000 x1.00  
+        descend x1  |g|=     207 lim=  1500 x1.00         align x1  |g|=      56 lim=   500 x1.00  
+          grasp x1  |g|=      23 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-119.749  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0158  Descend=50%/0.0667  Grasp=45%/0.0711  Move=0%/0.2315  Align=0%/0.2099  Insert=0%/0.2375  Release=100%/0.2375
+
+Iter  840:  Σrew=-95.873  grad=1459.1  [phase1=2.6s bptt=5.5s elapsed=7384s]
+  heads (0/7 clipped)   trunk |g|=245 lim=1500 x1.00
+        descend x1  |g|=    1019 lim=  1500 x1.00          move x1  |g|=     933 lim=  1000 x1.00  
+          reach x1  |g|=     391 lim=  3000 x1.00         align x1  |g|=      82 lim=   500 x1.00  
+          grasp x1  |g|=      45 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -95.873  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0172  Descend=60%/0.0641  Grasp=35%/0.0675  Move=0%/0.2250  Align=0%/0.1988  Insert=0%/0.2385  Release=100%/0.2385
+
+Iter  845:  Σrew=-108.694  grad=721.9  [phase1=2.7s bptt=5.5s elapsed=7433s]
+  heads (0/7 clipped)   trunk |g|=142 lim=1500 x1.00
+           move x1  |g|=     551 lim=  1000 x1.00         reach x1  |g|=     349 lim=  3000 x1.00  
+        descend x1  |g|=     267 lim=  1500 x1.00         align x1  |g|=      69 lim=   500 x1.00  
+          grasp x1  |g|=      15 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-108.694  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0169  Descend=20%/0.0906  Grasp=20%/0.0765  Move=0%/0.2289  Align=0%/0.2144  Insert=0%/0.2202  Release=100%/0.2202
+
+Iter  850:  Σrew=-74.479  grad=1301.0  [phase1=2.5s bptt=5.4s elapsed=7480s]
+  heads (0/7 clipped)   trunk |g|=244 lim=1500 x1.00
+        descend x1  |g|=    1173 lim=  1500 x1.00          move x1  |g|=     412 lim=  1000 x1.00  
+          reach x1  |g|=     277 lim=  3000 x1.00         align x1  |g|=      75 lim=   500 x1.00  
+          grasp x1  |g|=      72 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -74.479  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0172  Descend=60%/0.0513  Grasp=45%/0.0665  Move=0%/0.2176  Align=0%/0.2166  Insert=0%/0.2387  Release=100%/0.2387
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 850
+
+Iter  855:  Σrew=-102.353  grad=4351.1  [phase1=2.6s bptt=5.5s elapsed=7529s]
+  heads (2/7 clipped)   trunk |g|=687 lim=1500 x1.00
+        descend x1  |g|=    4087 lim=  1500 x0.37          move x1  |g|=    1230 lim=  1000 x0.81  
+          reach x1  |g|=     490 lim=  3000 x1.00         align x1  |g|=      60 lim=   500 x1.00  
+          grasp x1  |g|=      44 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-102.353  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0163  Descend=85%/0.0398  Grasp=65%/0.0437  Move=0%/0.1928  Align=0%/0.1959  Insert=0%/0.2229  Release=100%/0.2229
+
+Iter  860:  Σrew=-83.717  grad=732.7  [phase1=2.6s bptt=5.5s elapsed=7576s]
+  heads (0/7 clipped)   trunk |g|=175 lim=1500 x1.00
+        descend x1  |g|=     555 lim=  1500 x1.00         reach x1  |g|=     428 lim=  3000 x1.00  
+           move x1  |g|=     111 lim=  1000 x1.00         grasp x1  |g|=      47 lim=  1000 x1.00  
+          align x1  |g|=      30 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -83.717  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0134  Descend=65%/0.0640  Grasp=30%/0.0707  Move=0%/0.2114  Align=0%/0.2110  Insert=0%/0.2224  Release=100%/0.2224
+
+Iter  865:  Σrew=-94.157  grad=4470.2  [phase1=2.5s bptt=5.5s elapsed=7623s]
+  heads (1/7 clipped)   trunk |g|=337 lim=1500 x1.00
+           move x1  |g|=    4423 lim=  1000 x0.23         reach x1  |g|=     505 lim=  3000 x1.00  
+        descend x1  |g|=     210 lim=  1500 x1.00         grasp x1  |g|=     101 lim=  1000 x1.00  
+          align x1  |g|=      29 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -94.157  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0153  Descend=80%/0.0434  Grasp=40%/0.0613  Move=0%/0.2184  Align=0%/0.2013  Insert=0%/0.2286  Release=100%/0.2286
+
+Iter  870:  Σrew=-90.226  grad=2804.4  [phase1=4.4s bptt=5.5s elapsed=7672s]
+  heads (1/7 clipped)   trunk |g|=334 lim=1500 x1.00
+           move x1  |g|=    2689 lim=  1000 x0.37         reach x1  |g|=     698 lim=  3000 x1.00  
+        descend x1  |g|=     177 lim=  1500 x1.00         align x1  |g|=      34 lim=   500 x1.00  
+          grasp x1  |g|=      30 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -90.226  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0140  Descend=45%/0.0599  Grasp=25%/0.0745  Move=0%/0.2377  Align=0%/0.2201  Insert=0%/0.2232  Release=100%/0.2232
+
+Iter  875:  Σrew=-78.403  grad=4858.0  [phase1=2.5s bptt=5.5s elapsed=7718s]
+  heads (1/7 clipped)   trunk |g|=775 lim=1500 x1.00
+           move x1  |g|=    4773 lim=  1000 x0.21       descend x1  |g|=     333 lim=  1500 x1.00  
+          reach x1  |g|=     313 lim=  3000 x1.00         grasp x1  |g|=      83 lim=  1000 x1.00  
+          align x1  |g|=      78 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -78.403  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0159  Descend=100%/0.0199  Grasp=75%/0.0332  Move=0%/0.2422  Align=0%/0.2136  Insert=0%/0.2226  Release=100%/0.2226
+
+Iter  880:  Σrew=-123.937  grad=3162.4  [phase1=2.6s bptt=5.5s elapsed=7765s]
+  heads (1/7 clipped)   trunk |g|=298 lim=1500 x1.00
+           move x1  |g|=    3081 lim=  1000 x0.32       descend x1  |g|=     474 lim=  1500 x1.00  
+          reach x1  |g|=     430 lim=  3000 x1.00         align x1  |g|=      79 lim=   500 x1.00  
+          grasp x1  |g|=      39 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-123.937  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0162  Descend=70%/0.0415  Grasp=15%/0.0846  Move=0%/0.2291  Align=0%/0.2121  Insert=0%/0.2146  Release=100%/0.2146
+
+Iter  885:  Σrew=-120.904  grad=6717.0  [phase1=2.7s bptt=5.5s elapsed=7812s]
+  heads (1/7 clipped)   trunk |g|=685 lim=1500 x1.00
+           move x1  |g|=    6658 lim=  1000 x0.15       descend x1  |g|=     497 lim=  1500 x1.00  
+          reach x1  |g|=     241 lim=  3000 x1.00         grasp x1  |g|=      72 lim=  1000 x1.00  
+          align x1  |g|=      67 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-120.904  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0161  Descend=65%/0.0658  Grasp=35%/0.0702  Move=0%/0.2062  Align=0%/0.1828  Insert=0%/0.1932  Release=100%/0.1932
+
+Iter  890:  Σrew=-66.595  grad=1306.2  [phase1=2.5s bptt=5.5s elapsed=7860s]
+  heads (0/7 clipped)   trunk |g|=225 lim=1500 x1.00
+           move x1  |g|=     950 lim=  1000 x1.00       descend x1  |g|=     822 lim=  1500 x1.00  
+          reach x1  |g|=     250 lim=  3000 x1.00         align x1  |g|=     123 lim=   500 x1.00  
+          grasp x1  |g|=      21 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -66.595  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0135  Descend=40%/0.0650  Grasp=30%/0.0828  Move=0%/0.2768  Align=0%/0.2460  Insert=0%/0.2661  Release=100%/0.2661
+
+Iter  895:  Σrew=-93.342  grad=1914.0  [phase1=2.5s bptt=5.5s elapsed=7909s]
+  heads (1/7 clipped)   trunk |g|=299 lim=1500 x1.00
+           move x1  |g|=    1471 lim=  1000 x0.68       descend x1  |g|=    1114 lim=  1500 x1.00  
+          reach x1  |g|=     405 lim=  3000 x1.00         align x1  |g|=      75 lim=   500 x1.00  
+          grasp x1  |g|=      20 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -93.342  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0128  Descend=25%/0.0774  Grasp=0%/0.1260  Move=0%/0.2504  Align=0%/0.2348  Insert=0%/0.2352  Release=100%/0.2352
+
+Iter  900:  Σrew=-124.007  grad=2526.5  [phase1=2.5s bptt=5.5s elapsed=7956s]
+  heads (1/7 clipped)   trunk |g|=445 lim=1500 x1.00
+        descend x1  |g|=    2401 lim=  1500 x0.62         reach x1  |g|=     649 lim=  3000 x1.00  
+          align x1  |g|=      26 lim=   500 x1.00          move x1  |g|=       2 lim=  1000 x1.00  
+          grasp x1  |g|=       1 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-124.007  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0180  Descend=0%/0.1920  Grasp=0%/0.1581  Move=0%/0.2575  Align=0%/0.2418  Insert=0%/0.2422  Release=100%/0.2422
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 900
+
+Iter  905:  Σrew=-133.312  grad=474.8  [phase1=2.6s bptt=5.4s elapsed=8004s]
+  heads (0/7 clipped)   trunk |g|=118 lim=1500 x1.00
+          reach x1  |g|=     342 lim=  3000 x1.00       descend x1  |g|=     276 lim=  1500 x1.00  
+           move x1  |g|=     125 lim=  1000 x1.00         align x1  |g|=      47 lim=   500 x1.00  
+          grasp x1  |g|=       7 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-133.312  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0148  Descend=0%/0.1078  Grasp=5%/0.1109  Move=0%/0.2468  Align=0%/0.2303  Insert=0%/0.2308  Release=100%/0.2308
+
+Iter  910:  Σrew=-129.649  grad=1001.4  [phase1=2.6s bptt=5.5s elapsed=8051s]
+  heads (0/7 clipped)   trunk |g|=225 lim=1500 x1.00
+        descend x1  |g|=     873 lim=  1500 x1.00         reach x1  |g|=     427 lim=  3000 x1.00  
+           move x1  |g|=      68 lim=  1000 x1.00         align x1  |g|=      51 lim=   500 x1.00  
+          grasp x1  |g|=      10 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-129.649  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0124  Descend=55%/0.0629  Grasp=25%/0.0807  Move=0%/0.2487  Align=0%/0.2071  Insert=0%/0.2233  Release=100%/0.2233
+
+Iter  915:  Σrew=-98.900  grad=804.9  [phase1=2.6s bptt=5.5s elapsed=8099s]
+  heads (0/7 clipped)   trunk |g|=235 lim=1500 x1.00
+          reach x1  |g|=     584 lim=  3000 x1.00       descend x1  |g|=     444 lim=  1500 x1.00  
+           move x1  |g|=     221 lim=  1000 x1.00         align x1  |g|=      60 lim=   500 x1.00  
+          grasp x1  |g|=      48 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -98.900  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0150  Descend=55%/0.0582  Grasp=25%/0.0684  Move=0%/0.2457  Align=0%/0.2000  Insert=0%/0.2291  Release=100%/0.2291
+
+Iter  920:  Σrew=-67.752  grad=7338.3  [phase1=2.6s bptt=5.4s elapsed=8147s]
+  heads (1/7 clipped)   trunk |g|=1099 lim=1500 x1.00
+        descend x1  |g|=    7245 lim=  1500 x0.21         reach x1  |g|=     327 lim=  3000 x1.00  
+           move x1  |g|=     146 lim=  1000 x1.00         align x1  |g|=     118 lim=   500 x1.00  
+          grasp x1  |g|=      82 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -67.752  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0169  Descend=75%/0.0500  Grasp=60%/0.0510  Move=0%/0.2443  Align=0%/0.1728  Insert=0%/0.2378  Release=100%/0.2378
+
+Iter  925:  Σrew=-48.584  grad=1181.1  [phase1=2.5s bptt=5.5s elapsed=8194s]
+  heads (0/7 clipped)   trunk |g|=259 lim=1500 x1.00
+           move x1  |g|=     960 lim=  1000 x1.00         reach x1  |g|=     468 lim=  3000 x1.00  
+        descend x1  |g|=     426 lim=  1500 x1.00         align x1  |g|=      72 lim=   500 x1.00  
+          grasp x1  |g|=      18 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -48.584  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0124  Descend=95%/0.0283  Grasp=65%/0.0414  Move=0%/0.2162  Align=0%/0.1836  Insert=0%/0.2216  Release=100%/0.2216
+
+Iter  930:  Σrew=-50.291  grad=540.5  [phase1=2.6s bptt=5.5s elapsed=8241s]
+  heads (0/7 clipped)   trunk |g|=109 lim=1500 x1.00
+        descend x1  |g|=     439 lim=  1500 x1.00          move x1  |g|=     260 lim=  1000 x1.00  
+          reach x1  |g|=     120 lim=  3000 x1.00         align x1  |g|=      58 lim=   500 x1.00  
+          grasp x1  |g|=      49 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -50.291  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0148  Descend=90%/0.0262  Grasp=50%/0.0676  Move=0%/0.2408  Align=0%/0.2184  Insert=0%/0.2264  Release=100%/0.2264
+
+Iter  935:  Σrew=-66.218  grad=530.4  [phase1=2.5s bptt=5.5s elapsed=8289s]
+  heads (0/7 clipped)   trunk |g|=116 lim=1500 x1.00
+        descend x1  |g|=     409 lim=  1500 x1.00          move x1  |g|=     249 lim=  1000 x1.00  
+          reach x1  |g|=     176 lim=  3000 x1.00         grasp x1  |g|=      62 lim=  1000 x1.00  
+          align x1  |g|=      56 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -66.218  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0136  Descend=95%/0.0267  Grasp=70%/0.0437  Move=0%/0.2064  Align=0%/0.1814  Insert=0%/0.1990  Release=100%/0.1990
+
+Iter  940:  Σrew=-70.418  grad=1230.9  [phase1=4.4s bptt=5.5s elapsed=8337s]
+  heads (0/7 clipped)   trunk |g|=265 lim=1500 x1.00
+           move x1  |g|=     944 lim=  1000 x1.00       descend x1  |g|=     608 lim=  1500 x1.00  
+          reach x1  |g|=     414 lim=  3000 x1.00         grasp x1  |g|=     106 lim=  1000 x1.00  
+          align x1  |g|=      29 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -70.418  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0112  Descend=80%/0.0386  Grasp=40%/0.0454  Move=0%/0.2114  Align=0%/0.1729  Insert=0%/0.2090  Release=100%/0.2090
+
+Iter  945:  Σrew=-87.656  grad=671.4  [phase1=2.6s bptt=5.5s elapsed=8384s]
+  heads (0/7 clipped)   trunk |g|=177 lim=1500 x1.00
+          reach x1  |g|=     493 lim=  3000 x1.00       descend x1  |g|=     405 lim=  1500 x1.00  
+           move x1  |g|=     106 lim=  1000 x1.00         grasp x1  |g|=      37 lim=  1000 x1.00  
+          align x1  |g|=      19 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -87.656  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0153  Descend=75%/0.0507  Grasp=45%/0.0722  Move=0%/0.2209  Align=0%/0.1964  Insert=0%/0.2228  Release=100%/0.2228
+
+Iter  950:  Σrew=-88.151  grad=1782.3  [phase1=2.5s bptt=5.5s elapsed=8431s]
+  heads (1/7 clipped)   trunk |g|=433 lim=1500 x1.00
+           move x1  |g|=    1331 lim=  1000 x0.75       descend x1  |g|=    1085 lim=  1500 x1.00  
+          reach x1  |g|=     183 lim=  3000 x1.00         grasp x1  |g|=      81 lim=  1000 x1.00  
+          align x1  |g|=      14 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -88.151  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0134  Descend=70%/0.0451  Grasp=40%/0.0648  Move=0%/0.2259  Align=0%/0.2065  Insert=0%/0.2373  Release=100%/0.2373
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 950
+
+Iter  955:  Σrew=-65.896  grad=6128.3  [phase1=2.6s bptt=5.5s elapsed=8481s]
+  heads (2/7 clipped)   trunk |g|=1904 lim=1500 x0.79
+        descend x1  |g|=    4953 lim=  1500 x0.30          move x1  |g|=    3049 lim=  1000 x0.33  
+          reach x1  |g|=     312 lim=  3000 x1.00         grasp x1  |g|=     101 lim=  1000 x1.00  
+          align x1  |g|=      27 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -65.896  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0178  Descend=40%/0.0625  Grasp=35%/0.0606  Move=0%/0.2159  Align=0%/0.1918  Insert=0%/0.2040  Release=100%/0.2040
+
+Iter  960:  Σrew=-52.599  grad=1329.6  [phase1=2.6s bptt=5.4s elapsed=8527s]
+  heads (0/7 clipped)   trunk |g|=279 lim=1500 x1.00
+           move x1  |g|=     908 lim=  1000 x1.00       descend x1  |g|=     820 lim=  1500 x1.00  
+          reach x1  |g|=     432 lim=  3000 x1.00         align x1  |g|=      73 lim=   500 x1.00  
+          grasp x1  |g|=      41 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -52.599  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0150  Descend=70%/0.0496  Grasp=55%/0.0566  Move=0%/0.1916  Align=0%/0.1637  Insert=0%/0.1950  Release=100%/0.1950
+
+Iter  965:  Σrew=-87.639  grad=957.3  [phase1=2.5s bptt=5.5s elapsed=8574s]
+  heads (0/7 clipped)   trunk |g|=155 lim=1500 x1.00
+           move x1  |g|=     845 lim=  1000 x1.00       descend x1  |g|=     310 lim=  1500 x1.00  
+          reach x1  |g|=     274 lim=  3000 x1.00         grasp x1  |g|=      71 lim=  1000 x1.00  
+          align x1  |g|=      42 lim=   500 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -87.639  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0154  Descend=45%/0.0590  Grasp=35%/0.0586  Move=0%/0.2183  Align=0%/0.1910  Insert=0%/0.2049  Release=100%/0.2049
+
+Iter  970:  Σrew=-106.310  grad=1281.5  [phase1=2.6s bptt=5.5s elapsed=8621s]
+  heads (0/7 clipped)   trunk |g|=382 lim=1500 x1.00
+        descend x1  |g|=    1170 lim=  1500 x1.00         reach x1  |g|=     337 lim=  3000 x1.00  
+          align x1  |g|=      94 lim=   500 x1.00          move x1  |g|=      60 lim=  1000 x1.00  
+          grasp x1  |g|=      27 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-106.310  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0160  Descend=50%/0.0740  Grasp=10%/0.0882  Move=0%/0.2315  Align=0%/0.2064  Insert=0%/0.2208  Release=100%/0.2208
+
+Iter  975:  Σrew=-83.602  grad=819.7  [phase1=2.5s bptt=5.4s elapsed=8670s]
+  heads (0/7 clipped)   trunk |g|=241 lim=1500 x1.00
+        descend x1  |g|=     695 lim=  1500 x1.00         reach x1  |g|=     318 lim=  3000 x1.00  
+           move x1  |g|=     155 lim=  1000 x1.00         align x1  |g|=      77 lim=   500 x1.00  
+          grasp x1  |g|=       9 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -83.602  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0129  Descend=30%/0.0689  Grasp=10%/0.0829  Move=0%/0.2634  Align=0%/0.2159  Insert=0%/0.2586  Release=100%/0.2586
+
+Iter  980:  Σrew=-92.122  grad=593.9  [phase1=2.5s bptt=5.5s elapsed=8717s]
+  heads (0/7 clipped)   trunk |g|=177 lim=1500 x1.00
+          reach x1  |g|=     486 lim=  3000 x1.00          move x1  |g|=     216 lim=  1000 x1.00  
+        descend x1  |g|=     181 lim=  1500 x1.00         align x1  |g|=      76 lim=   500 x1.00  
+          grasp x1  |g|=      19 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -92.122  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0167  Descend=55%/0.0617  Grasp=20%/0.0869  Move=0%/0.2434  Align=0%/0.2201  Insert=0%/0.2313  Release=100%/0.2313
+
+Iter  985:  Σrew=-105.505  grad=849.8  [phase1=2.5s bptt=5.4s elapsed=8764s]
+  heads (0/7 clipped)   trunk |g|=221 lim=1500 x1.00
+          reach x1  |g|=     674 lim=  3000 x1.00          move x1  |g|=     351 lim=  1000 x1.00  
+        descend x1  |g|=     303 lim=  1500 x1.00         align x1  |g|=      56 lim=   500 x1.00  
+          grasp x1  |g|=       6 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew=-105.505  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0169  Descend=30%/0.0682  Grasp=15%/0.0945  Move=0%/0.2550  Align=0%/0.2097  Insert=0%/0.2400  Release=100%/0.2400
+
+Iter  990:  Σrew=-86.108  grad=520.0  [phase1=2.5s bptt=5.5s elapsed=8811s]
+  heads (0/7 clipped)   trunk |g|=159 lim=1500 x1.00
+          reach x1  |g|=     445 lim=  3000 x1.00          move x1  |g|=     175 lim=  1000 x1.00  
+        descend x1  |g|=     124 lim=  1500 x1.00         align x1  |g|=      30 lim=   500 x1.00  
+          grasp x1  |g|=      17 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -86.108  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0143  Descend=75%/0.0435  Grasp=35%/0.0799  Move=0%/0.2567  Align=0%/0.1982  Insert=0%/0.2458  Release=100%/0.2458
+
+Iter  995:  Σrew=-58.523  grad=848.4  [phase1=2.5s bptt=5.4s elapsed=8857s]
+  heads (0/7 clipped)   trunk |g|=186 lim=1500 x1.00
+           move x1  |g|=     616 lim=  1000 x1.00       descend x1  |g|=     460 lim=  1500 x1.00  
+          reach x1  |g|=     300 lim=  3000 x1.00         align x1  |g|=      60 lim=   500 x1.00  
+          grasp x1  |g|=      20 lim=  1000 x1.00       release x1  |g|=       0 lim=   500 x1.00  
+         insert x1  |g|=       0 lim=   500 x1.00  
+    peg_insertion   rew= -58.523  ph=3  success=0/20 (0%) (partial) streak=0  | Reach=100%/0.0185  Descend=80%/0.0328  Grasp=55%/0.0614  Move=0%/0.2385  Align=0%/0.1984  Insert=0%/0.2442  Release=100%/0.2442
+
+Training stopped: reached --iters after 999 iters, 8897.9s this run  (1 non-finite iterations skipped)
+  ✓ saved peg_vision_{params,obs_rms,opt}.pkl + _{learning,gradients}.png at iter 999 (final)
