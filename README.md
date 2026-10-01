@@ -1,4 +1,4 @@
-# Differentiable Reinforcement Learning in Aerial Manipulation
+# Sample-Efficient Learning of Contact-Rich Manipulation Primitives with Differentiable Simulation
 
 First-order analytic policy gradients (BPTT) through differentiable physics for Franka Emika Panda manipulation, implemented in MuJoCo MJX (JAX).
 
